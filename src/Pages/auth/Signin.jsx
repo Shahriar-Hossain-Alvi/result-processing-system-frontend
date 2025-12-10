@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { FaEyeSlash } from 'react-icons/fa';
 import { FaEye } from 'react-icons/fa6';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
+import useAuth from '../../hooks/useAuth';
 
 const Signin = () => {
     const [showPassword, setShowPassword] = useState(false);
-    
-    
+    const axiosPublic = useAxiosPublic();
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    // const {loading, setLoading, setUser, user} = useAuth();
+
+
+
+    const signInUser = async (data) => {
+
+        // Backend expects username and password as formdata
+        const formData = new FormData();
+        formData.append('username', data.email);
+        formData.append('password', data.password);
+
+        console.log("Sending data from form", data);
+
+        const result = await axiosPublic.post('/login', formData);
+        console.log(result);
+    }
+
+
 
 
     return (
@@ -18,28 +39,49 @@ const Signin = () => {
                     </p>
                 </div>
                 <div className="card bg-base-100 w-full shrink-0 shadow-2xl">
-                    <div className="card-body">
+                    <form onSubmit={handleSubmit(signInUser)} className="card-body">
                         <fieldset className="fieldset">
-                            <input type="email" className="input w-full" placeholder="Email" />
+                            <div className={`w-full ${errors.email && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.email && errors.email.message}>
+                                <input
+                                    type="email"
+                                    {...register("email", { required: "Email is required" })} className="input w-full"
+                                    placeholder="Email"
+                                />
+                            </div>
 
-                            <div className='relative'>
-                                <input type={showPassword ? "text" : "password"} className="input w-full" placeholder="Password" />
+                            <div className='relative my-3'>
+                                <div className={`w-full ${errors.password && "tooltip tooltip-open tooltip-bottom tooltip-error"}`} data-tip={errors.password && errors.password.message}>
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        className="input w-full"
+
+                                        {...register("password",
+                                            {
+                                                required: "Password is required",
+                                                minLength: { value: 6, message: "Password must be at least 6 characters" },
+                                                maxLength: { value: 32, message: "Password must be at most 32 characters" }
+                                            })}
+                                        placeholder="Password"
+                                    />
+                                    {/* {errors.password && <span className="text-error">{errors.password.message}</span>} */}
+                                </div>
+
                                 {
                                     showPassword ?
-                                        <button onClick={()=>setShowPassword(false)} className="btn btn-sm bg-base-100 btn-ghost absolute z-10 right-4 top-1/2 transform -translate-y-1/2">
+                                        <button type='button' onClick={()=>setShowPassword(false)} className="btn btn-sm bg-base-100 btn-ghost absolute z-10 right-4 top-1/2 transform -translate-y-1/2 tooltip tooltip-right tooltip-primary" data-tip="Hide Password">
                                             <FaEyeSlash />
                                         </button>
                                         :
-                                        <button onClick={()=>setShowPassword(true)} className="btn btn-sm bg-base-100 btn-ghost absolute z-10 right-4 top-1/2 transform -translate-y-1/2">
+                                        <button type='button' onClick={()=>setShowPassword(true)} className="btn btn-sm bg-base-100 btn-ghost absolute z-10 right-4 top-1/2 transform -translate-y-1/2 tooltip tooltip-right tooltip-warning" data-tip="Show Password">
                                             <FaEye />
                                         </button>
                                 }
                             </div>
 
                             <div><a className="link link-hover">Forgot password?</a></div>
-                            <button className="btn btn-neutral mt-4">Login</button>
+                            <button className="btn btn-neutral mt-4" type='submit'>Login</button>
                         </fieldset>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

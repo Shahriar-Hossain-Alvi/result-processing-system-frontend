@@ -9,7 +9,6 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true); // for loading spinner
     const axiosPublic = useAxiosPublic(); // axios instance with base url
 
-    // sign in user
 
     // logout user 
     const logout = () => {
@@ -22,7 +21,8 @@ const AuthProvider = ({ children }) => {
         logout,
         setLoading,
         loading,
-        user
+        user,
+        setUser
     }
 
     return (
