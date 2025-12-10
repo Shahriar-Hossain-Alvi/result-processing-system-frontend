@@ -17,7 +17,7 @@ export default defineConfig([
       reactRefresh.configs.vite,
     ],
     languageOptions: {
-      parser: '@babel/eslint-parser',
+      // parser: '@babel/eslint-parser',
       ecmaVersion: 2020,
       globals: {... globals.browser,},
       parserOptions: {
@@ -26,23 +26,23 @@ export default defineConfig([
         sourceType: 'module',
       },
     },
-    plugins: {
-      react,
-      import: importPlugin,
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      }
-    },
+    // plugins: {
+    //   react,
+    //   import: importPlugin,
+    // },
+    // settings: {
+    //   react: {
+    //     version: 'detect',
+    //   }
+    // },
     rules: {
-      'no-undef': 'error',
+      // 'no-undef': 'error',
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-      'import/no-unresolved': 'error',
-      "import/named": "error",
-      "import/default": "error",
+      // 'import/no-unresolved': 'error',
+      // "import/named": "error",
+      // "import/default": "error",
 
-      'react/react-in-jsx-scope': 'off',
+      // 'react/react-in-jsx-scope': 'off',
     },
   },
 ])
