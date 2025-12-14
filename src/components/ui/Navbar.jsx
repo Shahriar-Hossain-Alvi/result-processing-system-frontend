@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import useTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme.jsx';
 import { FaMoon, FaSun } from 'react-icons/fa6';
 import eduTrack_logo from "../../assets/edutrack_logo.png";
 
@@ -15,8 +15,8 @@ const Navbar = () => {
         <div>
             <div className="navbar bg-base-100 shadow-sm ">
                 <div className="flex-1">
-                    <NavLink to="/" className="max-h-16 text-xl">
-                        <img src={eduTrack_logo} className='max-h-16' alt="edutrack logo" />
+                    <NavLink to="/" className="text-xl">
+                        <img src={eduTrack_logo} className='max-h-20 w-28' alt="edutrack logo" />
                     </NavLink>
                 </div>
                 <div className="flex-none">
@@ -28,7 +28,7 @@ const Navbar = () => {
                         <li className='my-auto hover:bg-transparent group/theme'>
                             <label className="swap swap-rotate">
                                 {/* this hidden checkbox controls the state */}
-                                <input type="checkbox" className="theme-controller" value="light" onChange={toggleTheme} />
+                                <input type="checkbox" className="theme-controller" value="silk" onChange={toggleTheme} />
 {/* rotate-90 */}
                                 <FaSun className='swap-on group-hover/theme:rotate-360 group-hover/theme:transition-all' />
                                 <FaMoon className='swap-off rotate-217 group-hover/theme:rotate-0 group-hover/theme:transition-all' />

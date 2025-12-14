@@ -1,11 +1,24 @@
 import { Route } from "react-router-dom";
-import AdminDashboard from "../../pages/admin/AdminDashboard";
-import AdminLayout from "../layout/AdminLayout";
+import AdminDashboard from "../../pages/admin/AdminDashboard.jsx";
+import AdminLayout from "../layout/AdminLayout.jsx";
+import PrivateRoutes from "./PrivateRoutes.jsx";
 
 
 const AdminRoutes = (
-    <Route path="/admin" element={<AdminLayout />}>
+    // <Route path="/admin" element={<AdminLayout />}>
+    //     <Route index element={<AdminDashboard />} />
+    // </Route>
+    <Route
+        path="/admin"
+        element={
+            <PrivateRoutes role="admin">
+                <AdminLayout />
+            </PrivateRoutes>
+        }
+    >
+
         <Route index element={<AdminDashboard />} />
+        {/* <Route path="dashboard" element={<AdminDashboard />} /> */}
     </Route>
 )
 

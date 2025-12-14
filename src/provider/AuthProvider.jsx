@@ -1,38 +1,78 @@
-import { createContext, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from "react";
+import axiosSecure from "../utils/axios/axiosSecure.js";
+import axiosPublic from "../utils/axios/axiosPublic.js";
 
 
+export const AuthContext = createContext(
+    {
+        user: null,
+        loading: true,
+        setLoading: (newState) => { {/* Its to avoid error/warning */ } },
+        // fetchUser: () => Promise.resolve({ role: null }), // role:null to avoid 'void' warning
+        fetchUser: () => Promise.resolve({role: null}), // role:null to avoid 'void' warning
+        logout: (bypass) => { },
+        axiosSecure: axiosSecure,
+        axiosPublic: axiosPublic
+    }
+);
 
-export const AuthContext = createContext(null);
-
+// Main Auth Provider
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null); // set user
-    const [loading, setLoading] = useState(true); // for loading spinner
-    const [roleVerified, setRoleVerified] = useState(null);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    console.log(user);
+
+    // logout sets state, then conditionally calls backend
+    const logout = useCallback(async (bypassBackendCall = false) => {
+        // 1. Immediate State Cleanup
+        setUser(null);
+        setLoading(false);
+
+        if (!bypassBackendCall) {
+            try {
+                const res = await axiosSecure.post('/auth/logout');
+                console.log("Logout message", res?.data?.message);
+            } catch (error) {
+                console.error("Backend logout failed", error);
+            }
+        }
+        // Show toast after logout
+    }, [])
 
 
-    // fetch user after login
-    const fetchUser = async (axiosSecure) => {
-        const res = await axiosSecure.get('/users/me');
-        console.log(res.data);
-        setUser(res.data);
-    }
+    // fetch user
+    const fetchUser = useCallback(async () => {
+        try {
+            const res = await axiosSecure.get('/users/me');
+            setUser(res?.data);
+            return res?.data;
+        } catch (error) {
+            console.error("Backend user fetch failed", error);
+            setUser(null);
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
 
-    // logout user 
-    const logout = () => {
-        return '';
-    }
+    // Initial Session Check on mount
+    useEffect(() => {
+        fetchUser();
+    }, [fetchUser]);
 
-    // save user to local storage
 
     const authInfo = {
-        logout,
-        setLoading,
-        loading,
         user,
-        setUser,
-        fetchUser
+        loading,
+        setLoading,
+        logout,
+        fetchUser,
+        axiosPublic,
+        axiosSecure
     }
+
 
     return (
         <AuthContext.Provider value={authInfo}>

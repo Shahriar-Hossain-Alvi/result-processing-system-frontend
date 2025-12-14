@@ -14,11 +14,11 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
-      <AuthProvider>
+      {/* <AuthProvider> Auth Provider + axios interceptor + useNavigate */}
         <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
+            <RouterProvider router={router} /> {/* router provider(Routes are here) */}
         </QueryClientProvider>
-      </AuthProvider>
+      {/* </AuthProvider> */}
     </ThemeProvider>
   </StrictMode>,
 )

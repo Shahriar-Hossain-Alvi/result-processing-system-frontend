@@ -4,17 +4,17 @@ import { FaEyeSlash } from 'react-icons/fa';
 import { FaEye } from 'react-icons/fa6';
 import useAxiosPublic from '../../hooks/useAxiosPublic.jsx';
 import useAuth from '../../hooks/useAuth.jsx';
+import { useNavigate } from 'react-router-dom';
+import axiosSecure from '../../utils/axios/axiosSecure.js';
 import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
 
 const Signin = () => {
     const [showPassword, setShowPassword] = useState(false);
     const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const { loading, setLoading, setUser, fetchUser } = useAuth();
-
-    console.log(loading);
-
+    const { loading, user, setLoading, fetchUser } = useAuth();
 
     const signInUser = async (data) => {
 
@@ -23,28 +23,28 @@ const Signin = () => {
         formData.append('username', data.email);
         formData.append('password', data.password);
 
-        console.log("Sending data from form", data);
+        // TODO: prevent login if user is already logged in
 
         try {
-            const res = await axiosPublic.post('/login', formData);
-            console.log(res);
+            // 1: get token in httponly cookie from backend
+            const res = await axiosSecure.post('/auth/login', formData);
 
-            if (res.data.message === "Login successful") {
-                // const user_res = await axiosSecure.get('/users/me');
-                // console.log(user_res);
-
-                // setUser(user_res);
-                await fetchUser(axiosSecure);
-                setLoading(false);
+            if (res?.data?.message === "Login successful") {
+                // 2: Fetch user info using the new cookie
+                const userData = await fetchUser();
+                // 3: Redirect based on the fetched data 
+                if (userData?.role === "admin") {
+                    navigate('/admin');
+                } else if (userData?.role === "teacher") {
+                    navigate('/teacher');
+                } else if (userData?.role === "student") {
+                    navigate('/student')
+                }
             }
-
         } catch (error) {
             setLoading(false);
             console.error(error);
         }
-
-
-
     }
 
 
@@ -100,7 +100,7 @@ const Signin = () => {
                             </div>
 
                             <div><a className="link link-hover">Forgot password?</a></div>
-                            <button className="btn btn-neutral mt-4" type='submit'>Login</button>
+                            <button className={`btn mt-4 ${loading ? "btn-disabled" : "btn-primary"}`} type='submit'>Login</button>
                         </fieldset>
                     </form>
                 </div>

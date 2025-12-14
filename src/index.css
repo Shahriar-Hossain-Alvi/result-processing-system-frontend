@@ -7,7 +7,7 @@
 
 /* set themes */
 @plugin "daisyui" {
-  themes: light --default, dim --prefersdark;
+  themes: silk --default, dim --prefersdark;
 }
 
 

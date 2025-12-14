@@ -1,10 +1,8 @@
-import axios from "axios";
+import useAuth from "./useAuth.jsx";
 
+const useAxiosPublic = () => {
+    const { axiosPublic } = useAuth();
+    return axiosPublic;
+};
 
-const axiosPublic = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL
-})
-
-const useAxiosPublic = () => axiosPublic;
-
-export default useAxiosPublic
+export default useAxiosPublic;
