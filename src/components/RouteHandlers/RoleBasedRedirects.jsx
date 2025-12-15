@@ -8,7 +8,7 @@ const RoleBasedRedirects = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-         if (loading) {
+         if (!user && loading) {
             <LoadingSpinner />
             return
          } 

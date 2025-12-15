@@ -2,13 +2,14 @@ import { NavLink } from 'react-router-dom';
 import useTheme from '../../hooks/useTheme.jsx';
 import { FaMoon, FaSun } from 'react-icons/fa6';
 import eduTrack_logo from "../../assets/edutrack_logo.png";
+import eduTrack_logo_white from "../../assets/edutrack_logo_white.png"
 
 const Navbar = () => {
     const [theme, setTheme] = useTheme();
 
     // toggle theme
     const toggleTheme = (event) => {
-        setTheme(event.target.checked ? "dark" : "light");
+        setTheme(event.target.checked ? "light" : "dark");
     }
 
     return (
@@ -16,7 +17,11 @@ const Navbar = () => {
             <div className="navbar bg-base-100 shadow-sm ">
                 <div className="flex-1">
                     <NavLink to="/" className="text-xl">
-                        <img src={eduTrack_logo} className='max-h-20 w-28' alt="edutrack logo" />
+                        {
+                            theme == "dark" ?
+                            <img src={eduTrack_logo_white} className='max-h-20 w-28' alt="edutrack logo" /> :
+                            <img src={eduTrack_logo} className='max-h-20 w-28' alt="edutrack logo" />
+                        }
                     </NavLink>
                 </div>
                 <div className="flex-none">
@@ -29,7 +34,8 @@ const Navbar = () => {
                             <label className="swap swap-rotate">
                                 {/* this hidden checkbox controls the state */}
                                 <input type="checkbox" className="theme-controller" value="silk" onChange={toggleTheme} />
-{/* rotate-90 */}
+
+                                {/* rotate-90 */}
                                 <FaSun className='swap-on group-hover/theme:rotate-360 group-hover/theme:transition-all' />
                                 <FaMoon className='swap-off rotate-217 group-hover/theme:rotate-0 group-hover/theme:transition-all' />
                             </label>

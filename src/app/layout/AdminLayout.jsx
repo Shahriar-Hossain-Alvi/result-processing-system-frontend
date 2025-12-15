@@ -1,9 +1,13 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import DrawerSidebar from '../../components/ui/DrawerSidebar.jsx';
 import { GoSidebarCollapse, GoSidebarExpand } from 'react-icons/go';
 import { CiLogout } from 'react-icons/ci';
-import { MdLogout } from 'react-icons/md';
+import { MdDashboard, MdLogout } from 'react-icons/md';
 import useAuth from '../../hooks/useAuth.jsx';
+import { FaBook, FaBuilding, FaUsers } from 'react-icons/fa6';
+import { LuFileSpreadsheet, LuNotebookPen } from 'react-icons/lu';
+import { RiUserAddFill } from 'react-icons/ri';
+import { GrTableAdd } from 'react-icons/gr';
 
 
 const AdminLayout = () => {
@@ -18,31 +22,73 @@ const AdminLayout = () => {
     const adminNavLinks =
         <ul className="menu w-full grow">
 
-            {/* List item */}
+            {/* Close/Open Sidebar */}
             <li className='sm:hidden lg:block'>
                 <label htmlFor="my-drawer-4" aria-label="open sidebar" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Open Sidebar">
                     {/* Sidebar toggle icon */}
-                    <GoSidebarCollapse className='is-drawer-open:hidden' />
-                    <GoSidebarExpand className='is-drawer-close:hidden' />
+                    <GoSidebarCollapse className='is-drawer-open:hidden w-4 h-4' />
+                    <GoSidebarExpand className='is-drawer-close:hidden w-4 h-4' />
                     <span className='is-drawer-close:hidden transition duration-500 ease-in'>Close Sidebar</span>
                 </label>
 
             </li>
+
+            {/* Links */}
             <li>
-                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Homepage">
-                    {/* Home icon */}
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-                    <span className="is-drawer-close:hidden">Homepage</span>
-                </button>
+                <Link to="/admin" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Dashboard">
+                    <MdDashboard className='w-4 h-4' />
+                    <span   className="is-drawer-close:hidden">Dashboard</span>
+                </Link>
             </li>
 
-            {/* List item */}
+
             <li>
-                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
-                    {/* Settings icon */}
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
-                    <span className="is-drawer-close:hidden">Settings</span>
-                </button>
+                <Link to="/admin/departments" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Departments & Semesters">
+                    <FaBuilding className='w-4 h-4' />
+                    <span className="is-drawer-close:hidden">Departments & Semesters</span>
+                </Link>
+            </li>
+
+            <li>
+                <Link to="/admin/subjects" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Subjects">
+                    <FaBook className='w-4 h-4' />
+                    <span className="is-drawer-close:hidden">Subjects</span>
+                </Link>
+            </li>
+
+            <li>
+                <Link to="/admin/assignSubject" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Assign Subject">
+                    <LuNotebookPen className='w-4 h-4' />
+                    <span className="is-drawer-close:hidden">Assign Subject</span>
+                </Link>
+            </li>
+
+            <li>
+                <Link to="/admin/addUser" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Add User">
+                    <RiUserAddFill className='w-4 h-4' />
+                    <span className="is-drawer-close:hidden">Add User</span>
+                </Link>
+            </li>
+
+            <li>
+                <Link to="/admin/allUser" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All User">
+                    <FaUsers className='w-4 h-4' />
+                    <span className="is-drawer-close:hidden">All User</span>
+                </Link>
+            </li>
+
+            <li>
+                <Link to="/admin/insertMarks" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Insert marks">
+                    <GrTableAdd className='w-4 h-4' />
+                    <span className="is-drawer-close:hidden">Insert marks</span>
+                </Link>
+            </li>
+
+            <li>
+                <Link to="/admin/results" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Results">
+                    <LuFileSpreadsheet className='w-4 h-4' />
+                    <span className="is-drawer-close:hidden">Results</span>
+                </Link>
             </li>
 
             {/* logout button */}

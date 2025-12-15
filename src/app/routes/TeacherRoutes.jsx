@@ -1,11 +1,19 @@
 import { Route } from 'react-router-dom';
-import TeacherLayout from '../layout/TeacherLayout';
-import TeacherDashboard from '../../pages/teacher/TeacherDashboard';
+import TeacherLayout from '../layout/TeacherLayout.jsx';
+import TeacherDashboard from '../../pages/teacher/TeacherDashboard.jsx';
+import PrivateRoutes from '../../components/RouteHandlers/PrivateRoutes.jsx';
 
 const TeacherRoutes = (
-    <Route path="/teacher" element={<TeacherLayout />}>
+    <Route
+        path="/teacher"
+        element={
+            <PrivateRoutes role="teacher">
+                <TeacherLayout />
+            </PrivateRoutes>
+        }>
+
         <Route index element={<TeacherDashboard />} />
-    </Route>
+    </Route >
 )
 
 export default TeacherRoutes;
