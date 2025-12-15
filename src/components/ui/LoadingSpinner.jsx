@@ -1,7 +1,9 @@
 
 const LoadingSpinner = () => {
     return (
-        <span className="loading loading-spinner loading-xl text-primary"></span>
+        <div className="flex justify-center items-center min-h-screen">
+            <span className="loading loading-spinner loading-xl text-primary"></span>
+        </div>
     );
 };
 

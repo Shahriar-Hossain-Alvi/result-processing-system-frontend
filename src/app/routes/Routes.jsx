@@ -9,11 +9,13 @@ import AdminRoutes from "./AdminRoutes.jsx";
 import TeacherRoutes from "./TeacherRoutes.jsx";
 import StudentRoutes from "./StudentRoutes.jsx";
 import Unauthorize from "../../pages/public/Unauthorize.jsx";
+import RoleBasedRedirects from "../../components/RouteHandlers/RoleBasedRedirects.jsx";
 
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<MainLayout />} errorElement={<ErrorPage />}>
+            <Route index element={<RoleBasedRedirects />} />
 
             {/* public routes */}
             <Route path="/signin" element={<Signin />} />

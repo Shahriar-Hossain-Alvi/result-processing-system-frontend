@@ -5,18 +5,29 @@ import { FaEye } from 'react-icons/fa6';
 import useAxiosPublic from '../../hooks/useAxiosPublic.jsx';
 import useAuth from '../../hooks/useAuth.jsx';
 import { useNavigate } from 'react-router-dom';
+// @ts-ignore
 import axiosSecure from '../../utils/axios/axiosSecure.js';
 import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
+import toast, { Toaster } from 'react-hot-toast';
+import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
 
 const Signin = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const axiosPublic = useAxiosPublic();
+    const [formLoading, setFormLoading] = useState(false);
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const { loading, user, setLoading, fetchUser } = useAuth();
+    const { user, fetchUser, setLoading } = useAuth();
+
 
     const signInUser = async (data) => {
+
+        if (user) {
+            toast.error("Already logged in!");
+            return setTimeout(() => {
+                navigate('/');
+            }, 2000)
+        };
 
         // Backend expects username and password as formdata
         const formData = new FormData();
@@ -26,6 +37,7 @@ const Signin = () => {
         // TODO: prevent login if user is already logged in
 
         try {
+            setFormLoading(true);
             // 1: get token in httponly cookie from backend
             const res = await axiosSecure.post('/auth/login', formData);
 
@@ -44,6 +56,8 @@ const Signin = () => {
         } catch (error) {
             setLoading(false);
             console.error(error);
+        } finally {
+            setFormLoading(false);
         }
     }
 
@@ -100,7 +114,7 @@ const Signin = () => {
                             </div>
 
                             <div><a className="link link-hover">Forgot password?</a></div>
-                            <button className={`btn mt-4 ${loading ? "btn-disabled" : "btn-primary"}`} type='submit'>Login</button>
+                            <button className={`btn mt-4 ${formLoading ? "btn-disabled" : "btn-primary"}`} type='submit'>Login</button>
                         </fieldset>
                     </form>
                 </div>
