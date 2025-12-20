@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
 import { DepartmentsSkeleton, SemestersSkeleton } from '../../components/ui/Skeletons.jsx';
+import { FaEdit } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 
 const DepartmentsAndSemesters = () => {
     const axiosSecure = useAxiosSecure();
@@ -44,6 +46,7 @@ const DepartmentsAndSemesters = () => {
                                         <th>#</th>
                                         <th>Department Name</th>
                                         <th>Department ID</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -54,6 +57,14 @@ const DepartmentsAndSemesters = () => {
                                                 <th>{index + 1}</th>
                                                 <td>{department?.department_name}</td>
                                                 <td>{department?.id}</td>
+                                                <td>
+                                                    <button className="btn btn-ghost hover:bg-transparent border-0 group/edit-dept">
+                                                        <FaEdit className='group-hover/edit-dept:text-success' />
+                                                    </button>
+                                                    <button className="btn btn-ghost hover:bg-transparent border-0  group/delete-dept">
+                                                        <MdDelete className='group-hover/delete-dept:text-red-700 text-lg' />
+                                                    </button>
+                                                </td>
                                             </tr>
                                         )
                                     }
@@ -83,6 +94,7 @@ const DepartmentsAndSemesters = () => {
                                         <th>Semester Name</th>
                                         <th>Semester Number</th>
                                         <th>Semester ID</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -94,6 +106,14 @@ const DepartmentsAndSemesters = () => {
                                                 <td>{semester?.semester_name}</td>
                                                 <td>{semester?.semester_number}</td>
                                                 <td>{semester?.id}</td>
+                                                <td>
+                                                    <button className="btn btn-ghost hover:bg-transparent border-0 group/edit-semester">
+                                                        <FaEdit className='group-hover/edit-semester:text-success' />
+                                                    </button>
+                                                    <button className="btn btn-ghost hover:bg-transparent border-0  group/delete-semester">
+                                                        <MdDelete className='group-hover/delete-semester:text-red-700 text-lg' />
+                                                    </button>
+                                                </td>
                                             </tr>
                                         )
                                     }
