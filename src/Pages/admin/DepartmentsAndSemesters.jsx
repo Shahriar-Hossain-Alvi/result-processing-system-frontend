@@ -8,6 +8,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import CreateDepartment from '../../components/pageComponents/DepartmentPage/CreateDepartment.jsx';
+import CreateSemester from '../../components/pageComponents/DepartmentPage/CreateSemester.jsx';
 
 const DepartmentsAndSemesters = () => {
     const axiosSecure = useAxiosSecure();
@@ -32,7 +33,7 @@ const DepartmentsAndSemesters = () => {
     })
 
     // SEMESTERS query
-    const { data: totalSemesters, isLoading: isSemesterLoading, error: semesterError, isError: isSemesterError } = useQuery({
+    const { data: totalSemesters, isLoading: isSemesterLoading, error: semesterError, isError: isSemesterError, refetch: totalSemestersRefetch } = useQuery({
         queryKey: ['totalSemesters'],
         queryFn: async () => {
             const res = await axiosSecure('/semesters');
@@ -201,7 +202,12 @@ const DepartmentsAndSemesters = () => {
 
             {/* SEMESTERS */}
             <div className='mt-10'>
-                <h1 className='text-3xl font-bold'>Semesters</h1>
+
+                <div className='flex justify-between'>
+                    <h1 className='text-3xl font-bold'>Semesters</h1>
+
+                    <CreateSemester totalSemestersRefetch={totalSemestersRefetch} />
+                </div>
 
                 {isSemesterLoading && <SemestersSkeleton />}
                 {isSemesterError && <h4 className='text-error text-center text-lg'>An Error Occurred: {semesterError?.message}</h4>}
@@ -227,7 +233,7 @@ const DepartmentsAndSemesters = () => {
                                         totalSemesters?.map((semester, index) =>
                                             <tr key={semester?.id}>
                                                 <th>{index + 1}</th>
-                                                <td>{semester?.semester_name}</td>
+                                                <td className='capitalize'>{semester?.semester_name}</td>
                                                 <td>{semester?.semester_number}</td>
                                                 <td>{semester?.id}</td>
                                                 <td>
