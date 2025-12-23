@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure.jsx';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -7,7 +7,8 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 const CreateSemester = ({ totalSemestersRefetch }) => {
     const axiosSecure = useAxiosSecure();
-    const { register, handleSubmit, formState: { errors, isLoading }, reset } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const [isLoading, setIsLoading] = useState(false);
 
     // ADD NEW SEMESTER Function
     const addNewSemester = async (data) => {
@@ -18,11 +19,13 @@ const CreateSemester = ({ totalSemestersRefetch }) => {
         console.log(semester_name, semester_number);
 
         try {
+            setIsLoading(true);
             const res = await axiosSecure.post('/semesters', {
                 semester_name, semester_number
             });
             console.log(res);
             totalSemestersRefetch();
+
             // @ts-ignore
             document.getElementById('create_semester_modal').close();
             // @ts-ignore
@@ -33,6 +36,7 @@ const CreateSemester = ({ totalSemestersRefetch }) => {
             document.getElementById('create_semester_modal').close();
             toast.error(error?.response?.data?.detail);
         } finally {
+            setIsLoading(false);
             reset();
         }
     }

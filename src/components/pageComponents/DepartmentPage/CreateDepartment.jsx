@@ -3,16 +3,18 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure.jsx';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { useState } from 'react';
 
 const CreateDepartment = ({ allDepartmentsRefetch }) => {
     const axiosSecure = useAxiosSecure();
-    const { register, handleSubmit, formState: { errors, isLoading }, reset } = useForm();
-
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const [isLoading, setIsLoading] = useState(false);
 
     // ADD NEW DEPARTMENT Function
     const addNewDepartment = async (data) => {
         console.log(data);
         try {
+            setIsLoading(true);
             const res = await axiosSecure.post('/departments', { department_name: data.departmentName });
             console.log(res);
             allDepartmentsRefetch();
@@ -26,6 +28,7 @@ const CreateDepartment = ({ allDepartmentsRefetch }) => {
             document.getElementById('create_dept_modal').close();
             toast.error(error?.response?.data?.detail);
         } finally {
+            setIsLoading(false);
             reset();
         }
     }
@@ -58,7 +61,7 @@ const CreateDepartment = ({ allDepartmentsRefetch }) => {
                                         {...register("departmentName", { required: "Department name is required" })}
                                     />
                                 </div>
-                                <button className={`${isLoading && "btn-disabled"} btn w-full btn-success`}>
+                                <button className={`btn w-full ${isLoading ? "btn-disabled" : "btn-success"}`}>
                                     {isLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : "Create"}
                                 </button>
                             </form>
