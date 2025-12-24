@@ -8,16 +8,22 @@ import ThemeProvider from './provider/ThemeProvider.jsx'
 import AuthProvider from './provider/AuthProvider.jsx'
 
 // create tanstack query client
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3
+    }
+  }
+});
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
       {/* <AuthProvider> Auth Provider + axios interceptor + useNavigate */}
-        <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} /> {/* router provider(Routes are here) */}
-        </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} /> {/* router provider(Routes are here) */}
+      </QueryClientProvider>
       {/* </AuthProvider> */}
     </ThemeProvider>
   </StrictMode>,

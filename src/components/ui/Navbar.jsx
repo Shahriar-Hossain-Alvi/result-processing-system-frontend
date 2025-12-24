@@ -19,8 +19,8 @@ const Navbar = () => {
                     <NavLink to="/" className="text-xl">
                         {
                             theme == "dark" ?
-                            <img src={eduTrack_logo_white} className='max-h-20 w-28' alt="edutrack logo" /> :
-                            <img src={eduTrack_logo} className='max-h-20 w-28' alt="edutrack logo" />
+                                <img src={eduTrack_logo_white} className='max-h-20 w-28' alt="edutrack logo" /> :
+                                <img src={eduTrack_logo} className='max-h-20 w-28' alt="edutrack logo" />
                         }
                     </NavLink>
                 </div>
@@ -33,7 +33,7 @@ const Navbar = () => {
                         <li className='my-auto hover:bg-transparent group/theme'>
                             <label className="swap swap-rotate">
                                 {/* this hidden checkbox controls the state */}
-                                <input type="checkbox" className="theme-controller" value="silk" onChange={toggleTheme} />
+                                <input type="checkbox" className="theme-controller" value="light" onChange={toggleTheme} />
 
                                 {/* rotate-90 */}
                                 <FaSun className='swap-on group-hover/theme:rotate-360 group-hover/theme:transition-all' />
