@@ -15,7 +15,7 @@ const CreateDepartment = ({ allDepartmentsRefetch }) => {
         console.log(data);
         try {
             setIsLoading(true);
-            const res = await axiosSecure.post('/departments', { department_name: data.departmentName });
+            const res = await axiosSecure.post('/departments/', { department_name: data.departmentName });
             console.log(res);
             allDepartmentsRefetch();
             // @ts-ignore

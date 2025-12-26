@@ -15,7 +15,7 @@ const DepartmentsAndSemesters = () => {
     const { data: allDepartments, isLoading, isFetching, error, isError, refetch: allDepartmentsRefetch } = useQuery({
         queryKey: ['allDepartments'],
         queryFn: async () => {
-            const res = await axiosSecure('/departments');
+            const res = await axiosSecure('/departments/');
             return res.data;
         }
     })
@@ -24,7 +24,7 @@ const DepartmentsAndSemesters = () => {
     const { data: totalSemesters, isLoading: isSemesterLoading, isFetching: isSemesterFetching, error: semesterError, isError: isSemesterError, refetch: totalSemestersRefetch } = useQuery({
         queryKey: ['totalSemesters'],
         queryFn: async () => {
-            const res = await axiosSecure('/semesters');
+            const res = await axiosSecure('/semesters/');
             return res.data;
         }
     })

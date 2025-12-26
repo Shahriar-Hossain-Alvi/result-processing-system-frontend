@@ -20,7 +20,7 @@ const CreateSemester = ({ totalSemestersRefetch }) => {
 
         try {
             setIsLoading(true);
-            const res = await axiosSecure.post('/semesters', {
+            const res = await axiosSecure.post('/semesters/', {
                 semester_name, semester_number
             });
             console.log(res);
