@@ -6,13 +6,14 @@ import CreateTeacherTab from '../../components/pageComponents/AddUserPage/Create
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
 
 const AddUser = () => {
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const [formLoading, setFormLoading] = useState(false);
     // fetch departments
-    const { data: allDepartments, isLoading: isDepartmentsLoading, isError: isDepartmentsError } = useQuery({
+    const { data: allDepartments, isFetching: isDepartmentsFetching, isError: isDepartmentsError, error: departmentsError } = useQuery({
         queryKey: ['allDepartments'],
         queryFn: async () => {
             const res = await axiosSecure('/departments/');
@@ -40,8 +41,7 @@ const AddUser = () => {
             reset();
         } catch (error) {
             console.log(error);
-            const detail = error?.response?.data?.detail;
-            const message = Array.isArray(detail) ? detail[0]?.msg : detail;
+            const message = errorMessageParser(error);
             toast.error(message || "Failed to create admin. Please try again.");
         } finally {
             setFormLoading(false);
@@ -60,13 +60,21 @@ const AddUser = () => {
                 {/* Student Tab */}
                 <input type="radio" name="registration_tab" className="tab checked:font-bold checked:text-primary" aria-label="Student" defaultChecked />
                 <div className="tab-content bg-base-100 border-base-300 md:p-6">
-                    <CreateStudentTab allDepartments={allDepartments} isDepartmentsLoading={isDepartmentsLoading} isDepartmentsError={isDepartmentsError} />
+                    <CreateStudentTab
+                        allDepartments={allDepartments}
+                        isDepartmentsFetching={isDepartmentsFetching} isDepartmentsError={isDepartmentsError}
+                        departmentsError={departmentsError}
+                    />
                 </div>
 
                 {/* Teacher Tab */}
                 <input type="radio" name="registration_tab" className="tab checked:text-primary checked:font-bold" aria-label="Teacher" />
                 <div className="tab-content bg-base-100 border-base-300 md:p-6">
-                    <CreateTeacherTab allDepartments={allDepartments} isDepartmentsLoading={isDepartmentsLoading} isDepartmentsError={isDepartmentsError} />
+                    <CreateTeacherTab
+                        allDepartments={allDepartments}
+                        isDepartmentsFetching={isDepartmentsFetching} isDepartmentsError={isDepartmentsError}
+                        departmentsError={departmentsError}
+                    />
                 </div>
 
                 {/* Admin Tab */}

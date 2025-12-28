@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useState } from 'react';
+import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
 
 const CreateDepartment = ({ allDepartmentsRefetch }) => {
     const axiosSecure = useAxiosSecure();
@@ -26,7 +27,8 @@ const CreateDepartment = ({ allDepartmentsRefetch }) => {
             console.log(error);
             // @ts-ignore
             document.getElementById('create_dept_modal').close();
-            toast.error(error?.response?.data?.detail);
+            const message = errorMessageParser(error);
+            toast.error(message || 'Failed to add new department');
         } finally {
             setIsLoading(false);
             reset();

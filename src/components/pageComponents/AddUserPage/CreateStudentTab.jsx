@@ -6,9 +6,10 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure.jsx";
 import toast from "react-hot-toast";
 import axios from "axios";
 import CreateUserForm from "../../ui/CreateUserForm.jsx";
+import errorMessageParser from "../../../utils/errorMessageParser/errorMessageParser.js";
 
 
-const CreateStudentTab = ({ allDepartments, isDepartmentsLoading, isDepartmentsError }) => {
+const CreateStudentTab = ({ allDepartments, isDepartmentsFetching, isDepartmentsError, departmentsError }) => {
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
@@ -21,7 +22,7 @@ const CreateStudentTab = ({ allDepartments, isDepartmentsLoading, isDepartmentsE
 
 
     // fetch semesters
-    const { data: allSemesters, isLoading: isSemesterLoading, isError: isSemesterError } = useQuery({
+    const { data: allSemesters, isLoading: isSemesterLoading, isError: isSemesterError, error: semesterError } = useQuery({
         queryKey: ['allSemesters'],
         queryFn: async () => {
             const res = await axiosSecure('/semesters/');
@@ -32,13 +33,17 @@ const CreateStudentTab = ({ allDepartments, isDepartmentsLoading, isDepartmentsE
     // Only runs when the error state actually changes (prevent Cannot update a component (`Fe`) error and show error toast)
     useEffect(() => {
         if (isDepartmentsError) {
-            toast.error('Failed to fetch departments');
+            console.log(isDepartmentsError);
+            const message = errorMessageParser(departmentsError);
+            toast.error(message || "Failed to fetch departments");
         }
     }, [isDepartmentsError]);
 
     useEffect(() => {
         if (isSemesterError) {
-            toast.error('Failed to fetch semesters');
+            console.log(isSemesterError);
+            const message = errorMessageParser(semesterError);
+            toast.error(message || "Failed to fetch semesters");
         }
     }, [isSemesterError]);
 
@@ -103,8 +108,7 @@ const CreateStudentTab = ({ allDepartments, isDepartmentsLoading, isDepartmentsE
             reset();
         } catch (error) {
             console.log(error);
-            const detail = error?.response?.data?.detail;
-            const message = Array.isArray(detail) ? detail[0]?.msg : detail;
+            const message = errorMessageParser(error);
             toast.error(message || "Failed to create student. Please try again.");
         } finally {
             setFormLoading(false);
@@ -122,7 +126,7 @@ const CreateStudentTab = ({ allDepartments, isDepartmentsLoading, isDepartmentsE
                 errors={errors}
                 formLoading={formLoading}
                 handleSubmit={handleSubmit}
-                isDepartmentsLoading={isDepartmentsLoading}
+                isDepartmentsFetching={isDepartmentsFetching}
                 register={register}
                 role="student"
                 userSpecificData={{

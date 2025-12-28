@@ -6,7 +6,7 @@ const CreateUserForm = ({
     handleSubmit,
     errors, register,
     formLoading, allDepartments,
-    isDepartmentsLoading,
+    isDepartmentsFetching,
     role, userSpecificData = {}
 }) => {
     const [showNextForm, setShowNextForm] = useState(false);
@@ -99,7 +99,7 @@ const CreateUserForm = ({
                 <div className={`w-full`}>
                     <label className="label">Select Department</label>
                     {
-                        isDepartmentsLoading ?
+                        isDepartmentsFetching ?
                             <div className="skeleton h-10"></div>
                             :
                             <select

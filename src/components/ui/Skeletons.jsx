@@ -1,3 +1,5 @@
+// @ts-ignore
+import defaultImage from "../../assets/blank-profile-picture.png";
 
 export const DepartmentsSkeleton = () => {
     return <div>
@@ -73,3 +75,78 @@ export const SemestersSkeleton = () => {
         </table>
     </div>
 };
+
+export const AllUserTableSkeleton = () => {
+    return <table className="table">
+        {/* head */}
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Username/Email</th>
+                <th>Role</th>
+                <th>Account</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Photo</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td>
+                    <div className="mask mask-squircle h-10 w-10">
+                        <img
+                            src={defaultImage}
+                            alt="User Photo" />
+                    </div>
+                </td>
+                <td>
+                    <button className="btn skeleton w-16"></button>
+                </td>
+            </tr>
+            <tr>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td>
+                    <div className="mask mask-squircle h-10 w-10">
+                        <img
+                            src={defaultImage}
+                            alt="User Photo" />
+                    </div>
+                </td>
+                <td>
+                    <button className="btn skeleton w-16"></button>
+                </td>
+            </tr>
+            <tr>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td className="skeleton h-5 w-3"></td>
+                <td>
+                    <div className="mask mask-squircle h-10 w-10">
+                        <img
+                            src={defaultImage}
+                            alt="User Photo" />
+                    </div>
+                </td>
+                <td>
+                    <button className="btn skeleton w-16"></button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+}
