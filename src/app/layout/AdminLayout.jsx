@@ -28,7 +28,7 @@ const AdminLayout = () => {
                     {/* Sidebar toggle icon */}
                     <GoSidebarCollapse className='is-drawer-open:hidden w-4 h-4' />
                     <GoSidebarExpand className='is-drawer-close:hidden w-4 h-4' />
-                    <span className='is-drawer-close:hidden transition duration-500 ease-in'>Close Sidebar</span>
+                    <p className='is-drawer-close:hidden transition duration-500 ease-in'>Close Sidebar</p>
                 </label>
 
             </li>
@@ -37,7 +37,7 @@ const AdminLayout = () => {
             <li>
                 <Link to="/admin" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Dashboard">
                     <MdDashboard className='w-4 h-4' />
-                    <span className="is-drawer-close:hidden">Dashboard</span>
+                    <p className="is-drawer-close:hidden">Dashboard</p>
                 </Link>
             </li>
 
@@ -45,49 +45,49 @@ const AdminLayout = () => {
             <li>
                 <Link to="/admin/departmentsAndSemesters" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Departments & Semesters">
                     <FaBuilding className='w-4 h-4' />
-                    <span className="is-drawer-close:hidden">Departments & Semesters</span>
+                    <p className="is-drawer-close:hidden">Departments & Semesters</p>
                 </Link>
             </li>
 
             <li>
                 <Link to="/admin/subjects" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Subjects">
                     <FaBook className='w-4 h-4' />
-                    <span className="is-drawer-close:hidden">Subjects</span>
+                    <p className="is-drawer-close:hidden">Subjects</p>
                 </Link>
             </li>
 
             <li>
                 <Link to="/admin/assignSubject" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Assign Subject">
                     <LuNotebookPen className='w-4 h-4' />
-                    <span className="is-drawer-close:hidden">Assign Subject</span>
+                    <p className="is-drawer-close:hidden">Assign Subject</p>
                 </Link>
             </li>
 
             <li>
                 <Link to="/admin/addUser" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Add User">
                     <RiUserAddFill className='w-4 h-4' />
-                    <span className="is-drawer-close:hidden">Add User</span>
+                    <p className="is-drawer-close:hidden">Add User</p>
                 </Link>
             </li>
 
             <li>
                 <Link to="/admin/allUser" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All User">
                     <FaUsers className='w-4 h-4' />
-                    <span className="is-drawer-close:hidden">All User</span>
+                    <p className="is-drawer-close:hidden">All User</p>
                 </Link>
             </li>
 
             <li>
                 <Link to="/admin/insertMarks" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Insert marks">
                     <GrTableAdd className='w-4 h-4' />
-                    <span className="is-drawer-close:hidden">Insert marks</span>
+                    <p className="is-drawer-close:hidden">Insert marks</p>
                 </Link>
             </li>
 
             <li>
                 <Link to="/admin/results" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Results">
                     <LuFileSpreadsheet className='w-4 h-4' />
-                    <span className="is-drawer-close:hidden">Results</span>
+                    <p className="is-drawer-close:hidden">Results</p>
                 </Link>
             </li>
 
@@ -96,7 +96,7 @@ const AdminLayout = () => {
                 <button onClick={handleLogout} className="is-drawer-close:tooltip is-drawer-close:tooltip-right btn btn-error is-drawer-close:btn-sm is-drawer-open:rounded-none" data-tip="Logout">
 
                     <MdLogout className='w-4 h-4' />
-                    <span className="is-drawer-close:hidden text-black">Logout</span>
+                    <p className="is-drawer-close:hidden text-black">Logout</p>
                 </button>
             </li>
         </ul>

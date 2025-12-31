@@ -5,9 +5,10 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import SectionHeader from '../../../utils/SectionHeader/SectionHeader.jsx';
 import CreateUserForm from '../../ui/CreateUserForm.jsx';
+import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
 
 
-const CreateTeacherTab = ({ allDepartments, isDepartmentsLoading, isDepartmentsError }) => {
+const CreateTeacherTab = ({ allDepartments, isDepartmentsFetching, isDepartmentsError, departmentsError }) => {
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
@@ -20,7 +21,8 @@ const CreateTeacherTab = ({ allDepartments, isDepartmentsLoading, isDepartmentsE
     // Only runs when the error state actually changes (prevent Cannot update a component (`Fe`) error and show error toast)
     useEffect(() => {
         if (isDepartmentsError) {
-            toast.error('Failed to fetch departments');
+            const message = errorMessageParser(departmentsError);
+            toast.error(message || 'Failed to fetch departments');
         }
     }, [isDepartmentsError]);
 
@@ -84,10 +86,7 @@ const CreateTeacherTab = ({ allDepartments, isDepartmentsLoading, isDepartmentsE
             reset();
         } catch (error) {
             console.log(error);
-            const detail = error?.response?.data?.detail;
-            const message = Array.isArray(detail) ? detail[0]?.msg : detail;
-
-
+            const message = errorMessageParser(error);
             toast.error(message || "Failed to create teacher. Please try again.");
 
         } finally {
@@ -106,7 +105,7 @@ const CreateTeacherTab = ({ allDepartments, isDepartmentsLoading, isDepartmentsE
                     errors={errors}
                     formLoading={formLoading}
                     handleSubmit={handleSubmit}
-                    isDepartmentsLoading={isDepartmentsLoading}
+                    isDepartmentsFetching={isDepartmentsFetching}
                     register={register}
                     role="teacher"
                     userSpecificData={{

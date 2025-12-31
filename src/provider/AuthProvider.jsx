@@ -9,7 +9,7 @@ export const AuthContext = createContext(
         loading: true,
         setLoading: (newState) => { {/* Its to avoid error/warning */ } },
         // fetchUser: () => Promise.resolve({ role: null }), // role:null to avoid 'void' warning
-        fetchUser: () => Promise.resolve({role: null}), // role:null to avoid 'void' warning
+        fetchUser: () => Promise.resolve({ role: null }), // role:null to avoid 'void' warning
         logout: (bypass) => { },
         axiosSecure: axiosSecure,
         axiosPublic: axiosPublic
@@ -37,7 +37,6 @@ const AuthProvider = ({ children }) => {
                 console.error("Backend logout failed", error);
             }
         }
-        // Show toast after logout
     }, [])
 
 
@@ -48,8 +47,13 @@ const AuthProvider = ({ children }) => {
             setUser(res?.data);
             return res?.data;
         } catch (error) {
-            console.error("Backend user fetch failed", error);
-            setUser(null);
+            if (error.response?.status === 401) {
+                // This is a known state: User is just not logged in.
+                setUser(null);
+                console.log("Token expires/No active session found/login again.");
+            } else {
+                console.error("Actual error while fetching user", error);
+            }
             return null;
         } finally {
             setLoading(false);

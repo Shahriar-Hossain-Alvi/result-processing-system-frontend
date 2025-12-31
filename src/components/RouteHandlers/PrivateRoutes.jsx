@@ -3,7 +3,7 @@ import useAuth from '../../hooks/useAuth.jsx';
 import { Navigate, useLocation } from 'react-router-dom';
 
 const PrivateRoutes = ({ children, role }) => {
-    const { user, loading, logout } = useAuth();
+    const { user, loading } = useAuth();
     const location = useLocation();
 
     // 1. Wait for user to load

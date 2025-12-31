@@ -5,6 +5,7 @@ import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import toast from 'react-hot-toast';
+import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
 
 const SemesterTable = ({ totalSemesters, totalSemestersRefetch }) => {
     const axiosSecure = useAxiosSecure();
@@ -48,7 +49,8 @@ const SemesterTable = ({ totalSemesters, totalSemestersRefetch }) => {
             console.error(error);
             // @ts-ignore
             document.getElementById('update_semester_modal').close();
-            toast.error(error?.response?.data?.detail || 'Failed to update semester');
+            const message = errorMessageParser(error);
+            toast.error(message || 'Failed to update semester');
         } finally {
             setIsFormLoading(false);
             reset();
@@ -70,7 +72,8 @@ const SemesterTable = ({ totalSemesters, totalSemestersRefetch }) => {
             console.log(error);
             // @ts-ignore
             document.getElementById('delete_semester_modal').close();
-            toast.error(error?.response?.data?.detail || 'Failed to delete semester');
+            const message = errorMessageParser(error);
+            toast.error(message || 'Failed to delete semester');
         } finally {
             setIsFormLoading(false);
         }

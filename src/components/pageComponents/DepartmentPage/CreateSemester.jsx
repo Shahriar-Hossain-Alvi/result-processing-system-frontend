@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaPlus } from 'react-icons/fa6';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
 
 const CreateSemester = ({ totalSemestersRefetch }) => {
     const axiosSecure = useAxiosSecure();
@@ -34,7 +35,8 @@ const CreateSemester = ({ totalSemestersRefetch }) => {
             console.log(error);
             // @ts-ignore
             document.getElementById('create_semester_modal').close();
-            toast.error(error?.response?.data?.detail);
+            const message = errorMessageParser(error);
+            toast.error(message || 'Failed to add new semester');
         } finally {
             setIsLoading(false);
             reset();

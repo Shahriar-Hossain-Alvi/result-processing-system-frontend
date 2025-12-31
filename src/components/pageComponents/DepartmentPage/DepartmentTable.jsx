@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
+import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
 
 const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
     const axiosSecure = useAxiosSecure();
@@ -39,7 +40,8 @@ const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
             console.log(error);
             // @ts-ignore
             document.getElementById('update_dept_modal').close();
-            toast.error(error?.response?.data?.detail || 'Failed to delete department');
+            const message = errorMessageParser(error);
+            toast.error(message || 'Failed to update department');
         } finally {
             setIsFormLoading(false);
             reset();
@@ -62,7 +64,8 @@ const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
             console.log(error);
             // @ts-ignore
             document.getElementById('delete_dept_modal').close();
-            toast.error(error?.response?.data?.detail || 'Failed to delete department');
+            const message = errorMessageParser(error);
+            toast.error(message || 'Failed to delete department');
         } finally {
             setIsFormLoading(false);
         }

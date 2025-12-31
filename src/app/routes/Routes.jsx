@@ -10,6 +10,8 @@ import TeacherRoutes from "./TeacherRoutes.jsx";
 import StudentRoutes from "./StudentRoutes.jsx";
 import Unauthorize from "../../pages/public/Unauthorize.jsx";
 import RoleBasedRedirects from "../../components/RouteHandlers/RoleBasedRedirects.jsx";
+import SingleUserDetails from "../../pages/private/SingleUserDetails.jsx";
+import PrivateRoutes from "../../components/RouteHandlers/PrivateRoutes.jsx";
 
 
 const router = createBrowserRouter(
@@ -23,7 +25,6 @@ const router = createBrowserRouter(
             <Route path="/contact" element={<Contact />} />
             <Route path="/faculties" element={<Faculties />} />
             <Route path="/unauthorized" element={<Unauthorize />} />
-
 
             {/* Admin routes */}
             {AdminRoutes}
