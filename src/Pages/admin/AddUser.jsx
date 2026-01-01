@@ -13,7 +13,7 @@ const AddUser = () => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const [formLoading, setFormLoading] = useState(false);
     // fetch departments
-    const { data: allDepartments, isFetching: isDepartmentsFetching, isError: isDepartmentsError, error: departmentsError } = useQuery({
+    const { data: allDepartments, isPending: isDepartmentsPending, isError: isDepartmentsError, error: departmentsError } = useQuery({
         queryKey: ['allDepartments'],
         queryFn: async () => {
             const res = await axiosSecure('/departments/');
@@ -62,7 +62,7 @@ const AddUser = () => {
                 <div className="tab-content bg-base-100 border-base-300 md:p-6">
                     <CreateStudentTab
                         allDepartments={allDepartments}
-                        isDepartmentsFetching={isDepartmentsFetching} isDepartmentsError={isDepartmentsError}
+                        isDepartmentsPending={isDepartmentsPending} isDepartmentsError={isDepartmentsError}
                         departmentsError={departmentsError}
                     />
                 </div>
@@ -72,7 +72,7 @@ const AddUser = () => {
                 <div className="tab-content bg-base-100 border-base-300 md:p-6">
                     <CreateTeacherTab
                         allDepartments={allDepartments}
-                        isDepartmentsFetching={isDepartmentsFetching} isDepartmentsError={isDepartmentsError}
+                        isDepartmentsPending={isDepartmentsPending} isDepartmentsError={isDepartmentsError}
                         departmentsError={departmentsError}
                     />
                 </div>

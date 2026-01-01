@@ -12,7 +12,7 @@ const DepartmentsAndSemesters = () => {
 
 
     // DEPARTMENTS query
-    const { data: allDepartments, isLoading, isFetching, error, isError, refetch: allDepartmentsRefetch } = useQuery({
+    const { data: allDepartments, isPending, error, isError, refetch: allDepartmentsRefetch } = useQuery({
         queryKey: ['allDepartments'],
         queryFn: async () => {
             const res = await axiosSecure('/departments/');
@@ -21,7 +21,7 @@ const DepartmentsAndSemesters = () => {
     })
 
     // SEMESTERS query
-    const { data: totalSemesters, isLoading: isSemesterLoading, isFetching: isSemesterFetching, error: semesterError, isError: isSemesterError, refetch: totalSemestersRefetch } = useQuery({
+    const { data: totalSemesters, isPending: isSemesterPending, error: semesterError, isError: isSemesterError, refetch: totalSemestersRefetch } = useQuery({
         queryKey: ['totalSemesters'],
         queryFn: async () => {
             const res = await axiosSecure('/semesters/');
@@ -41,7 +41,7 @@ const DepartmentsAndSemesters = () => {
                     <CreateDepartment allDepartmentsRefetch={allDepartmentsRefetch} />
                 </div>
 
-                {(isLoading || isFetching) && <DepartmentsSkeleton />}
+                {(isPending) && <DepartmentsSkeleton />}
                 {isError && <h4 className='text-error text-center text-lg'>An Error Occurred: {error?.message}</h4>}
 
 
@@ -50,7 +50,7 @@ const DepartmentsAndSemesters = () => {
                     allDepartments?.length === 0 ?
                         <h4 className='text-error text-center text-lg'>No departments found</h4>
                         :
-                        (!isFetching && <DepartmentTable allDepartments={allDepartments} allDepartmentsRefetch={allDepartmentsRefetch} />)
+                        (!isPending && <DepartmentTable allDepartments={allDepartments} allDepartmentsRefetch={allDepartmentsRefetch} />)
                 }
             </div>
 
@@ -65,13 +65,13 @@ const DepartmentsAndSemesters = () => {
                     <CreateSemester totalSemestersRefetch={totalSemestersRefetch} />
                 </div>
 
-                {(isSemesterLoading || isSemesterFetching) && <SemestersSkeleton />}
+                {(isSemesterPending) && <SemestersSkeleton />}
                 {isSemesterError && <h4 className='text-error text-center text-lg'>An Error Occurred: {semesterError?.message}</h4>}
                 {
                     totalSemesters?.length === 0 ?
                         <h4 className='text-error text-center text-lg'>No semesters found</h4>
                         :
-                        (!isSemesterFetching && <SemesterTable totalSemesters={totalSemesters} totalSemestersRefetch={totalSemestersRefetch} />)
+                        (!isSemesterPending && <SemesterTable totalSemesters={totalSemesters} totalSemestersRefetch={totalSemestersRefetch} />)
                 }
 
 

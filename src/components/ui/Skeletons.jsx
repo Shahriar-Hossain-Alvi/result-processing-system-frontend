@@ -150,3 +150,78 @@ export const AllUserTableSkeleton = () => {
         </tbody>
     </table>
 }
+
+
+export const SingleUserDetailsSkeleton = () => {
+    return <div className="flex flex-col sm:flex-row sm:gap-5 place-self-center">
+        {/* Picture left square */}
+        <div className="avatar mx-auto w-full sm:min-w-60 max-w-72 border p-2 rounded">
+            <div className="rounded">
+                <img src={defaultImage} />
+            </div>
+        </div>
+
+        {/* Id, Name, email, Role, Department, username right */}
+        <div className="overflow-x-auto w-full">
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* ID */}
+                    <tr className="text-lg hover:bg-base-300">
+                        <th>
+                            <p className="font-bold">ID:</p>
+                        </th>
+                        <td>
+                            <span className="skeleton skeleton-text">fetching...</span>
+                        </td>
+                    </tr>
+
+                    {/* Role */}
+                    <tr className="text-lg hover:bg-base-300capitalize">
+                        <th>
+                            <p className="font-bold">Role:</p>
+                        </th>
+                        <td className="capitalize">
+                            <span className="skeleton skeleton-text">fetching...</span>
+                        </td>
+                    </tr>
+
+                    {/* Username */}
+                    <tr className="text-lg hover:bg-base-300">
+                        <th>
+                            <p className="font-bold">Username:</p>
+                        </th>
+                        <td>
+                            <span className="skeleton skeleton-text">fetching...</span>
+                        </td>
+                    </tr>
+
+                    {/* Email */}
+                    <tr className="text-lg hover:bg-base-300">
+                        <th>
+                            <p className="font-bold">Email:</p>
+                        </th>
+                        <td>
+                            <span className="skeleton skeleton-text">fetching...</span>
+                        </td>
+                    </tr>
+
+                    {/* Account Status */}
+                    <tr className="text-lg hover:bg-base-300">
+                        <th>
+                            <p className="font-bold">Account Status:</p>
+                        </th>
+                        <td>
+                            <button className="skeleton skeleton-text">fetching...</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

@@ -13,7 +13,7 @@ const AllUser = () => {
     const axiosSecure = useAxiosSecure();
     const [allUserFilter, setAllUserFilter] = useState(localStorage.getItem("allUserFilter") || "");
 
-    const { data: allUser, isError: isAllUserError, isFetching: isAllUserFetching, error: allUserError } = useQuery({
+    const { data: allUser, isError: isAllUserError, isPending: isAllUserPending, error: allUserError } = useQuery({
         queryKey: ['allUser', allUserFilter],
         queryFn: async () => {
             const res = await axiosSecure(`/users/?user_role=${allUserFilter}`);
@@ -29,8 +29,6 @@ const AllUser = () => {
             toast.error(message || "Failed to fetch users. Please try again.");
         }
     }, [isAllUserError])
-
-    console.log(isAllUserFetching);
 
     return (
         <div>
@@ -50,7 +48,7 @@ const AllUser = () => {
                 </select>
             </div>
             {
-                isAllUserFetching ?
+                isAllUserPending ?
                     <AllUserTableSkeleton />
                     :
                     <div className="overflow-x-auto overflow-y-clip">

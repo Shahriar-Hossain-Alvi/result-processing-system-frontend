@@ -9,7 +9,7 @@ import CreateUserForm from "../../ui/CreateUserForm.jsx";
 import errorMessageParser from "../../../utils/errorMessageParser/errorMessageParser.js";
 
 
-const CreateStudentTab = ({ allDepartments, isDepartmentsFetching, isDepartmentsError, departmentsError }) => {
+const CreateStudentTab = ({ allDepartments, isDepartmentsPending, isDepartmentsError, departmentsError }) => {
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
@@ -126,7 +126,7 @@ const CreateStudentTab = ({ allDepartments, isDepartmentsFetching, isDepartments
                 errors={errors}
                 formLoading={formLoading}
                 handleSubmit={handleSubmit}
-                isDepartmentsFetching={isDepartmentsFetching}
+                isDepartmentsPending={isDepartmentsPending}
                 register={register}
                 role="student"
                 userSpecificData={{
