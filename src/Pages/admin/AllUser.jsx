@@ -42,6 +42,7 @@ const AllUser = () => {
                     localStorage.setItem("allUserFilter", e.target.value); setAllUserFilter(e.target.value)
                 }}>
                     <option value="">All</option>
+                    <option value="super_admin">Super Admin</option>
                     <option value="admin">Admin</option>
                     <option value="student">Student</option>
                     <option value="teacher">Teacher</option>
@@ -109,7 +110,7 @@ const AllUser = () => {
                                             </td>
                                             <td>
                                                 {
-                                                    user?.role !== "admin" &&
+                                                    (user?.role !== "admin" && user?.role !== "super_admin") &&
                                                     <Link
                                                         to={`/admin/user/${user.id}`}
                                                         state={{ userData: user }} // pass the user data to the user details page

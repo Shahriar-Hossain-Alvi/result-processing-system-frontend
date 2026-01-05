@@ -88,7 +88,6 @@ const CreateStudentTab = ({ allDepartments, isDepartmentsPending, isDepartmentsE
             photo_public_id: public_id || "",
             present_address: data.present_address || "",
             permanent_address: data.permanent_address || "",
-            mobile_number: data.mobile_number || "",
             date_of_birth: data.date_of_birth ? data.date_of_birth : null,
 
             // required fields for user table
@@ -96,8 +95,9 @@ const CreateStudentTab = ({ allDepartments, isDepartmentsPending, isDepartmentsE
                 username: data.email,
                 email: data.email,
                 role: "student",
+                mobile_number: data.mobile_number || null,
                 is_active: data.account_status !== "disable",
-                password: data.password || "123456"
+                password: data.password || "123456",
             }
         }
         // send data to backend

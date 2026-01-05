@@ -1,20 +1,14 @@
-import { useLocation, useParams } from "react-router-dom";
-
-// @ts-ignore
-import defaultImage from "../../assets/blank-profile-picture.png";
+import { useParams } from "react-router-dom";
 import SectionHeader from "../../utils/SectionHeader/SectionHeader.jsx";
 import { FaEdit } from "react-icons/fa";
-import { useForm } from "react-hook-form";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure.jsx";
-import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
 import { SingleUserDetailsSkeleton } from "../../components/ui/Skeletons.jsx";
 import errorMessageParser from "../../utils/errorMessageParser/errorMessageParser.js";
-import UpdateUserAuthDetailsByAdminModal from "../../components/pageComponents/SingleUserDetailspage/UpdateUserAuthDetailsByAdminModal.jsx";
-import UpdateUsersAllDetailsModal from "../../components/pageComponents/SingleUserDetailspage/UpdateUsersAllDetailsModal.jsx";
+import UpdateUserAuthDetailsByAdminModal from "../../components/pageComponents/SingleUserDetailsPage/UpdateUserAuthDetailsByAdminModal.jsx";
+import UpdateUsersAllDetailsModal from "../../components/pageComponents/SingleUserDetailsPage/UpdateUsersAllDetailsModal.jsx";
+// @ts-ignore
+import defaultImage from "../../assets/blank-profile-picture.png";
 
 
 const SingleUserDetails = () => {
@@ -22,7 +16,7 @@ const SingleUserDetails = () => {
     const axiosSecure = useAxiosSecure();
 
     // Get the user details using the id
-    const { data: singleUserDetails, isPending, isError, error, refetch } = useQuery({
+    const { data: singleUserDetails, isPending, isError, error, refetch: singleUserDetailsRefetch } = useQuery({
         queryKey: ['user', id],
         queryFn: async () => {
             const res = await axiosSecure(`/users/${id}`);
@@ -43,7 +37,7 @@ const SingleUserDetails = () => {
     }
 
     // Destructure the user details
-    const { email, role, student, teacher, username, is_active } = singleUserDetails;
+    const { email, role, student, teacher, username, is_active, mobile_number } = singleUserDetails;
 
     // user image
     const userImage = student && student.photo_url || teacher && teacher.photo_url;
@@ -128,6 +122,16 @@ const SingleUserDetails = () => {
                                     </td>
                                 </tr>
 
+                                {/* Mobile */}
+                                <tr className="text-lg hover:bg-base-300">
+                                    <th>
+                                        <p className="font-bold">Mobile:</p>
+                                    </th>
+                                    <td>
+                                        {mobile_number || <span className="text-error">N/A</span>}
+                                    </td>
+                                </tr>
+
                                 {/* Account Status */}
                                 <tr className="text-lg hover:bg-base-300">
                                     <th>
@@ -197,17 +201,6 @@ const SingleUserDetails = () => {
                     }
                     <div className="md:text-lg max-w-4xl">
                         <div className="grid sm:grid-cols-3 justify-between items-center max-w-4xl mb-2 space-y-1 sm:space-y-0 gap-5">
-
-                            {/* Mobile Number */}
-                            <h2>
-                                <span className="font-bold mr-1 underline underline-offset-2">Mobile:</span>
-                                {(student && student.mobile_number) && student.mobile_number}
-                                {(student && student.mobile_number === "") && <span className="text-error">N/A</span>}
-
-                                {(teacher && teacher.mobile_number) && teacher.mobile_number}
-                                {(teacher && teacher.mobile_number === "") && <span className="text-error">N/A</span>}
-                            </h2>
-
                             {/* Date of Birth */}
                             <h2 className="sm:col-span-2">
                                 <span className="font-bold mr-1 underline underline-offset-2">Date of Birth:</span>
@@ -268,12 +261,20 @@ const SingleUserDetails = () => {
 
             {/* User data Update Modal (Email, Account Status) */}
             <dialog id="update_user_details_modal" className="modal">
-                <UpdateUserAuthDetailsByAdminModal singleUserDetails={singleUserDetails} refetch={refetch} id={id} />
+                <UpdateUserAuthDetailsByAdminModal
+                    singleUserDetails={singleUserDetails}
+                    singleUserDetailsRefetch={singleUserDetailsRefetch}
+                    user_id={id}
+                />
             </dialog>
 
             {/* Other data (Teacher/Student Tables data) update Modal  */}
             <dialog id="update_users_other_details_modal" className="modal">
-                <UpdateUsersAllDetailsModal singleUserDetails={singleUserDetails} refetch={refetch} id={id} />
+                <UpdateUsersAllDetailsModal
+                    singleUserDetails={singleUserDetails}
+                    singleUserDetailsRefetch={singleUserDetailsRefetch}
+                    user_specific_table_id={student && student.id || teacher && teacher.id}
+                />
             </dialog>
 
 

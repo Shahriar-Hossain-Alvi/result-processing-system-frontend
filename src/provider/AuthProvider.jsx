@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import axiosSecure from "../utils/axios/axiosSecure.js";
 import axiosPublic from "../utils/axios/axiosPublic.js";
+import toast from "react-hot-toast";
 
 
 export const AuthContext = createContext(
@@ -33,6 +34,7 @@ const AuthProvider = ({ children }) => {
             try {
                 const res = await axiosSecure.post('/auth/logout');
                 console.log("Logout message", res?.data?.message);
+                toast.success(res?.data?.message);
             } catch (error) {
                 console.error("Backend logout failed", error);
             }

@@ -42,6 +42,7 @@ const Signin = () => {
             const res = await axiosSecure.post('/auth/login', formData);
 
             if (res?.data?.message === "Login successful") {
+                toast.success(res?.data?.message);
                 // 2: Fetch user info using the new cookie
                 const userData = await fetchUser();
                 // 3: Redirect based on the fetched data 

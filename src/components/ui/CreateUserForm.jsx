@@ -48,6 +48,11 @@ const CreateUserForm = ({
                     />
                 </div>
 
+                {/* Mobile Number */}
+                <label className="label">Mobile Number: </label>
+                <input type="text" className="input" placeholder="Mobile Number"
+                    {...register("mobile_number")}
+                />
 
                 {/* Account Status (Active by default) */}
                 <label className="label">Active Account<span className="text-red-600">*</span></label>
@@ -149,11 +154,6 @@ const CreateUserForm = ({
                 <label className="label">Permanent Address</label>
                 <input type="text" className="input" placeholder="Permanent Address"
                     {...register("permanent_address")}
-                />
-
-                <label className="label">Mobile Number: </label>
-                <input type="text" className="input" placeholder="Mobile Number"
-                    {...register("mobile_number")}
                 />
 
                 <label className="label">Date of Birth</label>

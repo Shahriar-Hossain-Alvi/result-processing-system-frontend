@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import useAxiosSecure from '../../../hooks/useAxiosSecure.jsx';
 import toast from 'react-hot-toast';
 import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
 
-const UpdateUserAuthDetailsByAdminModal = ({ singleUserDetails, refetch, id }) => {
+const UpdateUserAuthDetailsByAdminModal = ({ singleUserDetails, singleUserDetailsRefetch, user_id }) => {
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, reset } = useForm();
     const [isFormLoading, setIsFormLoading] = useState(false);
 
-    const { email, role, student, teacher, username, is_active } = singleUserDetails;
+    const { email, is_active, mobile_number } = singleUserDetails;
+
+    // force-reset form when data changes(select options change, etc.)
+    useEffect(() => {
+        if (singleUserDetails) {
+            // student and teacher can be null
+            reset({
+                updatedEmail: email,
+                updatedMobileNumber: mobile_number,
+                updateAccountStatus: is_active ? "active" : "disable",
+            });
+        }
+    }, [singleUserDetails, reset])
+
 
     // user details update
     const updateUserDetails = async (data) => {
@@ -25,6 +38,23 @@ const UpdateUserAuthDetailsByAdminModal = ({ singleUserDetails, refetch, id }) =
 
         if (account_status !== is_active) updatedUserData.is_active = account_status;
 
+        // updated Mobile Number  
+        const updated_mobile_number = data.updatedMobileNumber === "" ? null : data.updatedMobileNumber;
+        if (updated_mobile_number !== mobile_number) {
+            console.log(updated_mobile_number);
+            if (updated_mobile_number?.startsWith("+88")) {
+                // @ts-ignore
+                document.getElementById('update_user_details_modal').close();
+                return toast.error('Do not include +88 in mobile number.');
+            }
+            if (updated_mobile_number != null && updated_mobile_number?.length !== 11) {
+                // @ts-ignore
+                document.getElementById('update_user_details_modal').close();
+                return toast.error('Mobile number must be 11 digits only.');
+            }
+            updatedUserData.mobile_number = data.updatedMobileNumber;
+        }
+
         if (Object.keys(updatedUserData).length === 0) {
             // @ts-ignore
             document.getElementById('update_user_details_modal').close();
@@ -33,11 +63,11 @@ const UpdateUserAuthDetailsByAdminModal = ({ singleUserDetails, refetch, id }) =
 
         try {
             setIsFormLoading(true);
-            const res = await axiosSecure.patch(`/users/${id}`, updatedUserData);
+            const res = await axiosSecure.patch(`/users/${user_id}`, updatedUserData);
             console.log(res);
             // @ts-ignore
             document.getElementById('update_user_details_modal').close();
-            refetch();
+            singleUserDetailsRefetch();
             // @ts-ignore
             toast.success(res?.data?.message);
         } catch (error) {
@@ -71,8 +101,18 @@ const UpdateUserAuthDetailsByAdminModal = ({ singleUserDetails, refetch, id }) =
                         <input
                             type="email"
                             className="input input-bordered w-full mt-2"
-                            defaultValue={email}
                             {...register("updatedEmail")}
+                        />
+                    </div>
+
+                    {/* Mobile */}
+                    <div>
+                        <label>Mobile <span className='text-info text-xs'>(Mobile number should be 11 digits. Do not add +88)</span></label>
+                        <input
+                            type="text"
+                            className="input input-bordered w-full mt-2"
+                            // defaultValue={student && student.mobile_number || teacher && teacher.mobile_number}
+                            {...register("updatedMobileNumber")}
                         />
                     </div>
 

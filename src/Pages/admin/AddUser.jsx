@@ -115,6 +115,12 @@ const AddUser = () => {
                                 />
                             </div>
 
+                            {/* Mobile Number */}
+                            <label className="label">Mobile Number: </label>
+                            <input type="text" className="input" placeholder="Mobile Number"
+                                {...register("mobile_number")}
+                            />
+
 
                             {/* Account Status (Active by default) */}
                             <label className="label">Active Account<span className="text-red-600">*</span></label>
