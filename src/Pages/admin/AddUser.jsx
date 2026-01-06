@@ -7,8 +7,10 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
+import useAuth from '../../hooks/useAuth.jsx';
 
 const AddUser = () => {
+    const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const [formLoading, setFormLoading] = useState(false);
@@ -57,7 +59,7 @@ const AddUser = () => {
 
             {/* name of each tab group should be unique */}
             <div className="tabs tabs-box place-self-center">
-                {/* Student Tab */}
+                {/* Create Student Tab */}
                 <input type="radio" name="registration_tab" className="tab checked:font-bold checked:text-primary" aria-label="Student" defaultChecked />
                 <div className="tab-content bg-base-100 border-base-300 md:p-6">
                     <CreateStudentTab
@@ -67,7 +69,7 @@ const AddUser = () => {
                     />
                 </div>
 
-                {/* Teacher Tab */}
+                {/* Create Teacher Tab */}
                 <input type="radio" name="registration_tab" className="tab checked:text-primary checked:font-bold" aria-label="Teacher" />
                 <div className="tab-content bg-base-100 border-base-300 md:p-6">
                     <CreateTeacherTab
@@ -77,70 +79,73 @@ const AddUser = () => {
                     />
                 </div>
 
-                {/* Admin Tab */}
-                <input type="radio" name="registration_tab" className="tab checked:font-bold checked:text-primary" aria-label="Admin" />
-                <div className="tab-content bg-base-100 border-base-300 md:p-6">
+                {/* Create Admin Tab */}
+                {
+                    user?.role === "super_admin" && <>
+                        <input type="radio" name="registration_tab" className="tab checked:font-bold checked:text-primary" aria-label="Admin" />
+                        <div className="tab-content bg-base-100 border-base-300 md:p-6">
 
-                    <div className='place-self-center'>
-                        <SectionHeader section_title='Admin Registration' />
-                    </div>
-
-                    {/* Admin Form */}
-                    <form
-                        onSubmit={handleSubmit(createAdmin)}
-                        className='max-w-xs place-self-center'>
-                        <fieldset className="fieldset text-left bg-base-200 border-base-300 rounded-box  border p-1 sm:p-4">
-
-                            {/* Email (Username) */}
-                            <div className={`w-full ${errors.email && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.email && errors.email.message}>
-                                <label className="label">Email<span className="text-red-600">*</span></label>
-                                <input
-                                    type="email" placeholder="Email"
-                                    className="input"
-                                    {...register("email", { required: "Email is required" })}
-                                />
+                            <div className='place-self-center'>
+                                <SectionHeader section_title='Admin Registration' />
                             </div>
 
-                            {/* Role */}
-                            <div className="w-full">
-                                <label className="label">Role<span className="text-red-600">*</span></label>
-                                <input type="text" className="input" disabled placeholder="admin" />
-                            </div>
+                            {/* Admin Form */}
+                            <form
+                                onSubmit={handleSubmit(createAdmin)}
+                                className='max-w-xs place-self-center'>
+                                <fieldset className="fieldset text-left bg-base-200 border-base-300 rounded-box  border p-1 sm:p-4">
 
-                            {/* Default Password */}
-                            <div className={`w-full ${errors.password && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.password && errors.password.message}>
-                                <label className="label">Password<span className="text-red-600">*</span></label>
-                                <input type="text" className="input" placeholder="Password"
-                                    {...register("password", { required: "Password is required" })}
-                                />
-                            </div>
+                                    {/* Email (Username) */}
+                                    <div className={`w-full ${errors.email && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.email && errors.email.message}>
+                                        <label className="label">Email<span className="text-red-600">*</span></label>
+                                        <input
+                                            type="email" placeholder="Email"
+                                            className="input"
+                                            {...register("email", { required: "Email is required" })}
+                                        />
+                                    </div>
 
-                            {/* Mobile Number */}
-                            <label className="label">Mobile Number: </label>
-                            <input type="text" className="input" placeholder="Mobile Number"
-                                {...register("mobile_number")}
-                            />
+                                    {/* Role */}
+                                    <div className="w-full">
+                                        <label className="label">Role<span className="text-red-600">*</span></label>
+                                        <input type="text" className="input" disabled placeholder="admin" />
+                                    </div>
+
+                                    {/* Default Password */}
+                                    <div className={`w-full ${errors.password && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.password && errors.password.message}>
+                                        <label className="label">Password<span className="text-red-600">*</span></label>
+                                        <input type="text" className="input" placeholder="Password"
+                                            {...register("password", { required: "Password is required" })}
+                                        />
+                                    </div>
+
+                                    {/* Mobile Number */}
+                                    <label className="label">Mobile Number: </label>
+                                    <input type="text" className="input" placeholder="Mobile Number"
+                                        {...register("mobile_number")}
+                                    />
 
 
-                            {/* Account Status (Active by default) */}
-                            <label className="label">Active Account<span className="text-red-600">*</span></label>
-                            <select className="select" {...register("account_status")} defaultValue="active">
-                                <option value="active">Active</option>
-                                <option value="disable">Disable</option>
-                            </select>
+                                    {/* Account Status (Active by default) */}
+                                    <label className="label">Active Account<span className="text-red-600">*</span></label>
+                                    <select className="select" {...register("account_status")} defaultValue="active">
+                                        <option value="active">Active</option>
+                                        <option value="disable">Disable</option>
+                                    </select>
 
-                            {/* Submit Button */}
-                            <button className={`btn ${formLoading ? "btn-disabled" : "btn-success"} mt-4`}>
-                                {
-                                    formLoading ?
-                                        <span className="loading loading-spinner"></span>
-                                        :
-                                        "Submit"
-                                }
-                            </button>
-                        </fieldset>
-                    </form>
-                </div>
+                                    {/* Submit Button */}
+                                    <button className={`btn ${formLoading ? "btn-disabled" : "btn-success"} mt-4`}>
+                                        {
+                                            formLoading ?
+                                                <span className="loading loading-spinner"></span>
+                                                :
+                                                "Submit"
+                                        }
+                                    </button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </>}
             </div>
         </div>
     );
