@@ -6,8 +6,10 @@ import { MdDelete } from 'react-icons/md';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import toast from 'react-hot-toast';
 import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
+import useAuth from '../../../hooks/useAuth.jsx';
 
 const SemesterTable = ({ allSemesters, totalSemestersRefetch }) => {
+    const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [selectedSemester, setSelectedSemester] = useState(null); // state for editing
@@ -115,18 +117,19 @@ const SemesterTable = ({ allSemesters, totalSemestersRefetch }) => {
 
 
                                         {/* Delete semester confirmation Modal */}
-                                        <div>
-                                            <button className="btn btn-ghost hover:bg-transparent border-0 group/delete-semester"
-                                                onClick={() => {
-                                                    setSelectedSemester(semester);
-                                                    document.getElementById('delete_semester_modal').
-                                                        // @ts-ignore
-                                                        showModal()
-                                                }}
-                                            >
-                                                <MdDelete className='group-hover/delete-semester:text-red-700 text-lg' />
-                                            </button>
-                                        </div>
+                                        {
+                                            user?.role === "super_admin" && <div>
+                                                <button className="btn btn-ghost hover:bg-transparent border-0 group/delete-semester"
+                                                    onClick={() => {
+                                                        setSelectedSemester(semester);
+                                                        document.getElementById('delete_semester_modal').
+                                                            // @ts-ignore
+                                                            showModal()
+                                                    }}
+                                                >
+                                                    <MdDelete className='group-hover/delete-semester:text-red-700 text-lg' />
+                                                </button>
+                                            </div>}
                                     </td>
                                 </tr>
                             )

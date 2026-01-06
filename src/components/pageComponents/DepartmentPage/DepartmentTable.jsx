@@ -6,8 +6,10 @@ import toast from 'react-hot-toast';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
+import useAuth from '../../../hooks/useAuth.jsx';
 
 const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
+    const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [selectedDept, setSelectedDept] = useState(null); // state for editing
@@ -103,18 +105,20 @@ const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
 
 
                                         {/* Delete Department confirmation Modal */}
-                                        <div>
-                                            <button className="btn btn-ghost hover:bg-transparent border-0 group/delete-dept"
-                                                onClick={() => {
-                                                    setSelectedDept(department);
-                                                    document.getElementById('delete_dept_modal').
-                                                        // @ts-ignore
-                                                        showModal()
-                                                }}
-                                            >
-                                                <MdDelete className='group-hover/delete-dept:text-red-700 text-lg' />
-                                            </button>
-                                        </div>
+                                        {
+                                            user?.role === "super_admin" &&
+                                            <div>
+                                                <button className="btn btn-ghost hover:bg-transparent border-0 group/delete-dept"
+                                                    onClick={() => {
+                                                        setSelectedDept(department);
+                                                        document.getElementById('delete_dept_modal').
+                                                            // @ts-ignore
+                                                            showModal()
+                                                    }}
+                                                >
+                                                    <MdDelete className='group-hover/delete-dept:text-red-700 text-lg' />
+                                                </button>
+                                            </div>}
                                     </td>
                                 </tr>
                             )

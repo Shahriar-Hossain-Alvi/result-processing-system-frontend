@@ -21,6 +21,8 @@ const AllUser = () => {
         }
     })
 
+    console.log(allUser);
+
     useEffect(() => {
         if (isAllUserError) {
             console.log(allUserError);
@@ -32,7 +34,10 @@ const AllUser = () => {
 
     return (
         <div>
-            <SectionHeader section_title='All User' />
+            <div className='flex items-center gap-1'>
+                <SectionHeader section_title='All User' />
+                <span className='font-bold text-xl'>({allUser?.length})</span>
+            </div>
             {/* FIXME: remove the overflow-y-clip if it causes any issue scrolling issue for many rows */}
 
             {/* All User Table */}
@@ -58,13 +63,14 @@ const AllUser = () => {
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Username/Email</th>
-                                    <th>Role</th>
-                                    <th>Account</th>
-                                    <th>Name</th>
-                                    <th>Department</th>
                                     <th>Photo</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Username/Email</th>
+                                    <th>Mobile</th>
+                                    <th>Department</th>
                                     <th>Details</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -72,26 +78,8 @@ const AllUser = () => {
                                     allUser?.length > 0 && allUser.map((user, index) =>
                                         <tr className="hover:bg-base-300" key={user.id}>
                                             <td>{index + 1}</td>
-                                            <td>{user.username}</td>
-                                            <td>{user.role}</td>
-                                            {/* Account Status */}
-                                            <td>{user.is_active ?
-                                                <button className="badge badge-sm badge-success font-medium">Active</button>
-                                                : <button className="badge badge-sm badge-error font-medium">Inactive</button>}
-                                            </td>
 
-                                            {/* Name */}
-                                            <td>
-                                                {user.role === "student" && user?.student?.name}
-                                                {user.role === "teacher" && user?.teacher?.name}
-                                            </td>
-
-                                            {/* Department */}
-                                            <td className='uppercase'>
-                                                {user.role === "student" && ((user?.student?.department) ? user?.student?.department?.department_name : <p className='text-error'>Not Assigned</p>)}
-
-                                                {user.role === "teacher" && ((user?.teacher?.department) ? user?.teacher?.department?.department_name : <p className='text-error'>Not Assigned</p>)}
-                                            </td>
+                                            {/* Image */}
                                             <td>
                                                 {user.role === "student" &&
                                                     <div className="mask mask-squircle h-10 w-10">
@@ -107,7 +95,38 @@ const AllUser = () => {
                                                             alt="User Photo" />
                                                     </div>
                                                 }
+                                                {
+                                                    (user.role === "admin" || user.role === "super_admin") && <div className="mask mask-squircle h-10 w-10">
+                                                        <img
+                                                            src={defaultImage}
+                                                            alt="User Photo" />
+                                                    </div>
+                                                }
                                             </td>
+
+                                            {/* Name */}
+                                            <td>
+                                                {user.role === "student" && user?.student?.name}
+                                                {user.role === "teacher" && user?.teacher?.name}
+                                            </td>
+
+                                            <td>{user.role}</td>
+
+
+                                            {/* username/email */}
+                                            <td>{user.username}</td>
+
+                                            {/* Mobile */}
+                                            <td>{user.mobile_number || <span className='text-error'>N/A</span>}</td>
+
+                                            {/* Department */}
+                                            <td className='uppercase'>
+                                                {user.role === "student" && ((user?.student?.department) ? user?.student?.department?.department_name : <p className='text-error'>N/A</p>)}
+
+                                                {user.role === "teacher" && ((user?.teacher?.department) ? user?.teacher?.department?.department_name : <p className='text-error'>N/A</p>)}
+                                            </td>
+
+                                            {/* details */}
                                             <td>
                                                 {
                                                     (user?.role !== "admin" && user?.role !== "super_admin") &&
@@ -117,6 +136,12 @@ const AllUser = () => {
                                                         className="btn btn-info btn-xs"
                                                     >Details
                                                     </Link>}
+                                            </td>
+
+                                            {/* Account Status */}
+                                            <td>{user.is_active ?
+                                                <button className="badge badge-sm badge-success font-medium">Active</button>
+                                                : <button className="badge badge-sm badge-error font-medium">Inactive</button>}
                                             </td>
                                         </tr>
                                     )
