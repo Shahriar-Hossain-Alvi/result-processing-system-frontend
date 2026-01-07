@@ -12,8 +12,12 @@ const PrivateRoutes = ({ children, role }) => {
     // 2. Authentication check. If no user, redirect to login
     if (!user) return <Navigate to="/signin" state={{ from: location }} replace />
 
+    // Check if 'role' is an array. If it is, check if it includes user.role.
+    // If it's a string, check for equality.
+    const allowedRoles = Array.isArray(role) ? role : [role];
+
     // 3. Authorization check. 
-    if (role && user?.role !== role) {
+    if (role && !allowedRoles.includes(user?.role)) {
         console.warn(`User role '${user.role}' denied access to required role '${role}'`);
         return <Navigate to="/unauthorized" replace /> // TODO: add a unauthorized page
     }
@@ -21,9 +25,5 @@ const PrivateRoutes = ({ children, role }) => {
     return children;
 };
 
-// PrivateRoute.propTypes = {
-//     children: PropTypes.node.isRequired,
-//     role: PropTypes.string // Optional role to check against
-// }
 
 export default PrivateRoutes;

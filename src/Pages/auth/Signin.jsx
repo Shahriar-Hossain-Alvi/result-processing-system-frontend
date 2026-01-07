@@ -46,7 +46,7 @@ const Signin = () => {
                 // 2: Fetch user info using the new cookie
                 const userData = await fetchUser();
                 // 3: Redirect based on the fetched data 
-                if (userData?.role === "admin") {
+                if (userData?.role === "admin" || userData?.role === "super_admin") {
                     navigate('/admin');
                 } else if (userData?.role === "teacher") {
                     navigate('/teacher');

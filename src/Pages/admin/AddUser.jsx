@@ -145,7 +145,8 @@ const AddUser = () => {
                                 </fieldset>
                             </form>
                         </div>
-                    </>}
+                    </>
+                }
             </div>
         </div>
     );
