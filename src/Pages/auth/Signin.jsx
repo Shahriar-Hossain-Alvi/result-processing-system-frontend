@@ -40,11 +40,12 @@ const Signin = () => {
             setFormLoading(true);
             // 1: get token in httponly cookie from backend
             const res = await axiosSecure.post('/auth/login', formData);
-
+            console.log(res);
             if (res?.data?.message === "Login successful") {
                 toast.success(res?.data?.message);
                 // 2: Fetch user info using the new cookie
                 const userData = await fetchUser();
+                console.log(userData);
                 // 3: Redirect based on the fetched data 
                 if (userData?.role === "admin" || userData?.role === "super_admin") {
                     navigate('/admin');
