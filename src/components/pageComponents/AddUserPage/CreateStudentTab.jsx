@@ -74,6 +74,18 @@ const CreateStudentTab = ({ allDepartments, isDepartmentsPending, isDepartmentsE
             }
         }
 
+        // updated Mobile Number  
+
+        if (data.mobile_number?.startsWith("+88")) {
+            setFormLoading(false);
+            return toast.error('Do not include +88 in mobile number.');
+        }
+        if (data.mobile_number != "" && data.mobile_number?.length !== 11) {
+            setFormLoading(false);
+            return toast.error('Mobile number must be 11 digits only.');
+        }
+
+
         // create student object
         const create_student_payload = {
             // required fields for student table

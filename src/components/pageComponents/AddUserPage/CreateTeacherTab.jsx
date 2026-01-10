@@ -54,7 +54,18 @@ const CreateTeacherTab = ({ allDepartments, isDepartmentsPending, isDepartmentsE
             }
         }
 
-        // // create teacher object
+        // updated Mobile Number  
+
+        if (data.mobile_number?.startsWith("+88")) {
+            setFormLoading(false);
+            return toast.error('Do not include +88 in mobile number.');
+        }
+        if (data.mobile_number != "" && data.mobile_number?.length !== 11) {
+            setFormLoading(false);
+            return toast.error('Mobile number must be 11 digits only.');
+        }
+
+        // create teacher object
         const create_teacher_payload = {
             // required fields for teacher table
             name: data.name,

@@ -46,9 +46,11 @@ const AuthProvider = ({ children }) => {
     const fetchUser = useCallback(async () => {
         try {
             const res = await axiosSecure.get('/users/me');
+            console.log(res);
             setUser(res?.data);
             return res?.data;
         } catch (error) {
+            console.log(error);
             if (error.response?.status === 401) {
                 // This is a known state: User is just not logged in.
                 setUser(null);

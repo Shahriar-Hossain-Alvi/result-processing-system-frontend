@@ -12,7 +12,7 @@ const AdminRoutes = (
     <Route
         path="/admin"
         element={
-            <PrivateRoutes role="admin">
+            <PrivateRoutes role={["admin", "super_admin"]}>
                 <AdminLayout />
             </PrivateRoutes>
         }

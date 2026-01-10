@@ -63,7 +63,6 @@ const AllUser = () => {
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Photo</th>
                                     <th>Name</th>
                                     <th>Role</th>
                                     <th>Username/Email</th>
@@ -79,31 +78,6 @@ const AllUser = () => {
                                         <tr className="hover:bg-base-300" key={user.id}>
                                             <td>{index + 1}</td>
 
-                                            {/* Image */}
-                                            <td>
-                                                {user.role === "student" &&
-                                                    <div className="mask mask-squircle h-10 w-10">
-                                                        <img
-                                                            src={user?.student?.photo_url || defaultImage}
-                                                            alt="User Photo" />
-                                                    </div>
-                                                }
-                                                {user.role === "teacher" &&
-                                                    <div className="mask mask-squircle h-10 w-10">
-                                                        <img
-                                                            src={user?.teacher?.photo_url || defaultImage}
-                                                            alt="User Photo" />
-                                                    </div>
-                                                }
-                                                {
-                                                    (user.role === "admin" || user.role === "super_admin") && <div className="mask mask-squircle h-10 w-10">
-                                                        <img
-                                                            src={defaultImage}
-                                                            alt="User Photo" />
-                                                    </div>
-                                                }
-                                            </td>
-
                                             {/* Name */}
                                             <td>
                                                 {user.role === "student" && user?.student?.name}
@@ -114,13 +88,13 @@ const AllUser = () => {
 
 
                                             {/* username/email */}
-                                            <td>{user.username}</td>
+                                            <td className='overflow-x-auto max-w-48'>{user.username}</td>
 
                                             {/* Mobile */}
                                             <td>{user.mobile_number || <span className='text-error'>N/A</span>}</td>
 
                                             {/* Department */}
-                                            <td className='uppercase'>
+                                            <td className='uppercase max-w-44 xl:max-w-full'>
                                                 {user.role === "student" && ((user?.student?.department) ? user?.student?.department?.department_name : <p className='text-error'>N/A</p>)}
 
                                                 {user.role === "teacher" && ((user?.teacher?.department) ? user?.teacher?.department?.department_name : <p className='text-error'>N/A</p>)}
