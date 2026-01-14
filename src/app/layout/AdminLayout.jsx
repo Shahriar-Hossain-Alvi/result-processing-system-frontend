@@ -35,60 +35,62 @@ const AdminLayout = () => {
 
             {/* Links */}
             <li>
-                <Link to="/admin" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Dashboard">
+                <NavLink end to="/admin" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Dashboard">
                     <MdDashboard className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">Dashboard</p>
-                </Link>
-            </li>
-
-
-            <li>
-                <Link to="/admin/departmentsAndSemesters" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Departments & Semesters">
-                    <FaBuilding className='w-4 h-4' />
-                    <p className="is-drawer-close:hidden">Departments & Semesters</p>
-                </Link>
+                </NavLink>
             </li>
 
             <li>
-                <Link to="/admin/subjects" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Subjects">
-                    <FaBook className='w-4 h-4' />
-                    <p className="is-drawer-close:hidden">Subjects</p>
-                </Link>
-            </li>
-
-            <li>
-                <Link to="/admin/assignSubject" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Assign Subject">
-                    <LuNotebookPen className='w-4 h-4' />
-                    <p className="is-drawer-close:hidden">Assign Subject</p>
-                </Link>
-            </li>
-
-            <li>
-                <Link to="/admin/addUser" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Add User">
+                <NavLink to="/admin/addUser" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Add User">
                     <RiUserAddFill className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">Add User</p>
-                </Link>
+                </NavLink>
             </li>
 
             <li>
-                <Link to="/admin/allUser" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All User">
+                <NavLink to="/admin/allUser" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All User">
                     <FaUsers className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">All User</p>
-                </Link>
+                </NavLink>
             </li>
 
             <li>
-                <Link to="/admin/insertMarks" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Insert marks">
+                <NavLink to="/admin/insertMarks" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Insert marks">
                     <GrTableAdd className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">Insert marks</p>
-                </Link>
+                </NavLink>
             </li>
 
             <li>
-                <Link to="/admin/results" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Results">
+                <NavLink to="/admin/results" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Results">
                     <LuFileSpreadsheet className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">Results</p>
-                </Link>
+                </NavLink>
+            </li>
+
+            {/* Subjects */}
+            <li>
+                <NavLink to="/admin/subjects" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Subjects">
+                    <FaBook className='w-4 h-4' />
+                    <p className="is-drawer-close:hidden">Subjects</p>
+                </NavLink>
+            </li>
+
+            {/* Assign Subject */}
+            <li>
+                <NavLink to="/admin/assignSubject" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Assign Subject">
+                    <LuNotebookPen className='w-4 h-4' />
+                    <p className="is-drawer-close:hidden">Assign Subject</p>
+                </NavLink>
+            </li>
+
+            {/* Departments & Semesters */}
+            <li>
+                <NavLink to="/admin/departmentsAndSemesters" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Departments & Semesters">
+                    <FaBuilding className='w-4 h-4' />
+                    <p className="is-drawer-close:hidden">Departments & Semesters</p>
+                </NavLink>
             </li>
 
             {/* logout button */}

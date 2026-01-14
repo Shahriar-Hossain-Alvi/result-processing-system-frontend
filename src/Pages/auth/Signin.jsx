@@ -10,6 +10,7 @@ import axiosSecure from '../../utils/axios/axiosSecure.js';
 import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
 import toast, { Toaster } from 'react-hot-toast';
 import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
+import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
 
 const Signin = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -56,8 +57,10 @@ const Signin = () => {
                 }
             }
         } catch (error) {
-            setLoading(false);
             console.error(error);
+            const message = errorMessageParser(error);
+            toast.error(message || "Failed to login. Please check your credentials.");
+            setLoading(false);
         } finally {
             setFormLoading(false);
         }

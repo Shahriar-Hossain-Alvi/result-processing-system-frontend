@@ -74,8 +74,7 @@ const CreateStudentTab = ({ allDepartments, isDepartmentsPending, isDepartmentsE
             }
         }
 
-        // updated Mobile Number  
-
+        //  Mobile Number  
         if (data.mobile_number?.startsWith("+88")) {
             setFormLoading(false);
             return toast.error('Do not include +88 in mobile number.');

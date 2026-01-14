@@ -9,6 +9,7 @@ import UpdateUserAuthDetailsByAdminModal from "../../components/pageComponents/S
 import UpdateUsersAllDetailsModal from "../../components/pageComponents/SingleUserDetailsPage/UpdateUsersAllDetailsModal.jsx";
 // @ts-ignore
 import defaultImage from "../../assets/blank-profile-picture.png";
+import { ImZoomIn } from "react-icons/im";
 
 
 const SingleUserDetails = () => {
@@ -49,7 +50,7 @@ const SingleUserDetails = () => {
                 <SectionHeader section_title='User Details' />
 
                 {/* User Details Edit Button */}
-                <div className="tooltip absolute -right-9 -top-2" data-tip="Edit USER Details">
+                <div className="sm:tooltip absolute -right-9 -top-2" data-tip="Edit USER Details">
                     <button
                         onClick={() => {
                             // @ts-ignore
@@ -65,10 +66,35 @@ const SingleUserDetails = () => {
             <div>
                 {/* user details */}
                 < div className="flex flex-col sm:flex-row sm:gap-5 place-self-center">
+
                     {/* Picture left square */}
-                    <div className="avatar mx-auto w-full sm:min-w-60 max-w-72 border p-2 rounded">
-                        <div className="rounded">
-                            <img src={userImage || defaultImage} />
+                    <div>
+                        <div className="mx-auto w-full sm:min-w-60 max-w-72 border p-2 rounded relative">
+                            <div className="rounded">
+                                <img src={userImage || defaultImage} />
+                            </div>
+
+                            {/* Update Profile Picture */}
+                            <div className="absolute bottom-0 left-0 flex justify-center gap-5 place-items-center bg-neutral opacity-55 w-full sm:min-w-60 max-w-72 h-12">
+                                {/* Profile Picture Full View */}
+                                <div>
+                                    <button className="btn btn-sm btn-circle btn-ghost hover:bg-transparent hover:text-success hover:border border-success border-0 shadow-none"
+                                        onClick={() => {
+                                            // @ts-ignore
+                                            document.getElementById('update_profile_picture_modal').showModal()
+                                        }}
+                                    >
+                                        <ImZoomIn />
+                                    </button>
+                                </div>
+
+                                <div>
+                                    <button
+                                        className="btn btn-sm btn-circle btn-ghost hover:bg-transparent hover:text-success hover:border border-success border-0 shadow-none">
+                                        <FaEdit />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -151,7 +177,7 @@ const SingleUserDetails = () => {
                     <div className="place-self-center relative">
                         <SectionHeader section_title='Other Details' />
 
-                        <div className="tooltip absolute -right-9 -top-2" data-tip={`Edit ${role.toUpperCase()} Details`}>
+                        <div className="sm:tooltip absolute -right-9 -top-2" data-tip={`Edit ${role.toUpperCase()} Details`}>
                             <button
                                 // @ts-ignore
                                 onClick={() => document.getElementById("update_users_other_details_modal").showModal()}
@@ -277,7 +303,18 @@ const SingleUserDetails = () => {
                 />
             </dialog>
 
-
+            {/* profile image show and update modal */}
+            <dialog id="update_profile_picture_modal" className="modal">
+                <div className="modal-box">
+                    <div className="rounded">
+                        <img src={userImage || defaultImage} />
+                    </div>
+                    <h3 className="font-bold text-lg text-center mt-3">{singleUserDetails?.student && singleUserDetails?.student.name || singleUserDetails?.teacher && singleUserDetails?.teacher.name}</h3>
+                </div>
+                <form method="dialog" className="modal-backdrop">
+                    <button>close</button>
+                </form>
+            </dialog>
         </div >
     );
 };

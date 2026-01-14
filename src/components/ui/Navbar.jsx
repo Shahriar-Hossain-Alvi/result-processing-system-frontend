@@ -1,7 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import useTheme from '../../hooks/useTheme.jsx';
 import { FaMoon, FaSun } from 'react-icons/fa6';
+// @ts-ignore
 import eduTrack_logo from "../../assets/edutrack_logo.png";
+// @ts-ignore
 import eduTrack_logo_white from "../../assets/edutrack_logo_white.png"
 
 const Navbar = () => {
@@ -14,7 +16,7 @@ const Navbar = () => {
 
     return (
         <div>
-            <div className="navbar bg-base-100 shadow-sm ">
+            <div id='navbar' className="navbar bg-base-100 shadow-sm ">
                 <div className="flex-1">
                     <NavLink to="/" className="text-xl">
                         {
@@ -26,9 +28,9 @@ const Navbar = () => {
                 </div>
                 <div className="flex-none">
                     <ul className="menu menu-horizontal px-1">
-                        <li><NavLink to="/notice">Notice</NavLink></li>
-                        <li><NavLink to="/contact">Contact</NavLink></li>
-                        <li><NavLink to="/faculties">Faculties</NavLink></li>
+                        <li><NavLink to="/notice" target='_blank'>Notice</NavLink></li>
+                        <li><NavLink to="/contact" target='_blank'>Contact</NavLink></li>
+                        <li><NavLink to="/faculties" target='_blank'>Faculties</NavLink></li>
                         {/* <li><ThemeSwitch changeTheme={toggleTheme} /></li> */}
                         <li className='my-auto hover:bg-transparent group/theme'>
                             <label className="swap swap-rotate">

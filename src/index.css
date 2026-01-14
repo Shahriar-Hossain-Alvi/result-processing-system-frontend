@@ -16,7 +16,12 @@
   --font-noto-sans: "Noto Sans", sans-serif;
 }
 
-.navbar a.active{
+#navbar a.active{
   background-color: #1FB854;
   color: black
+}
+
+#sidebar a.active{
+  background-color: #1FB854;
+  color:black
 }

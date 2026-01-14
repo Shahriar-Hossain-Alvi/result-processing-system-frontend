@@ -6,6 +6,7 @@ import AddUser from "../../pages/admin/AddUser.jsx";
 import DepartmentsAndSemesters from "../../pages/admin/DepartmentsAndSemesters.jsx";
 import AllUser from "../../pages/admin/AllUser.jsx";
 import SingleUserDetails from "../../pages/private/SingleUserDetails.jsx";
+import Subjects from "../../pages/admin/Subjects.jsx";
 
 
 const AdminRoutes = (
@@ -19,15 +20,15 @@ const AdminRoutes = (
     >
 
         <Route index element={<AdminDashboard />} />
-        {/* <Route index element={<AdminDashboard />} /> */}
-        <Route path="departmentsAndSemesters" element={<DepartmentsAndSemesters />} />
-        {/* <Route path="subjects" element={<AdminDashboard />} /> */}
-        {/* <Route path="assignSubject" element={<AdminDashboard />} /> */}
         <Route path="addUser" element={<AddUser />} />
         <Route path="allUser" element={<AllUser />} />
         <Route path="user/:id" element={<SingleUserDetails />} />
+        {/* <Route index element={<AdminDashboard />} /> */}
         {/* <Route path="insertMarks" element={<AdminDashboard />} /> */}
         {/* <Route path="results" element={<AdminDashboard />} /> */}
+        <Route path="subjects" element={<Subjects />} />
+        {/* <Route path="assignSubject" element={<AdminDashboard />} /> */}
+        <Route path="departmentsAndSemesters" element={<DepartmentsAndSemesters />} />
     </Route>
 )
 
