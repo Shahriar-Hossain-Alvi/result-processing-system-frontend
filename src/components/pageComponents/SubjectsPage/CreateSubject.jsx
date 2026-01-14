@@ -87,7 +87,7 @@ const CreateSubject = ({ allSubjectsRefetch }) => {
                                 <input
                                     type="text"
                                     placeholder="Subject Title"
-                                    className="input input-bordered w-full mt-2 capitalize"
+                                    className="input input-bordered w-full mt-2"
                                     {...register("subjectTitle", { required: "Subject title is required" })}
                                 />
                             </div>

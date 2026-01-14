@@ -98,7 +98,7 @@ const SingleUserDetails = () => {
                         </div>
                     </div>
 
-                    {/* Id, Name, email, Role, Department, username right */}
+                    {/* Id, Name, email, Role, username */}
                     <div className="overflow-x-auto">
                         <table className="table">
                             <thead>

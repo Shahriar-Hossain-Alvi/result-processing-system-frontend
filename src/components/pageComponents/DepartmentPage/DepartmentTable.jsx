@@ -157,7 +157,7 @@ const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
                 <div className="modal-box">
                     <h3 className="font-bold text-lg text-error uppercase">Be Careful!!!</h3>
                     <p className="py-4">Are you sure you want to delete "{selectedDept?.department_name.toUpperCase()}" department?</p>
-                    <p className='text-warning'>The department is connected with other data such as Subject, Teachers, Students etc. Deleting it will create errors and failures in the system!!! Try Editing instead</p>
+                    <p className='text-warning'>The department is connected with other data such as Subject, Teachers, Students etc. Deleting it may create errors and failures in the system!!! Try Editing instead</p>
                     <div className="modal-action">
                         <button onClick={() => deleteDepartment(selectedDept?.id)} className={`btn ${isFormLoading ? "btn-disabled" : "btn-error"}`} >
                             {isFormLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : "Yes, delete it"}
