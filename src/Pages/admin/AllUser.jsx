@@ -5,8 +5,6 @@ import toast from 'react-hot-toast';
 import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
 import { AllUserTableSkeleton } from '../../components/ui/Skeletons.jsx';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
-// @ts-ignore
-import defaultImage from "../../assets/blank-profile-picture.png";
 import { Link } from 'react-router-dom';
 
 const AllUser = () => {

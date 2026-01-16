@@ -163,8 +163,8 @@ const CreateUserForm = ({
                 />
 
 
-                <label className="label">Profile Picture</label>
-                <input type="file" className="file-input"
+                <label className="label">Profile Picture (Only <span className='text-info font-medium italic text-xs'>JPG, JPEG, PNG</span> are allowed)</label>
+                <input type="file" accept=".jpg, .jpeg, .png" className="file-input"
                     {...register("profile_picture")}
                 />
 
