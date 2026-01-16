@@ -56,7 +56,14 @@ const CreateStudentTab = ({ allDepartments, isDepartmentsPending, isDepartmentsE
         // if profile picture is uploaded
         if (data.profile_picture && data.profile_picture.length > 0) {
             const picture = data.profile_picture[0];
-            console.log(picture);
+
+            // Image type check
+            const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+            if (!allowedTypes.includes(picture.type)) {
+                setFormLoading(false);
+                return toast.error('Invalid image type. Please upload a JPEG, PNG, or JPG image.');
+            }
+
             const formData = new FormData();
             formData.append("file", picture);
             formData.append("upload_preset", cloudinary_upload_preset);

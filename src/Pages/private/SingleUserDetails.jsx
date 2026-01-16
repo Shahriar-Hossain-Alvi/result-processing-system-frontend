@@ -10,11 +10,22 @@ import UpdateUsersAllDetailsModal from "../../components/pageComponents/SingleUs
 // @ts-ignore
 import defaultImage from "../../assets/blank-profile-picture.png";
 import { ImZoomIn } from "react-icons/im";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 
 const SingleUserDetails = () => {
+    // Load Cloudinary Cloud Name and Upload Preset from .env file
+    const cloudinary_cloud_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+    const cloudinary_upload_preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
     const { id } = useParams();
     const axiosSecure = useAxiosSecure();
+    const [formLoading, setFormLoading] = useState(false);
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
     // Get the user details using the id
     const { data: singleUserDetails, isPending, isError, error, refetch: singleUserDetailsRefetch } = useQuery({
@@ -43,6 +54,75 @@ const SingleUserDetails = () => {
     // user image
     const userImage = student && student.photo_url || teacher && teacher.photo_url;
 
+    // update profile picture
+    const updateProfilePicture = async (data) => {
+        const user_photo_update_data = {};
+        setFormLoading(true);
+        let uploadedPhotoUrl = '';
+        let public_id = '';
+
+        // if profile picture is uploaded
+        if (data.updated_profile_picture && data.updated_profile_picture.length > 0) {
+            const picture = data.updated_profile_picture[0];
+
+            // Image type check
+            const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+            if (!allowedTypes.includes(picture.type)) {
+                setFormLoading(false);
+                return toast.error('Invalid image type. Please upload a JPEG, PNG, or JPG image.');
+            }
+
+            const formData = new FormData();
+            formData.append("file", picture);
+            formData.append("upload_preset", cloudinary_upload_preset);
+
+            try {
+                const cloudinaryRes = await axios.post(`https://api.cloudinary.com/v1_1/${cloudinary_cloud_name}/image/upload`, formData);
+                console.log(cloudinaryRes);
+                uploadedPhotoUrl = cloudinaryRes.data.secure_url;
+                public_id = cloudinaryRes.data.public_id;
+                toast.success('Image uploaded successfully');
+            } catch (error) {
+                console.log(error);
+                setFormLoading(false);
+                return toast.error('Failed to upload image. Please try again.');
+            }
+        }
+
+        if (uploadedPhotoUrl !== '' && public_id !== '') {
+            user_photo_update_data.photo_url = uploadedPhotoUrl;
+            user_photo_update_data.photo_public_id = public_id;
+        }
+
+
+        if (Object.keys(user_photo_update_data).length === 0) {
+            return toast.error('No image uploaded.');
+        }
+
+        // send data to backend
+        try {
+            let requestUrl = "";
+            setFormLoading(true);
+            if (student && role === 'student') requestUrl = `/students/updateByAdmin/${student.id}`;
+            if (teacher && role === 'teacher') requestUrl = `/teachers/updateByAdmin/${teacher.id}`;
+
+            const res = await axiosSecure.patch(`${requestUrl}`, user_photo_update_data);
+            console.log(res);
+            toast.success(res?.data?.message || "Profile picture updated");
+            reset();
+            singleUserDetailsRefetch();
+            // @ts-ignore
+            document.getElementById("update_profile_picture_modal").close();
+        } catch (error) {
+            console.log(error);
+            // @ts-ignore
+            document.getElementById("update_profile_picture_modal").close();
+            const message = errorMessageParser(error);
+            toast.error(message || "Failed to update profile picture. Please try again.");
+        } finally {
+            setFormLoading(false);
+        }
+    };
 
     return (
         <div>
@@ -81,7 +161,7 @@ const SingleUserDetails = () => {
                                     <button className="btn btn-sm btn-circle btn-ghost hover:bg-transparent hover:text-success hover:border border-success border-0 shadow-none"
                                         onClick={() => {
                                             // @ts-ignore
-                                            document.getElementById('update_profile_picture_modal').showModal()
+                                            document.getElementById('show_full_profile_picture_modal').showModal()
                                         }}
                                     >
                                         <ImZoomIn />
@@ -90,7 +170,12 @@ const SingleUserDetails = () => {
 
                                 <div>
                                     <button
-                                        className="btn btn-sm btn-circle btn-ghost hover:bg-transparent hover:text-success hover:border border-success border-0 shadow-none">
+                                        className="btn btn-sm btn-circle btn-ghost hover:bg-transparent hover:text-success hover:border border-success border-0 shadow-none"
+                                        onClick={() => {
+                                            // @ts-ignore
+                                            document.getElementById('update_profile_picture_modal').showModal()
+                                        }}
+                                    >
                                         <FaEdit />
                                     </button>
                                 </div>
@@ -304,12 +389,38 @@ const SingleUserDetails = () => {
             </dialog>
 
             {/* profile image show and update modal */}
-            <dialog id="update_profile_picture_modal" className="modal">
+            <dialog id="show_full_profile_picture_modal" className="modal">
                 <div className="modal-box">
                     <div className="rounded">
                         <img src={userImage || defaultImage} />
                     </div>
                     <h3 className="font-bold text-lg text-center mt-3">{singleUserDetails?.student && singleUserDetails?.student.name || singleUserDetails?.teacher && singleUserDetails?.teacher.name}</h3>
+                </div>
+                <form method="dialog" className="modal-backdrop">
+                    <button>close</button>
+                </form>
+            </dialog>
+
+            <dialog id="update_profile_picture_modal" className="modal">
+                <div className="modal-box">
+                    <h2>Update Profile Picture</h2>
+                    <form className="mt-3"
+                        onSubmit={handleSubmit(updateProfilePicture)}>
+                        <label className="label">Upload a new profile picture</label>
+                        <p className="my-2">(Only <span className="text-info text-xs italic font-medium">JPG, JPEG, PNG</span> are allowed)</p>
+
+                        <div className="flex flex-col md:flex-row md:items-center md:gap-2">
+                            <input type="file" accept=".jpg, .jpeg, .png" className="file-input w-full"
+                                {...register("updated_profile_picture")}
+                            />
+
+                            <button className={`btn ${formLoading && "btn-disabled"} btn-success mt-2 md:mt-0`} type='submit' disabled={formLoading}>
+                                {formLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : "Update"}
+                            </button>
+                        </div>
+
+                    </form>
+
                 </div>
                 <form method="dialog" className="modal-backdrop">
                     <button>close</button>
