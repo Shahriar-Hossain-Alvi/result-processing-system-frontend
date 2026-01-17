@@ -85,7 +85,8 @@ const Subjects = () => {
             updatedSubjectTitle: sub.subject_title,
             updatedSubjectCode: sub.subject_code,
             updatedSubjectCredits: sub.credits,
-            updatedSemester: sub.semester_id
+            updatedSemester: sub.semester_id,
+            updatedIsGeneral: sub.is_general ? "yes" : "no"
         }); // This fills the form
         // @ts-ignore
         document.getElementById('update_subject_modal').showModal();
@@ -102,6 +103,8 @@ const Subjects = () => {
         if (data.updatedSubjectCredits && parseFloat(data.updatedSubjectCredits) !== selectedSubject.credits) updated_data.credits = parseFloat(data.updatedSubjectCredits);
 
         if (data.updatedSemester && parseInt(data.updatedSemester) !== selectedSubject.semester_id) updated_data.semester_id = parseInt(data.updatedSemester);
+
+        if (data.updatedIsGeneral && data.updatedIsGeneral !== (selectedSubject.is_general ? "yes" : "no")) updated_data.is_general = data.updatedIsGeneral === "yes";
 
         if (Object.keys(updated_data).length === 0) {
             // @ts-ignore
@@ -156,17 +159,19 @@ const Subjects = () => {
         }
     }
 
-    // console.log(allSubjects);
+    console.log(allSubjects);
 
     return (
         <div>
             <div className="flex justify-between items-center">
-                <SectionHeader section_title='Subjects' />
+                <div className="flex items-center gap-1">
+                    <SectionHeader section_title='Subjects' />
+                    <span>({allSubjects?.length})</span>
+                </div>
 
                 <CreateSubject allSubjectsRefetch={allSubjectsRefetch} />
             </div>
 
-            {/* TODO: add filter by credits, semester, subject code(letter part), search by subject title */}
             {/* 3. Filter UI Section */}
             <div className="grid grid-cols-1 md:grid-cols-9 gap-4 mb-6 bg-base-200 p-4 rounded-lg">
 
@@ -238,8 +243,8 @@ const Subjects = () => {
                             <th>Subject Code</th>
                             <th>Credits</th>
                             <th>Taught in</th>
-                            <th>Created At</th>
-                            <th>Updated At</th>
+                            <th>Is General <br /> Subject?</th>
+                            <th>Created/updated At</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -252,8 +257,10 @@ const Subjects = () => {
                                     <td>{subject.subject_code}</td>
                                     <td>{subject.credits}</td>
                                     <td className="capitalize">{subject.semester.semester_name} Semester</td>
-                                    <td>{subject.created_at?.split('T')[0]}</td>
-                                    <td>{subject.updated_at?.split('T')[0]}</td>
+                                    <td>{subject.is_general ? 'Yes' : 'No'}</td>
+                                    <td>C: {subject.created_at?.split('T')[0]} <br />
+                                        U: {subject.updated_at?.split('T')[0]}
+                                    </td>
                                     <td className="flex gap-2">
                                         {/* update subject Modal trigger */}
                                         <button
@@ -344,6 +351,17 @@ const Subjects = () => {
                                 </select>}
                         </div>
 
+                        {/* update subject is general */}
+                        <div>
+                            <label className="label block">Is General Subject?</label>
+
+                            <select className="select w-full"
+                                {...register("updatedIsGeneral")}
+                            >
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
 
                         <button className={`btn ${isFormLoading && "btn-disabled"} btn-success w-full`} type='submit' disabled={isFormLoading}>
                             {isFormLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : "Update"}
