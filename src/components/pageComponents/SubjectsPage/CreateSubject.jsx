@@ -37,10 +37,10 @@ const CreateSubject = ({ allSubjectsRefetch }) => {
             subject_title: data.subjectTitle,
             subject_code: data.subjectCode,
             credits: parseFloat(data.subjectCredit),
-            semester_id: parseInt(data.semesterId)
+            semester_id: parseInt(data.semesterId),
+            is_general: data.isGeneral === "no" ? false : true
         }
 
-        console.log(subject_data);
         try {
             setIsLoading(true);
             const res = await axiosSecure.post('/subjects/', subject_data);
@@ -74,6 +74,7 @@ const CreateSubject = ({ allSubjectsRefetch }) => {
                 <FaPlus className='text-lg group-hover/add-dept:text-success' />
             </button>
 
+            {/* TODO: add an is_general field while creating subject to mark it as a general subject */}
             <dialog id="create_subject_modal" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Add New Subject</h3>
@@ -138,6 +139,21 @@ const CreateSubject = ({ allSubjectsRefetch }) => {
                                             </select>}
                                 </div>
                             }
+
+                            {/* Is General Subject */}
+
+                            <div className={`${errors.isGeneral && "tooltip tooltip-open tooltip-bottom tooltip-error"} w-full`} data-tip={errors.isGeneral && errors.isGeneral.message}>
+                                <label className="label block">Is this a General Subject?</label>
+                                <select
+                                    {...register("isGeneral")}
+                                    defaultValue="no"
+                                    className="select select-bordered w-full">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+
+                                </select>
+                            </div>
+
 
                             <button className={`btn w-full ${isLoading ? "btn-disabled" : "btn-success"}`}>
                                 {isLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : "Create"}

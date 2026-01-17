@@ -6,6 +6,7 @@ import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
 import { AllUserTableSkeleton } from '../../components/ui/Skeletons.jsx';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
 import { Link } from 'react-router-dom';
+import { LiaChalkboardTeacherSolid } from 'react-icons/lia';
 
 const AllUser = () => {
     const axiosSecure = useAxiosSecure();
@@ -45,10 +46,10 @@ const AllUser = () => {
                     localStorage.setItem("allUserFilter", e.target.value); setAllUserFilter(e.target.value)
                 }}>
                     <option value="">All</option>
-                    <option value="super_admin">Super Admin</option>
-                    <option value="admin">Admin</option>
-                    <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
+                    <option value="super_admin">🧑‍💻 Super Admin</option>
+                    <option value="admin">🧑‍💼 Admin</option>
+                    <option value="student">🧑‍🎓 Student</option>
+                    <option value="teacher">🧑‍🏫 Teacher</option>
                 </select>
             </div>
             {
