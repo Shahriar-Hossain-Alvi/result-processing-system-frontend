@@ -110,7 +110,7 @@ const CreateUserForm = ({
                             <select
                                 {...register("departmentId")}
                                 defaultValue={null}
-                                className="select select-bordered w-full max-w-xs">
+                                className="select select-bordered w-full capitalize max-w-xs">
                                 <option value={null}>Choose a Department</option>
                                 {
                                     allDepartments?.map(dept => <option

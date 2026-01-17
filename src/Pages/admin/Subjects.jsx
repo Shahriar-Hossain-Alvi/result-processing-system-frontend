@@ -180,7 +180,7 @@ const Subjects = () => {
                     <label className="label">Semester</label>
                     <select
                         name="semester_id"
-                        className="select select-bordered"
+                        className="select"
                         value={filters.semester_id}
                         onChange={handleFilterChange}
                     >
