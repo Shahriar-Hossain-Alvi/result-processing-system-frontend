@@ -24,7 +24,8 @@ const Subjects = () => {
     const [filters, setFilters] = useState({
         semester_id: "",
         subject_credits: "",
-        search: ""
+        search: "",
+        sub_order_by_filter: localStorage.getItem("sub_order_by_filter") || ""
     });
 
     // debounce the search string by 500ms(wait 500ms before making the request send after user stop typing)
@@ -32,12 +33,13 @@ const Subjects = () => {
 
     // Subjects query
     const { data: allSubjects, isPending: isSubjectsPending, error: subjectsError, isError: isSubjectsError, refetch: allSubjectsRefetch } = useQuery({
-        queryKey: ['allSubjects', filters.semester_id, filters.subject_credits, debouncedSearch],
+        queryKey: ['allSubjects', filters.semester_id, filters.subject_credits, filters.sub_order_by_filter, debouncedSearch],
         queryFn: async () => {
             const params = new URLSearchParams();
 
             if (filters.semester_id) params.append('semester_id', filters.semester_id);
             if (filters.subject_credits) params.append('subject_credits', filters.subject_credits);
+            if (filters.sub_order_by_filter) params.append('order_by_filter', filters.sub_order_by_filter);
 
             // Use the debounced value for the API call
             if (debouncedSearch) params.append('search', debouncedSearch);
@@ -173,14 +175,14 @@ const Subjects = () => {
             </div>
 
             {/* 3. Filter UI Section */}
-            <div className="grid grid-cols-1 md:grid-cols-9 gap-4 mb-6 bg-base-200 p-4 rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-10 gap-4 mb-6 bg-base-200 p-4 rounded-lg">
 
                 {/* Semester Select */}
                 <div className="form-control md:col-span-1">
                     <label className="label">Semester</label>
                     <select
                         name="semester_id"
-                        className="select select-bordered"
+                        className="select"
                         value={filters.semester_id}
                         onChange={handleFilterChange}
                     >
@@ -188,6 +190,23 @@ const Subjects = () => {
                         {allSemesters?.map(semester => (
                             <option key={semester.id} value={semester.id}>Semester {semester.semester_number}</option>
                         ))}
+                    </select>
+                </div>
+
+                {/* Order by */}
+                <div className="md:col-span-1">
+                    <label className="label">Order By: </label>
+                    <select
+                        name='sub_order_by_filter'
+                        className='select'
+                        value={filters.sub_order_by_filter}
+                        onChange={(e) => {
+                            handleFilterChange(e);
+                            localStorage.setItem("sub_order_by_filter", e.target.value);
+                        }}
+                    >
+                        <option value="asc">ASC ⬇️</option>
+                        <option value="desc">DESC ⬆️</option>
                     </select>
                 </div>
 
@@ -223,7 +242,10 @@ const Subjects = () => {
                 <div className="md:col-span-1 md:place-self-center md:mt-5">
                     <button
                         className="btn btn-error text-sm"
-                        onClick={() => setFilters({ semester_id: "", subject_credits: "", search: "" })}
+                        onClick={() => {
+                            setFilters({ semester_id: "", subject_credits: "", search: "", sub_order_by_filter: "" })
+                            localStorage.removeItem("sub_order_by_filter");
+                        }}
                     >
                         Clear Filters
                     </button>
