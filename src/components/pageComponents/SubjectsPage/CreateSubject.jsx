@@ -24,7 +24,7 @@ const CreateSubject = ({ allSubjectsRefetch }) => {
     // semester error toast
     useEffect(() => {
         if (isSemesterError) {
-            console.log(isSemesterError);
+            console.log(semesterError);
             const message = errorMessageParser(semesterError);
             toast.error(message || "Failed to fetch semesters");
         }
@@ -74,7 +74,6 @@ const CreateSubject = ({ allSubjectsRefetch }) => {
                 <FaPlus className='text-lg group-hover/add-dept:text-success' />
             </button>
 
-            {/* TODO: add an is_general field while creating subject to mark it as a general subject */}
             <dialog id="create_subject_modal" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Add New Subject</h3>

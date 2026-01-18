@@ -161,8 +161,6 @@ const Subjects = () => {
         }
     }
 
-    console.log(allSubjects);
-
     return (
         <div>
             <div className="flex justify-between items-center">

@@ -79,9 +79,9 @@ const AdminLayout = () => {
 
             {/* Assign Subject */}
             <li>
-                <NavLink to="/admin/assignSubject" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Assign Subject">
+                <NavLink to="/admin/assignedCourses" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Assign Subject">
                     <LuNotebookPen className='w-4 h-4' />
-                    <p className="is-drawer-close:hidden">Assign Subject</p>
+                    <p className="is-drawer-close:hidden">Courses Assignments</p>
                 </NavLink>
             </li>
 
