@@ -125,10 +125,12 @@ const CreateNewCourseAssignment = ({ allAssignedCoursesRefetch }) => {
 
     return (
         <div>
-            <button className='btn btn-circle btn-ghost btn-sm border-2 border-dashed' onClick={() => document.getElementById('create_subject_offering_modal').
+            {/* Create New Course Assignment Modal */}
+            <button className='btn btn-ghost btn-sm group/add-dept hover:bg-transparent border-0 tooltip tooltip-left' data-tip="Create New Course Assignment" onClick={() => {
                 // @ts-ignore
-                showModal()}>
-                <FaPlus />
+                document.getElementById('create_subject_offering_modal').showModal()
+            }}>
+                <FaPlus className='text-lg group-hover/add-dept:text-success' />
             </button>
 
             <dialog id="create_subject_offering_modal" className="modal">
