@@ -8,18 +8,19 @@ import { useQuery } from "@tanstack/react-query";
 import { FaEdit, FaSearch } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-const UpdateCourseAssignment = ({ assignedCourse, allAssignedCoursesRefetch }) => {
+const UpdateCourseAssignment = ({ assignedCourse, allDepartments, isAllDepartmentsPending, allDepartmentsRefetch, allAssignedCoursesRefetch }) => {
     const axiosSecure = useAxiosSecure();
     const modalId = `edit_assignment_modal_${assignedCourse?.id}`; // unique id for each row to avoid always showing the first data
     const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm({
         defaultValues: {
-            updatedTeacherId: assignedCourse?.taught_by?.id,
+            updatedTeacherId: assignedCourse?.taught_by?.id || null,
             updatedSubjectId: assignedCourse?.subject?.id,
             updatedDepartmentId: assignedCourse?.department?.id
         }
     }
     );
-
+    // Add a state to track if THIS specific modal is open
+    const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     // Filter states for search
@@ -39,26 +40,18 @@ const UpdateCourseAssignment = ({ assignedCourse, allAssignedCoursesRefetch }) =
     useEffect(() => {
         if (assignedCourse) {
             setValue("updatedDepartmentId", assignedCourse.department?.id);
-            setValue("updatedTeacherId", assignedCourse.taught_by?.id);
+            setValue("updatedTeacherId", assignedCourse.taught_by?.id || null);
             setValue("updatedSubjectId", assignedCourse.subject?.id);
             setTeacherSearch(assignedCourse.taught_by?.name || "");
             setSubjectSearch(`${assignedCourse.subject?.subject_code}: ${assignedCourse.subject?.subject_title}` || "");
         }
     }, [assignedCourse, setValue]);
 
-    // Departments fetch
-    const { data: allDepartments, isPending: isAllDepartmentsPending, error: allDepartmentsError, isError: isAllDepartmentsError, refetch: allDepartmentsRefetch } = useQuery({
-        queryKey: ['allDepartments'],
-        queryFn: async () => {
-            const res = await axiosSecure('/departments/');
-            return res.data;
-        }
-    })
 
-    // Fetch Teachers 
+
+    // Fetch Teachers - Only if the modal is open
     const {
         data: allTeachersForCourseAssignment,
-        isFetching: isAllTeachersForCourseAssignmentFetching,
         error: allTeachersForCourseAssignmentError,
         isError: isAllTeachersForCourseAssignmentError
     } = useQuery({
@@ -69,11 +62,11 @@ const UpdateCourseAssignment = ({ assignedCourse, allAssignedCoursesRefetch }) =
             const res = await axiosSecure.get(`/teachers/all/?search=${debouncedTeacherSearch}`);
             return res.data;
         },
-        enabled: debouncedTeacherSearch.length > 1
+        enabled: isOpen && debouncedTeacherSearch.length > 1
     });
 
-    // Fetch Subjects
-    const { data: allSubjects, isFetching: isAllSubjectsFetching, error: allSubjectsError, isError: isAllSubjectsError } = useQuery({
+    // Fetch Subjects - Only if the modal is open
+    const { data: allSubjects, error: allSubjectsError, isError: isAllSubjectsError } = useQuery({
         queryKey: ['allSubjects', debouncedSubjectSearch],
         queryFn: async () => {
             if (!debouncedSubjectSearch) return [];
@@ -83,16 +76,8 @@ const UpdateCourseAssignment = ({ assignedCourse, allAssignedCoursesRefetch }) =
             const res = await axiosSecure(`/subjects/?${params.toString()}`);
             return res.data;
         },
-        enabled: debouncedSubjectSearch?.length > 1
+        enabled: isOpen && debouncedSubjectSearch?.length > 1
     });
-
-    useEffect(() => {
-        if (isAllDepartmentsError) {
-            console.log(allDepartmentsError);
-            const message = errorMessageParser(allDepartmentsError);
-            toast.error(message || "Failed to fetch departments");
-        }
-    }, [isAllDepartmentsError])
 
 
     useEffect(() => {
@@ -117,7 +102,9 @@ const UpdateCourseAssignment = ({ assignedCourse, allAssignedCoursesRefetch }) =
 
     // ADD NEW Course Assignment Function
     const updateSubjectOffering = async (data) => {
-        const update_data = {};
+        const update_data = {
+            taught_by_id: null
+        };
 
         if (data.updatedTeacherId && (parseInt(data.updatedTeacherId) !== parseInt(assignedCourse?.taught_by?.id))) update_data.taught_by_id = parseInt(data.updatedTeacherId);
 
@@ -147,6 +134,7 @@ const UpdateCourseAssignment = ({ assignedCourse, allAssignedCoursesRefetch }) =
             const message = errorMessageParser(error);
             toast.error(message || 'Failed to update assigned course');
         } finally {
+            reset();
             setIsLoading(false);
             allAssignedCoursesRefetch();
             allDepartmentsRefetch();
@@ -160,13 +148,14 @@ const UpdateCourseAssignment = ({ assignedCourse, allAssignedCoursesRefetch }) =
             <div>
                 {/* Create New Course Assignment Modal */}
                 <button className='btn btn-ghost hover:bg-transparent border-0 group/edit-courseAssignment' onClick={() => {
+                    setIsOpen(true);
                     // @ts-ignore
                     document.getElementById(modalId).showModal()
                 }}>
                     <FaEdit className='text-sm group-hover/edit-courseAssignment:text-success' />
                 </button>
 
-                <dialog id={modalId} className="modal">
+                <dialog id={modalId} onClose={() => setIsOpen(false)} className="modal">
                     <div className="modal-box max-w-3xl">
                         <h3 className="font-bold text-2xl mb-6 border-b pb-2">Edit Assign Course to Teacher</h3>
 
@@ -273,11 +262,6 @@ const UpdateCourseAssignment = ({ assignedCourse, allAssignedCoursesRefetch }) =
                             </div>
 
                             {/* Summary Box */}
-                            {/* {(teacherSearch || subjectSearch) ? (
-                                <div className="bg-base-200 p-3 rounded-lg text-sm italic">
-                                    Ready to assign <span className="font-bold text-success">{selectedSubjectId ? subjectSearch : '...'}</span> to <span className="font-bold text-info">{selectedTeacherId ? teacherSearch : '...'}</span> for <span>{selectedDepartmentId ? selectedDepartmentId : '...'}</span>
-                                </div>
-                            ) : null} */}
                             <div className="alert bg-base-200 border-none italic text-sm py-4">
                                 <div>
                                     Ready to assign <span className="text-success font-bold">{subjectSearch || '...'}</span> to <span className="text-info font-bold">{teacherSearch || '...'}</span> for <span className="font-bold">{currentDeptName}</span>
@@ -287,8 +271,8 @@ const UpdateCourseAssignment = ({ assignedCourse, allAssignedCoursesRefetch }) =
                             {/* close modal and submit */}
                             <div className="modal-action flex items-center justify-end">
                                 <button type="button" className="btn btn-ghost" onClick={() => {
-                                    // reset();
-                                    setTeacherSearch(assignedCourse?.taught_by?.name);
+                                    setIsOpen(false);
+                                    setTeacherSearch(assignedCourse?.taught_by?.name || '');
                                     setSubjectSearch(assignedCourse?.subject?.subject_title);
                                     // @ts-ignore
                                     document.getElementById(modalId).close();

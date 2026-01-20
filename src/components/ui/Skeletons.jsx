@@ -1,3 +1,5 @@
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 // @ts-ignore
 import defaultImage from "../../assets/blank-profile-picture.png";
 
@@ -223,5 +225,183 @@ export const SingleUserDetailsSkeleton = () => {
                 </tbody>
             </table>
         </div>
+    </div>
+}
+
+export const AssignedCoursesSkeleton = () => {
+    {/* Id, Name, email, Role, Department, username right */ }
+    return <div className="overflow-x-auto">
+        <table className="table table-xs md:table-sm xl:table-md">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Assigned <br /> Teacher</th>
+                    <th>Assigned <br /> Subject</th>
+                    <th>Assigned to <br /> (Department)</th>
+                    <th>Semester</th>
+                    <th>Assigned Date</th>
+                    <th>Updated On<br /> (Assignment)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {/* ID */}
+                    <th className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">Id...</span>
+                    </th>
+
+                    {/* Teacher Name  & Department */}
+                    <td className="skeleton h-5 w-3 min-w-40">
+                        <span className="skeleton skeleton-text">name...</span>
+                    </td>
+
+                    {/* Assigned Subject Name & Code */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">subject...</span>
+                    </td>
+
+                    {/* Assigned Department Name */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">department...</span>
+                    </td>
+
+                    {/* Semester Name */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">semester...</span>
+                    </td>
+
+                    {/* Assigned Date */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">date...</span>
+                    </td>
+
+                    {/* Updated Date */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">date...</span>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="skeleton h-5 w-3">
+                        <div className="place-self-center flex gap-1">
+                            <button className="opacity-25">
+                                <FaEdit />
+                            </button>
+                            <button className="opacity-25">
+                                <MdDelete />
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    {/* ID */}
+                    <th className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">Id...</span>
+                    </th>
+
+                    {/* Teacher Name  & Department */}
+                    <td className="skeleton h-5 w-3 min-w-40">
+                        <span className="skeleton skeleton-text">name...</span>
+                    </td>
+
+                    {/* Assigned Subject Name & Code */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">subject...</span>
+                    </td>
+
+                    {/* Assigned Department Name */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">department...</span>
+                    </td>
+
+                    {/* Semester Name */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">semester...</span>
+                    </td>
+
+                    {/* Assigned Date */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">date...</span>
+                    </td>
+
+                    {/* Updated Date */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">date...</span>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="skeleton h-5 w-3">
+                        <div className="place-self-center flex gap-1">
+                            <button className="opacity-25">
+                                <FaEdit />
+                            </button>
+                            <button className="opacity-25">
+                                <MdDelete />
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    {/* ID */}
+                    <th className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">Id...</span>
+                    </th>
+
+                    {/* Teacher Name  & Department */}
+                    <td className="skeleton h-5 w-3 min-w-40">
+                        <span className="skeleton skeleton-text">name...</span>
+                    </td>
+
+                    {/* Assigned Subject Name & Code */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">subject...</span>
+                    </td>
+
+                    {/* Assigned Department Name */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">department...</span>
+                    </td>
+
+                    {/* Semester Name */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">semester...</span>
+                    </td>
+
+                    {/* Assigned Date */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">date...</span>
+                    </td>
+
+                    {/* Updated Date */}
+                    <td className="skeleton h-5 w-3">
+                        <span className="skeleton skeleton-text">date...</span>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="skeleton h-5 w-3">
+                        <div className="place-self-center flex gap-1">
+                            <button className="opacity-25">
+                                <FaEdit />
+                            </button>
+                            <button className="opacity-25">
+                                <MdDelete />
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Assigned <br /> Teacher</th>
+                    <th>Assigned <br /> Subject</th>
+                    <th>Assigned to <br /> (Department)</th>
+                    <th>Semester</th>
+                    <th>Assigned Date</th>
+                    <th>Updated On<br /> (Assignment)</th>
+                    <th>Actions</th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 }

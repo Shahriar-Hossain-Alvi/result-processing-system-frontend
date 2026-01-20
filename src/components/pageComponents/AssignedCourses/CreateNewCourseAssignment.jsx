@@ -9,7 +9,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useDebounce } from '../../../hooks/useDebounce.jsx';
 import { FaSearch } from 'react-icons/fa';
 
-const CreateNewCourseAssignment = ({ allAssignedCoursesRefetch }) => {
+const CreateNewCourseAssignment = ({ allDepartments, isAllDepartmentsPending, allDepartmentsRefetch, allAssignedCoursesRefetch }) => {
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm();
     const [isLoading, setIsLoading] = useState(false);
@@ -25,23 +25,6 @@ const CreateNewCourseAssignment = ({ allAssignedCoursesRefetch }) => {
     // Watching selected values to show labels
     const selectedTeacherId = watch("teacherId");
     const selectedSubjectId = watch("subjectId");
-
-    // Departments fetch
-    const { data: allDepartments, isPending: isAllDepartmentsPending, error: allDepartmentsError, isError: isAllDepartmentsError, refetch: allDepartmentsRefetch } = useQuery({
-        queryKey: ['allDepartments'],
-        queryFn: async () => {
-            const res = await axiosSecure('/departments/');
-            return res.data;
-        }
-    })
-
-    useEffect(() => {
-        if (isAllDepartmentsError) {
-            console.log(allDepartmentsError);
-            const message = errorMessageParser(allDepartmentsError);
-            toast.error(message || "Failed to fetch departments");
-        }
-    }, [isAllDepartmentsError])
 
 
     // Fetch Teachers 
