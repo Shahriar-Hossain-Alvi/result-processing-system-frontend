@@ -19,10 +19,32 @@ const AssignedCourses = () => {
     const [selectedSubjectOffering, setSelectedSubjectOffering] = useState(null); // state for editing
     const [isFormLoading, setIsFormLoading] = useState(false);
 
+    // Filter
+    const [filters, setFilters] = useState({
+        // semester_id: "",
+        // subject_credits: "",
+        // search: "",
+        course_assignment_order_by_filter: localStorage.getItem("course_assignment_order_by_filter") || ""
+    });
+
+    // Fetch all assigned courses
     const { data: allAssignedCourses, isPending: isAllAssignedCoursesPending, error: assignedCoursesError, isError: isAssignedCoursesError, refetch: allAssignedCoursesRefetch } = useQuery({
-        queryKey: ['allAssignedCourses'],
+        queryKey: ['allAssignedCourses', filters.course_assignment_order_by_filter],
         queryFn: async () => {
-            const res = await axiosSecure('/subject_offering/');
+            const params = new URLSearchParams();
+
+            if (filters.course_assignment_order_by_filter) params.append('order_by_filter', filters.course_assignment_order_by_filter);
+
+            const res = await axiosSecure(`/subject_offering/?${params.toString()}`);
+            return res.data;
+        }
+    })
+
+    // Departments fetch for update and create
+    const { data: allDepartments, isPending: isAllDepartmentsPending, error: allDepartmentsError, isError: isAllDepartmentsError, refetch: allDepartmentsRefetch } = useQuery({
+        queryKey: ['allDepartments'],
+        queryFn: async () => {
+            const res = await axiosSecure('/departments/');
             return res.data;
         }
     })
@@ -34,6 +56,20 @@ const AssignedCourses = () => {
             toast.error(message || "Failed to fetch assigned courses");
         }
     }, [isAssignedCoursesError])
+
+    useEffect(() => {
+        if (isAllDepartmentsError) {
+            console.log(allDepartmentsError);
+            const message = errorMessageParser(allDepartmentsError);
+            toast.error(message || "Failed to fetch departments");
+        }
+    }, [isAllDepartmentsError])
+
+    // Handler to update filters
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters(prev => ({ ...prev, [name]: value }));
+    };
 
     // delete subject offering (course assignment)
     const deleteSubjectOffering = async (id) => {
@@ -64,12 +100,83 @@ const AssignedCourses = () => {
                     <span>({allAssignedCourses?.length})</span>
                 </div>
 
-                <CreateNewCourseAssignment allAssignedCoursesRefetch={allAssignedCoursesRefetch} />
+                <CreateNewCourseAssignment
+                    allDepartments={allDepartments}
+                    isAllDepartmentsPending={isAllDepartmentsPending}
+                    allDepartmentsRefetch={allDepartmentsRefetch}
+                    allAssignedCoursesRefetch={allAssignedCoursesRefetch} />
             </div>
 
 
             {/* Show all assigned courses */}
             <div>
+                {/* 3. Filter UI Section */}
+                <div className="grid grid-cols-1 md:grid-cols-10 gap-4 mb-6 bg-base-200 p-4 rounded-lg">
+
+                    {/* Semester Select */}
+                    {/* <div className="form-control md:col-span-1">
+                        <label className="label">Semester</label>
+                        <select
+                            name="semester_id"
+                            className="select"
+                            value={filters.semester_id}
+                            onChange={handleFilterChange}
+                        >
+                            <option value="">All</option>
+                            {allSemesters?.map(semester => (
+                                <option key={semester.id} value={semester.id}>Semester {semester.semester_number}</option>
+                            ))}
+                        </select>
+                    </div> */}
+
+                    {/* Order by */}
+                    <div className="md:col-span-1">
+                        <label className="label">Order By: </label>
+                        <select
+                            name='course_assignment_order_by_filter'
+                            className='select'
+                            value={filters.course_assignment_order_by_filter}
+                            onChange={(e) => {
+                                localStorage.setItem("course_assignment_order_by_filter", e.target.value);
+                                handleFilterChange(e);
+                            }}
+                        >
+                            <option value="asc">ASC ⬇️</option>
+                            <option value="desc">DESC ⬆️</option>
+                        </select>
+                    </div>
+
+                    {/* Search Title/Code */}
+                    {/* <div className="form-control md:col-span-4">
+                        <label className="label">Search Title or Code</label>
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Math, CSE-101..."
+                            className="input input-bordered w-full"
+                            value={filters.search}
+                            onChange={handleFilterChange}
+                        />
+                    </div> */}
+
+                    {/* Reset Button */}
+                    <div className="md:col-span-1 md:place-self-center md:mt-5">
+                        <button
+                            className="btn btn-error text-sm"
+                            onClick={() => {
+                                setFilters({
+                                    // semester_id: "", 
+                                    // subject_credits: "", 
+                                    // search: "", 
+                                    course_assignment_order_by_filter: ""
+                                })
+                                localStorage.removeItem("course_assignment_order_by_filter");
+                            }}
+                        >
+                            Clear Filters
+                        </button>
+                    </div>
+                </div>
                 {isAllAssignedCoursesPending && <AssignedCoursesSkeleton />}
 
                 {allAssignedCourses?.length === 0 && <div className="text-center py-4">No assigned courses found</div>}
@@ -99,9 +206,12 @@ const AssignedCourses = () => {
 
                                             {/* Teacher Name  & Department */}
                                             <td className="min-w-40">
-                                                <h4>{assignedCourse.taught_by.name}</h4>
+                                                <h4>
+                                                    {assignedCourse?.taught_by && assignedCourse?.taught_by?.name}
+                                                    <span className="text-error font-bold uppercase opacity-100">{!assignedCourse?.taught_by?.name && "N/A"}</span>
+                                                </h4>
                                                 <p className="text-xs xl:text-sm opacity-60 mt-1">
-                                                    From <span className="uppercase font-bold opacity-100">{(assignedCourse.taught_by.department.department_name).split(/\s*[-\u2013\u2014]\s*/)[0]}</span> Department {/* removes different types of  hyphens and keeps the first word */}
+                                                    From <span className="uppercase font-bold opacity-100">{(assignedCourse?.taught_by && (assignedCourse?.taught_by?.department?.department_name).split(/\s*[-\u2013\u2014]\s*/)[0])}</span> <span className="text-error font-bold uppercase opacity-100">{!assignedCourse?.taught_by?.department?.department_name && "N/A"}</span> Department {/* removes different types of  hyphens and keeps the first word */}
                                                 </p>
                                             </td>
 
@@ -126,13 +236,18 @@ const AssignedCourses = () => {
                                             {/* Actions */}
                                             <td>
                                                 {/* update course assignment Modal trigger */}
-                                                <UpdateCourseAssignment assignedCourse={assignedCourse} allAssignedCoursesRefetch={allAssignedCoursesRefetch} />
+                                                <UpdateCourseAssignment
+                                                    assignedCourse={assignedCourse}
+                                                    allDepartments={allDepartments}
+                                                    isAllDepartmentsPending={isAllDepartmentsPending}
+                                                    allDepartmentsRefetch={allDepartmentsRefetch}
+                                                    allAssignedCoursesRefetch={allAssignedCoursesRefetch} />
 
                                                 {/* Delete Course Assignment confirmation Modal */}
                                                 {
                                                     user?.role === "super_admin" &&
                                                     <>
-                                                        <button className="btn btn-ghost hover:bg-transparent border-0 group/delete-dept"
+                                                        <button className="btn btn-ghost hover:bg-transparent border-0 group/delete-course-assignment"
                                                             onClick={() => {
                                                                 setSelectedSubjectOffering(assignedCourse);
                                                                 document.getElementById('delete_subject_offering_modal').
@@ -140,7 +255,7 @@ const AssignedCourses = () => {
                                                                     showModal()
                                                             }}
                                                         >
-                                                            <MdDelete className='group-hover/delete-dept:text-red-700 text-lg' />
+                                                            <MdDelete className='group-hover/delete-course-assignment:text-red-700 text-lg' />
                                                         </button>
                                                     </>}
                                             </td>
@@ -176,8 +291,8 @@ const AssignedCourses = () => {
                     <p className="py-4">
                         <span className="font-semibold block mb-2">Are you sure you want to delete this course assignment?</span>
                         <span className="font-bold block underline">Details:</span>
-                        Assigned <span className="text-info">{selectedSubjectOffering?.taught_by?.name}</span> from <span className="font-medium uppercase text-info">
-                            {(selectedSubjectOffering?.taught_by?.department?.department_name)?.split(/\s*[-\u2013\u2014]\s*/)[0]}
+                        Assigned <span className="text-info">{selectedSubjectOffering?.taught_by?.name || "N/A"}</span> from <span className="font-medium uppercase text-info">
+                            {(selectedSubjectOffering?.taught_by && (selectedSubjectOffering?.taught_by?.department?.department_name)?.split(/\s*[-\u2013\u2014]\s*/)[0]) || "N/A"}
                         </span> department <br /> as <span className="font-medium capitalize text-info">{selectedSubjectOffering?.subject.subject_title}</span> <span className="text-sm text-info italic">({selectedSubjectOffering?.subject?.subject_code})</span> teacher <br /> to <span className="text-info">{selectedSubjectOffering?.department.department_name.toUpperCase()}</span> department
                     </p>
                     <p className='text-warning text-sm'>The course assignment is connected with other data such as Mark Inputs. Deleting it may create errors and failures in the system!!! Try Editing instead</p>
