@@ -37,7 +37,7 @@ const AddUser = () => {
 
         // send data to backend
         try {
-            const res = await axiosSecure.post('/users/register', create_admin_payload);
+            const res = await axiosSecure.post('/users/create_admin', create_admin_payload);
             console.log(res);
             toast.success(res?.data?.message || "New Admin created successfully");
             reset();

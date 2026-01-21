@@ -5,20 +5,20 @@ import { createContext, useEffect, useState } from "react";
 // @ts-ignore
 export const ThemeContext = createContext();
 
-const ThemeProvider = ({children}) => {
+const ThemeProvider = ({ children }) => {
     // get stored theme by default from local storage
-    const [theme, setTheme] = useState(()=>{
-        return localStorage.getItem("theme") || "light";
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem("theme") || "corporate";
     })
 
     // save theme to local storage
-    useEffect(()=>{
+    useEffect(() => {
         localStorage.setItem("theme", theme);
         document.body.className = theme;
     }, [theme]);
 
     return (
-        <ThemeContext.Provider value={{theme, setTheme}}>
+        <ThemeContext.Provider value={{ theme, setTheme }}>
             {children}
         </ThemeContext.Provider>
     );

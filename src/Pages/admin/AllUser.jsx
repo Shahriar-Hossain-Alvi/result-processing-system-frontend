@@ -11,8 +11,6 @@ import { useDebounce } from '../../hooks/useDebounce.jsx';
 
 const AllUser = () => {
     const axiosSecure = useAxiosSecure();
-    // const [allUserFilter, setAllUserFilter] = useState(localStorage.getItem("allUserFilter") || "");
-    // Filter
     const [filters, setFilters] = useState({
         user_role_filter: localStorage.getItem("user_role_filter") || "",
         department_search: "",

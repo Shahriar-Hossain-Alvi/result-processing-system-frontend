@@ -11,7 +11,7 @@ const Navbar = () => {
 
     // toggle theme
     const toggleTheme = (event) => {
-        setTheme(event.target.checked ? "light" : "dark");
+        setTheme(event.target.checked ? "corporate" : "dark");
     }
 
     return (
@@ -35,7 +35,7 @@ const Navbar = () => {
                         <li className='my-auto hover:bg-transparent group/theme'>
                             <label className="swap swap-rotate">
                                 {/* this hidden checkbox controls the state */}
-                                <input type="checkbox" className="theme-controller" value="light" onChange={toggleTheme} />
+                                <input type="checkbox" className="theme-controller" value="corporate" onChange={toggleTheme} />
 
                                 {/* rotate-90 */}
                                 <FaSun className='swap-on group-hover/theme:rotate-360 group-hover/theme:transition-all' />
