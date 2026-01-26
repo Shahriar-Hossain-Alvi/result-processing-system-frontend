@@ -28,15 +28,12 @@ const InsertMarks = () => {
     const selectedStudentId = watch("studentId");
     const selectedSubjectId = watch("subjectId");
 
-    console.log(selectedStudentId);
-
     // Fetch students 
     const {
         data: allStudentsForMarks,
         isFetching: isAllStudentsForMarksFetching,
         error: allStudentsForMarksError,
-        isError: isAllStudentsForMarksError,
-        refetch: allStudentsForMarksRefetch
+        isError: isAllStudentsForMarksError
     } = useQuery({
         queryKey: ['allStudentsForMarks', debouncedStudentSearch],
         queryFn: async () => {
@@ -47,8 +44,6 @@ const InsertMarks = () => {
         },
         enabled: debouncedStudentSearch.length > 1
     });
-
-    console.log(allStudentsForMarks);
 
     useEffect(() => {
         if (isAllStudentsForMarksError) {
@@ -63,8 +58,7 @@ const InsertMarks = () => {
     const { data: subjectsForMarking,
         isPending: isSubjectsForMarkingPending,
         error: subjectsForMarkingError,
-        isError: isSubjectsForMarkingError,
-        refetch: subjectsForMarkingRefetch } = useQuery({
+        isError: isSubjectsForMarkingError } = useQuery({
             queryKey: ['subjectsForMarking'],
             queryFn: async () => {
                 const student = allStudentsForMarks[0];
@@ -104,36 +98,51 @@ const InsertMarks = () => {
 
     // ADD NEW Course Assignment Function
     const addNewSubjectOffering = async (data) => {
-        console.log(data);
         const payload = {
-            taught_by_id: parseInt(data.teacherId),
+            student_id: parseInt(data.studentId),
+            semester_id: parseInt(data.semesterId),
             subject_id: parseInt(data.subjectId),
-            department_id: parseInt(data.departmentId),
+
+            // Marks
+            // assignment_mark: parseFloat(data.assignmentMarks) || null,
+            // class_test_mark: parseFloat(data.classTestMarks) || null,
+            // midterm_mark: parseFloat(data.midtermMarks) || null,
+            // final_exam_mark: parseFloat(data.finalExamMarks) || null,
+
         };
+        if (data.assignmentMarks) payload.assignment_mark = parseFloat(data.assignmentMarks);
+        if (data.classTestMarks) payload.class_test_mark = parseFloat(data.classTestMarks);
+        if (data.midtermMarks) payload.midterm_mark = parseFloat(data.midtermMarks);
+        if (data.finalExamMarks) payload.final_exam_mark = parseFloat(data.finalExamMarks);
 
-        // try {
-        //     setIsLoading(true);
+        if (Object.keys(payload).length < 4) {
+            // @ts-ignore
+            document.getElementById('insert_marks_modal').close();
+            return toast.error('Minimum one mark is required to insert marks.');
+        }
 
-        //     const res = await axiosSecure.post('/subject_offering/', payload);
-        //     toast.success(res?.data?.message || 'Course assigned successfully');
-        //     // allAssignedCoursesRefetch();
-        //     // @ts-ignore
-        //     document.getElementById('create_subject_offering_modal').close();
-        //     reset();
-        //     setTeacherSearch("");
-        //     setSubjectSearch("");
-        // } catch (error) {
-        //     console.log(error);
-        //     // @ts-ignore
-        //     document.getElementById('create_subject_offering_modal').close();
-        //     const message = errorMessageParser(error);
-        //     toast.error(message || 'Failed to assign course');
-        // } finally {
-        //     setIsLoading(false);
-        //     // allDepartmentsRefetch();
-        //     allTeachersForCourseAssignmentRefetch();
-        //     allSubjectsRefetch();
-        // }
+        console.log(payload);
+
+        try {
+            setIsLoading(true);
+
+            const res = await axiosSecure.post('/marks/', payload);
+            toast.success(res?.data?.message || 'Marks inserted');
+            // @ts-ignore
+            document.getElementById('insert_marks_modal').close();
+            reset();
+        } catch (error) {
+            console.log(error);
+            // @ts-ignore
+            document.getElementById('insert_marks_modal').close();
+            const message = errorMessageParser(error);
+            toast.error(message || 'Failed to insert marks');
+        } finally {
+            setStudentSearch("");
+            setSelectedSubjectForMarking(null);
+            setIsLoading(false);
+            // TODO: all marks refetch
+        }
     };
 
 
@@ -227,18 +236,18 @@ const InsertMarks = () => {
                         </div>
 
                         {/* Assignment Marks */}
-                        <div className={`${errors.assignment_marks && "tooltip tooltip-open tooltip-top tooltip-error mt-5"} space-y-1 w-full`} data-tip={errors.assignment_marks && errors.assignment_marks.message}>
+                        <div className={`${errors.assignmentMarks && "tooltip tooltip-open tooltip-top tooltip-error mt-5"} space-y-1 w-full`} data-tip={errors.assignmentMarks && errors.assignmentMarks.message}>
                             <label className="label font-semibold"
 
                             >Assignment Mark</label>
                             <input
                                 type="number"
+                                step="0.1"
                                 className='input w-full'
                                 placeholder='Assignment Marks (0-20)'
                                 {...register(
-                                    "assignment_marks",
+                                    "assignmentMarks",
                                     {
-                                        required: "Required",
                                         min: {
                                             value: 0,
                                             message: "Must be greater than 0"
@@ -252,17 +261,17 @@ const InsertMarks = () => {
                         </div>
 
                         {/* Class Test Marks */}
-                        <div className={`${errors.class_test_marks && "tooltip tooltip-open tooltip-top mt-5 tooltip-error"} space-y-1 w-full`} data-tip={errors.class_test_marks && errors.class_test_marks.message}>
+                        <div className={`${errors.classTestMarks && "tooltip tooltip-open tooltip-top mt-5 tooltip-error"} space-y-1 w-full`} data-tip={errors.classTestMarks && errors.classTestMarks.message}>
                             <label className="label font-semibold"
                             >Class Test Mark</label>
                             <input
                                 type="number"
+                                step="0.1"
                                 className='input w-full'
                                 placeholder='Class Test Marks (0-20)'
                                 {...register(
-                                    "class_test_marks",
+                                    "classTestMarks",
                                     {
-                                        required: "Required",
                                         min: {
                                             value: 0,
                                             message: "Must be greater than 0"
@@ -277,18 +286,18 @@ const InsertMarks = () => {
                         </div>
 
                         {/* Midterm Marks */}
-                        <div className={`space-y-1 w-full ${errors.midterm_mark && "tooltip tooltip-open tooltip-top mt-5 tooltip-error"}`} data-tip={errors.midterm_mark && errors.midterm_mark.message}>
+                        <div className={`space-y-1 w-full ${errors.midtermMarks && "tooltip tooltip-open tooltip-top mt-5 tooltip-error"}`} data-tip={errors.midtermMarks && errors.midtermMarks.message}>
                             <label className="label font-semibold"
 
                             >Midterm Mark</label>
                             <input
                                 type="number"
+                                step="0.1"
                                 className='input w-full'
                                 placeholder='Midterm Marks (0-20)'
                                 {...register(
-                                    "midterm_mark",
+                                    "midtermMarks",
                                     {
-                                        required: "Required",
                                         min: {
                                             value: 0,
                                             message: "Must be greater than 0"
@@ -302,17 +311,17 @@ const InsertMarks = () => {
                         </div>
 
                         {/* Final Exam Marks */}
-                        <div className={`${errors.final_exam_mark && "tooltip tooltip-open tooltip-top mt-5 tooltip-error"} space-y-1 w-full`} data-tip={errors.final_exam_mark && errors.final_exam_mark.message}>
+                        <div className={`${errors.finalExamMarks && "tooltip tooltip-open tooltip-top mt-5 tooltip-error"} space-y-1 w-full`} data-tip={errors.finalExamMarks && errors.finalExamMarks.message}>
                             <label className="label font-semibold"
                             >Final Exam Mark</label>
                             <input
                                 type="number"
+                                step="0.1"
                                 className='input w-full'
                                 placeholder='Final Exam Marks (0-80)'
                                 {...register(
-                                    "final_exam_mark",
+                                    "finalExamMarks",
                                     {
-                                        required: "Required",
                                         min: {
                                             value: 0,
                                             message: "Must be greater than 0"
