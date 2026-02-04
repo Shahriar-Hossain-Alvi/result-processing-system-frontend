@@ -6,17 +6,18 @@
 @plugin "daisyui";
 
 /* set themes */
-@plugin "daisyui" {
+/* @plugin "daisyui" {
   themes: corporate --default, dim --prefersdark;
-}
+} */
 
 /* 1. CUSTOMIZE CORPORATE THEME */
-@plugin "daisyui/theme" {
+/* @plugin "daisyui/theme" {
   name: "corporate";
   default: true;
   --color-warning: oklch(68.1% 0.162 75.834);
-  --color-warning-content: oklch(100% 0 0); /* White text for contrast on darker yellow */
-}
+  --color-warning-content: oklch(100% 0 0); 
+} */
+  /* White text for contrast on darker yellow */
 
 /* Custom CSS */
 @theme {

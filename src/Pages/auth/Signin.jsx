@@ -11,6 +11,9 @@ import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
 import toast, { Toaster } from 'react-hot-toast';
 import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
+// @ts-ignore
+import logo from "../../assets/edutrack_logo.png"
+import { MdEmail } from 'react-icons/md';
 
 const Signin = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -70,27 +73,32 @@ const Signin = () => {
 
 
     return (
-        <div className="hero min-h-screen">
-            <div className="p-8 bg-base-200 rounded-2xl flex-col w-3/4 lg:w-1/3">
+        <div className="hero min-h-screen bg-[#ECF7FF]">
+            <div className="flex-col xs:w-3xs w-2xs md:w-lg">
                 <div className="text-center">
-                    <h1 className="text-5xl font-bold">Login</h1>
-                    <p className="py-6">
-                        Use your email and password to login
+                    <img src={logo} alt="Logo" className='w-44 md:w-60 lg:w-72 mx-auto' />
+                    <p className="py-6 text-black text-lg lg:text-xl">
+                        Sign in to your account
                     </p>
                 </div>
-                <div className="card bg-base-100 w-full shrink-0 shadow-2xl">
+                <div className="card bg-base-100 shadow-lg hover:shadow-2xl w-full shrink-0">
                     <form onSubmit={handleSubmit(signInUser)} className="card-body">
                         <fieldset className="fieldset">
                             <div className={`w-full ${errors.email && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.email && errors.email.message}>
-                                <input
-                                    type="email"
-                                    {...register("email", { required: "Email is required" })} className="input w-full"
-                                    placeholder="Email"
-                                />
+                                <p className='font-medium '>Email Address</p>
+                                <label className='input w-full'>
+                                    <MdEmail className='text-gray-400 text-base' />
+                                    <input
+                                        type="email"
+                                        {...register("email", { required: "Email is required" })}
+                                        placeholder="user@email.com"
+                                    />
+                                </label>
                             </div>
 
                             <div className='relative my-3'>
                                 <div className={`w-full ${errors.password && "tooltip tooltip-open tooltip-bottom tooltip-error"}`} data-tip={errors.password && errors.password.message}>
+
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         className="input w-full"
@@ -103,16 +111,15 @@ const Signin = () => {
                                             })}
                                         placeholder="Password"
                                     />
-                                    {/* {errors.password && <span className="text-error">{errors.password.message}</span>} */}
                                 </div>
 
                                 {
                                     showPassword ?
-                                        <button type='button' onClick={() => setShowPassword(false)} className="btn btn-sm bg-base-100 btn-ghost absolute z-10 right-4 top-1/2 transform -translate-y-1/2 tooltip tooltip-right tooltip-primary" data-tip="Hide Password">
+                                        <button type='button' onClick={() => setShowPassword(false)} className="btn btn-sm bg-base-100 btn-ghost absolute z-10 right-4 top-1/2 transform -translate-y-1/2 lg:tooltip lg:tooltip-right tooltip-primary" data-tip="Hide Password">
                                             <FaEyeSlash />
                                         </button>
                                         :
-                                        <button type='button' onClick={() => setShowPassword(true)} className="btn btn-sm bg-base-100 btn-ghost absolute z-10 right-4 top-1/2 transform -translate-y-1/2 tooltip tooltip-right tooltip-warning" data-tip="Show Password">
+                                        <button type='button' onClick={() => setShowPassword(true)} className="btn btn-sm bg-base-100 btn-ghost absolute z-10 right-4 top-1/2 transform -translate-y-1/2 lg:tooltip lg:tooltip-right tooltip-warning" data-tip="Show Password">
                                             <FaEye />
                                         </button>
                                 }
