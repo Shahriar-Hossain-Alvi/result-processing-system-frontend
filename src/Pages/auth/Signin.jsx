@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaEyeSlash } from 'react-icons/fa';
-import { FaEye } from 'react-icons/fa6';
+import { FaEye, FaLock } from 'react-icons/fa6';
 import useAxiosPublic from '../../hooks/useAxiosPublic.jsx';
 import useAuth from '../../hooks/useAuth.jsx';
 import { useNavigate } from 'react-router-dom';
@@ -81,15 +81,16 @@ const Signin = () => {
                         Sign in to your account
                     </p>
                 </div>
-                <div className="card bg-base-100 shadow-lg hover:shadow-2xl w-full shrink-0">
+                <div className="card bg-base-100 shadow-lg hover:shadow-2xl transition ease-in-out duration-500 w-full shrink-0">
                     <form onSubmit={handleSubmit(signInUser)} className="card-body">
                         <fieldset className="fieldset">
                             <div className={`w-full ${errors.email && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.email && errors.email.message}>
-                                <p className='font-medium '>Email Address</p>
-                                <label className='input w-full'>
-                                    <MdEmail className='text-gray-400 text-base' />
+                                <p className='font-medium mb-2'>Email Address</p>
+                                <label className='input w-full has-focus:input-info transition-colors h-12'>
+                                    <MdEmail className='text-gray-400 text-lg' />
                                     <input
                                         type="email"
+                                        className='grow'
                                         {...register("email", { required: "Email is required" })}
                                         placeholder="user@email.com"
                                     />
@@ -98,38 +99,42 @@ const Signin = () => {
 
                             <div className='relative my-3'>
                                 <div className={`w-full ${errors.password && "tooltip tooltip-open tooltip-bottom tooltip-error"}`} data-tip={errors.password && errors.password.message}>
+                                    <p className='font-medium mb-2'>Password</p>
+                                    <label className='input w-full has-focus:input-info transition-colors h-12'>
+                                        <FaLock className='text-gray-400 text-base' />
+                                        <input
+                                            className='grow'
+                                            type={showPassword ? "text" : "password"}
 
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        className="input w-full"
-
-                                        {...register("password",
-                                            {
-                                                required: "Password is required",
-                                                minLength: { value: 6, message: "Password must be at least 6 characters" },
-                                                maxLength: { value: 32, message: "Password must be at most 32 characters" }
-                                            })}
-                                        placeholder="Password"
-                                    />
+                                            {...register("password",
+                                                {
+                                                    required: "Password is required",
+                                                    minLength: { value: 6, message: "Password must be at least 6 characters" },
+                                                    maxLength: { value: 32, message: "Password must be at most 32 characters" }
+                                                })}
+                                            placeholder="••••••••"
+                                        />
+                                    </label>
                                 </div>
 
                                 {
                                     showPassword ?
-                                        <button type='button' onClick={() => setShowPassword(false)} className="btn btn-sm bg-base-100 btn-ghost absolute z-10 right-4 top-1/2 transform -translate-y-1/2 lg:tooltip lg:tooltip-right tooltip-primary" data-tip="Hide Password">
+                                        <button type='button' onClick={() => setShowPassword(false)} className="btn btn-sm border-0 bg-transparent hover:bg-transparent  hover:border-0 absolute z-10 right-4 top-1/2 transform -translate-y-0.5 lg:tooltip lg:tooltip-right tooltip-primary" data-tip="Hide Password">
                                             <FaEyeSlash />
                                         </button>
                                         :
-                                        <button type='button' onClick={() => setShowPassword(true)} className="btn btn-sm bg-base-100 btn-ghost absolute z-10 right-4 top-1/2 transform -translate-y-1/2 lg:tooltip lg:tooltip-right tooltip-warning" data-tip="Show Password">
+                                        <button type='button' onClick={() => setShowPassword(true)} className="btn btn-sm border-0 bg-transparent hover:bg-transparent  hover:border-0 absolute z-10 right-4 top-1/2 transform -translate-y-0.5 lg:tooltip lg:tooltip-right tooltip-warning" data-tip="Show Password">
                                             <FaEye />
                                         </button>
                                 }
                             </div>
 
-                            <div><a className="link link-hover">Forgot password?</a></div>
-                            <button className={`btn mt-4 ${formLoading ? "btn-disabled" : "btn-primary"}`} type='submit'>Login</button>
+                            <a className="link link-hover link-info text-right text-sm">Forgot password?</a>
+                            <button className={`btn mt-4 ${formLoading ? "btn-disabled" : "bg-[#0284C7] hover:bg-[#0369a1] text-white"}`} type='submit'>Login</button>
                         </fieldset>
                     </form>
                 </div>
+                <p className='text-center my-5 text-xs'>&copy; {new Date().getFullYear()} EDUTRACK. All rights reserved.</p>
             </div>
         </div>
     );
