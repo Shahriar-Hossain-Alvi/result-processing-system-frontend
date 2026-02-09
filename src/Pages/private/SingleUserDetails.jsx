@@ -125,40 +125,40 @@ const SingleUserDetails = () => {
     };
 
     return (
-        <div>
-            <div className="place-self-center relative">
-                <SectionHeader section_title='User Details' />
+        <div className="bg-white border w-11/12 mx-auto my-5">
+            <div className="border-b border-base-300 flex items-center justify-between mb-5">
+                <SectionHeader section_title='User Profile' />
+
 
                 {/* User Details Edit Button */}
-                <div className="sm:tooltip absolute -right-9 -top-2" data-tip="Edit USER Details">
+                <div className="sm:tooltip" data-tip="Edit USER Details">
                     <button
                         onClick={() => {
                             // @ts-ignore
                             document.getElementById('update_user_details_modal').showModal()
                         }}
-                        className="btn btn-sm btn-ghost hover:bg-transparent border-0 shadow-none  hover:text-success ">
-                        <FaEdit />
+                        className="btn btn-primary ">
+                        <FaEdit /> Edit
                     </button>
                 </div>
             </div>
-
 
             <div>
                 {/* user details */}
                 < div className="flex flex-col sm:flex-row sm:gap-5 place-self-center">
 
                     {/* Picture left square */}
-                    <div>
-                        <div className="mx-auto w-full sm:min-w-60 max-w-72 border p-2 rounded relative">
+                    <div className="group/user-image">
+                        <div className="mx-auto w-full sm:min-w-32 max-w-52 rounded-3xl relative">
                             <div className="rounded">
                                 <img src={userImage || defaultImage} />
                             </div>
 
                             {/* Update Profile Picture */}
-                            <div className="absolute bottom-0 left-0 flex justify-center gap-5 place-items-center bg-neutral opacity-55 w-full sm:min-w-60 max-w-72 h-12">
+                            <div className="absolute bottom-0 left-0 group-hover/user-image:flex justify-center gap-5 place-items-center bg-neutral opacity-55 w-full sm:min-w-32 max-w-52 group-hover/user-image:h-12 hidden">
                                 {/* Profile Picture Full View */}
                                 <div>
-                                    <button className="btn btn-sm btn-circle btn-ghost hover:bg-transparent hover:text-success hover:border border-success border-0 shadow-none"
+                                    <button className="btn btn-sm btn-circle btn-ghost hover:bg-primary-tint hover:text-primary hover:border border-primary shadow-none text-white"
                                         onClick={() => {
                                             // @ts-ignore
                                             document.getElementById('show_full_profile_picture_modal').showModal()
@@ -170,7 +170,7 @@ const SingleUserDetails = () => {
 
                                 <div>
                                     <button
-                                        className="btn btn-sm btn-circle btn-ghost hover:bg-transparent hover:text-success hover:border border-success border-0 shadow-none"
+                                        className="btn btn-sm btn-circle btn-ghost hover:bg-primary-tint hover:text-primary hover:border border-primary shadow-none text-white"
                                         onClick={() => {
                                             // @ts-ignore
                                             document.getElementById('update_profile_picture_modal').showModal()
@@ -367,6 +367,10 @@ const SingleUserDetails = () => {
                     </div>
                 </div>
             </div>
+
+
+
+
 
 
 

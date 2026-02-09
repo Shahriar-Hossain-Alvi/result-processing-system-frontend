@@ -9,7 +9,7 @@ const MainLayoutWithAxiosInterceptor = () => {
     useAxiosInterceptor();
 
     return (
-        <div className="font-noto-sans">
+        <div className="font-noto-sans bg-base-200">
             <Navbar />
             <Toaster />
             <Outlet />

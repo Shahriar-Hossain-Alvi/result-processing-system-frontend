@@ -73,7 +73,7 @@ const Signin = () => {
 
 
     return (
-        <div className="hero min-h-screen bg-[#ECF7FF]">
+        <div className="hero min-h-screen bg-primary-tint">
             <div className="flex-col xs:w-3xs w-2xs md:w-lg">
                 <div className="text-center">
                     <img src={logo} alt="Logo" className='w-44 md:w-60 lg:w-72 mx-auto' />
@@ -130,7 +130,7 @@ const Signin = () => {
                             </div>
 
                             <a className="link link-hover link-info text-right text-sm">Forgot password?</a>
-                            <button className={`btn mt-4 ${formLoading ? "btn-disabled" : "bg-[#0284C7] hover:bg-[#0369a1] text-white"}`} type='submit'>Login</button>
+                            <button className={`btn mt-4 ${formLoading ? "btn-disabled" : "bg-primary hover:bg-primary-dark text-white"}`} type='submit'>Login</button>
                         </fieldset>
                     </form>
                 </div>

@@ -6,30 +6,48 @@
 @plugin "daisyui";
 
 /* set themes */
-/* @plugin "daisyui" {
+@plugin "daisyui" {
   themes: light --default, dim --prefersdark;
-} */
+}
 
 /* 1. CUSTOMIZE CORPORATE THEME */
-/* @plugin "daisyui/theme" {
-  name: "corporate";
+@plugin "daisyui/theme" {
+  name: "light";
   default: true;
+  /* warning color overrides */
   --color-warning: oklch(68.1% 0.162 75.834);
-  --color-warning-content: oklch(100% 0 0); 
-} */
-  /* White text for contrast on darker yellow */
+  --color-warning-content: oklch(100% 0 0); /* White text for contrast on darker yellow */
+  
+  /* Primary Blue Overrides */
+  --color-primary: oklch(0.5876 0.1389 241.97);        /* main blue */
+  --color-primary-dark: oklch(0.5 0.1193 242.75); /* hover/active blue */
+  --color-primary-tint: oklch(0.9702 0.0159 239.1); /* hover/active blue */
+  --color-primary-content: #ffffff; /* Ensure text on blue buttons is white */
+}
+
+@plugin "daisyui/theme" {
+  name: "dim";
+  prefersdark: true;
+  --color-primary: oklch(0.5876 0.1389 241.97);
+  --color-primary-dark: oklch(0.5 0.1193 242.75);
+  --color-primary-tint: oklch(0.9702 0.0159 239.1);
+  --color-primary-content: #ffffff;
+}
+  
 
 /* Custom CSS */
 @theme {
   --font-noto-sans: "Noto Sans", sans-serif;
+  --color-primary-dark: var(--color-primary-dark);
+  --color-primary-tint: var(--color-primary-tint);
 }
 
 #navbar a.active{
-  background-color: #1FB854;
-  color: black
+  background-color: oklch(0.9702 0.0159 239.1);
+  color: oklch(0.5 0.1193 242.75)
 }
 
 #sidebar a.active{
-  background-color: #1FB854;
-  color:black
+  background-color: oklch(0.9702 0.0159 239.1);
+  color: oklch(0.5 0.1193 242.75)
 }
