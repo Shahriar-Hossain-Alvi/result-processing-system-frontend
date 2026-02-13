@@ -205,7 +205,7 @@ const UpdateUsersAllDetailsModal = ({ singleUserDetails, singleUserDetailsRefetc
 
                             {/* Session */}
                             <div>
-                                <label>Session <span className='text-info text-xs'>(eg: 2022-2023)</span></label>
+                                <label>Session <span className='text-primary-dark text-xs'>(eg: 2022-2023)</span></label>
                                 <input
                                     type="text"
                                     className="input input-bordered w-full mt-2"
@@ -270,7 +270,7 @@ const UpdateUsersAllDetailsModal = ({ singleUserDetails, singleUserDetailsRefetc
 
                 {/* Present Address */}
                 <div>
-                    <label>Present Address <span className='text-info text-xs'>(Write Full Address- eg: House No, Road No, Area, City - City Code)</span></label>
+                    <label>Present Address <span className='text-primary-dark text-xs'>(Write Full Address- eg: House No, Road No, Area, City - City Code)</span></label>
                     <input
                         type="text"
                         className="input input-bordered w-full mt-2"
@@ -281,7 +281,7 @@ const UpdateUsersAllDetailsModal = ({ singleUserDetails, singleUserDetailsRefetc
 
                 {/* Present Address */}
                 <div>
-                    <label>Permanent Address <span className='text-info text-xs'>(Write Full Address- eg: House No, Road No, Area, City - City Code)</span></label>
+                    <label>Permanent Address <span className='text-primary-dark text-xs'>(Write Full Address- eg: House No, Road No, Area, City - City Code)</span></label>
                     <input
                         type="text"
                         className="input input-bordered w-full mt-2"
@@ -296,7 +296,7 @@ const UpdateUsersAllDetailsModal = ({ singleUserDetails, singleUserDetailsRefetc
             </form>
 
             <div className="modal-action">
-                <form method="dialog"><button className="btn btn-error">Cancel</button></form>
+                <form method="dialog"><button className="btn btn-error text-white">Cancel</button></form>
             </div>
         </div>
         //</dialog>

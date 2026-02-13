@@ -107,7 +107,7 @@ const UpdateUserAuthDetailsByAdminModal = ({ singleUserDetails, singleUserDetail
 
                     {/* Mobile */}
                     <div>
-                        <label>Mobile <span className='text-info text-xs'>(Mobile number should be 11 digits. Do not add +88)</span></label>
+                        <label>Mobile <span className='text-primary-dark text-xs'>(Mobile number should be 11 digits. Do not add +88)</span></label>
                         <input
                             type="text"
                             className="input input-bordered w-full mt-2"
@@ -131,7 +131,7 @@ const UpdateUserAuthDetailsByAdminModal = ({ singleUserDetails, singleUserDetail
             </form>
 
             <div className="modal-action">
-                <form method="dialog"><button className="btn btn-error">Cancel</button></form>
+                <form method="dialog"><button className="btn btn-error text-white">Cancel</button></form>
             </div>
         </div>
         //</dialog>
