@@ -52,8 +52,6 @@ const SingleUserDetails = () => {
     // Destructure the user details
     const { email, role, student, teacher, username, is_active, mobile_number, created_at } = singleUserDetails;
 
-    console.log(singleUserDetails);
-
     // user image
     const userImage = student && student.photo_url || teacher && teacher.photo_url;
 
@@ -129,7 +127,6 @@ const SingleUserDetails = () => {
 
     return (
         <div>
-
             <div className="w-11/12 my-5 bg-white p-4 mx-auto rounded-xl">
                 <div className="border-b border-base-300 flex items-center justify-between">
                     <SectionHeader section_title='User Profile' />
