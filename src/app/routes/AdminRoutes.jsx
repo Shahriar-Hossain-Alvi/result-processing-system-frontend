@@ -8,7 +8,6 @@ import AllUser from "../../pages/admin/AllUser.jsx";
 import SingleUserDetails from "../../pages/private/SingleUserDetails.jsx";
 import Subjects from "../../pages/admin/Subjects.jsx";
 import AssignedCourses from "../../pages/admin/AssignedCourses.jsx";
-import InsertMarks from "../../pages/admin/Marks.jsx";
 import Marks from "../../pages/admin/Marks.jsx";
 
 

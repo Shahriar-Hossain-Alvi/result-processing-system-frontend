@@ -6,7 +6,6 @@ import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
 import { AllUserTableSkeleton } from '../../components/ui/Skeletons.jsx';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
 import { Link } from 'react-router-dom';
-import { LiaChalkboardTeacherSolid } from 'react-icons/lia';
 import { useDebounce } from '../../hooks/useDebounce.jsx';
 
 const AllUser = () => {
@@ -45,7 +44,6 @@ const AllUser = () => {
         }
     }, [isAllUserError])
 
-    console.log(allUser);
 
     // Handler to update filters
     const handleFilterChange = (e) => {
@@ -54,157 +52,155 @@ const AllUser = () => {
     };
 
     return (
-        <div>
-            <div className='w-[95%] my-5 bg-white p-4 mx-auto rounded-xl'>
-                <div className='flex items-center gap-1'>
-                    <SectionHeader section_title='All User' />
-                    <span className='font-bold text-xl'>({allUser?.length})</span>
-                </div>
-                {/* FIXME: remove the overflow-y-clip if it causes any issue scrolling issue for many rows */}
-
-                {/* 3. Filter UI Section */}
-                <div className="grid grid-cols-1 md:grid-cols-7 gap-3 mb-6">
-
-                    {/* Role Filter */}
-                    <div className='md:col-span-1'>
-                        <label className="label">Filter by Role: </label>
-                        <select
-                            name='user_role_filter'
-                            className='select'
-                            value={filters.user_role_filter}
-                            onChange={(e) => {
-                                handleFilterChange(e);
-                                localStorage.setItem("user_role_filter", e.target.value);
-                            }}
-                        >
-                            <option value="">All</option>
-                            <option value="super_admin">🧑‍💻 Super Admin</option>
-                            <option value="admin">🧑‍💼 Admin</option>
-                            <option value="student">🧑‍🎓 Student</option>
-                            <option value="teacher">🧑‍🏫 Teacher</option>
-                        </select>
-                    </div>
-
-                    {/* Order by */}
-                    <div className="md:col-span-1">
-                        <label className="label block">Order By: </label>
-                        <select
-                            name='user_order_by_filter'
-                            className='select w-full'
-                            value={filters.user_order_by_filter}
-                            onChange={(e) => {
-                                handleFilterChange(e);
-                                localStorage.setItem("user_order_by_filter", e.target.value);
-                            }}
-                        >
-                            <option value="asc">ASC ⬇️</option>
-                            <option value="desc">DESC ⬆️</option>
-                        </select>
-                    </div>
-
-                    {/* Search Title/Code */}
-                    <div className="form-control md:col-span-4">
-                        <label className="label">Search by Department</label>
-                        <input
-                            type="text"
-                            name="department_search"
-                            placeholder="CSE, EEE, etc..."
-                            className="input input-bordered w-full"
-                            value={filters.department_search}
-                            onChange={handleFilterChange}
-                        />
-                    </div>
-
-                    {/* Reset Button */}
-                    <div className="md:col-span-1  md:mt-6">
-                        <button
-                            className="btn btn-error w-full text-sm text-white"
-                            onClick={() => {
-                                setFilters({ user_role_filter: "", department_search: "", user_order_by_filter: "" })
-                                localStorage.removeItem("user_role_filter");
-                                localStorage.removeItem("order_by_filter");
-                            }}
-                        >
-                            Clear Filters
-                        </button>
-                    </div>
-                </div>
-
-
-
-                {/* All User Table */}
-                {
-                    isAllUserPending ?
-                        <AllUserTableSkeleton />
-                        :
-                        <div className="overflow-x-auto overflow-y-clip">
-                            <table className="table table-xs md:table-md">
-                                {/* head */}
-                                <thead className='bg-base-200'>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Role</th>
-                                        <th>Username/Email</th>
-                                        <th>Mobile</th>
-                                        <th>Department</th>
-                                        <th>Details</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        allUser?.length > 0 && allUser.map((user) =>
-                                            <tr className="hover:bg-base-300" key={user.id}>
-                                                <td>{user.id}</td>
-
-                                                {/* Name */}
-                                                <td>
-                                                    {user.role === "student" && user?.student?.name}
-                                                    {user.role === "teacher" && user?.teacher?.name}
-                                                </td>
-
-                                                <td><span className={`badge badge-sm badge-soft ${(user?.role === "admin" || user?.role === "super_admin") && "badge-warning"} ${user?.role === "student" && "badge-info"} ${user?.role === "teacher" && "badge-secondary"}`}>{user.role}</span></td>
-
-
-                                                {/* username/email */}
-                                                <td className='overflow-x-auto max-w-48'>{user.username}</td>
-
-                                                {/* Mobile */}
-                                                <td>{user.mobile_number || <span className='text-error'>N/A</span>}</td>
-
-                                                {/* Department */}
-                                                <td className='uppercase max-w-44 xl:max-w-full'>
-                                                    {user.role === "student" && ((user?.student?.department) ? user?.student?.department?.department_name : <p className='text-error'>N/A</p>)}
-
-                                                    {user.role === "teacher" && ((user?.teacher?.department) ? user?.teacher?.department?.department_name : <p className='text-error'>N/A</p>)}
-                                                </td>
-
-                                                {/* Account Status */}
-                                                <td>{user.is_active ?
-                                                    <button className="badge badge-sm badge-soft badge-success font-medium">Active</button>
-                                                    : <button className="badge badge-sm badge-soft badge-error font-medium">Inactive</button>}
-                                                </td>
-
-                                                {/* details */}
-                                                <td>
-                                                    {
-                                                        (user?.role !== "admin" && user?.role !== "super_admin") &&
-                                                        <Link
-                                                            to={`/admin/user/${user.id}`}
-                                                            state={{ userData: user }} // pass the user data to the user details page
-                                                            className="link link-primary link-hover"
-                                                        >Details
-                                                        </Link>}
-                                                </td>
-                                            </tr>
-                                        )
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                }
+        <div className='bg-white p-4 rounded-xl'>
+            <div className='flex items-center gap-1'>
+                <SectionHeader section_title='All User' />
+                <span className='font-bold text-xl'>({allUser?.length})</span>
             </div>
+            {/* FIXME: remove the overflow-y-clip if it causes any issue scrolling issue for many rows */}
+
+            {/* 3. Filter UI Section */}
+            <div className="grid grid-cols-1 md:grid-cols-7 gap-3 mb-6">
+
+                {/* Role Filter */}
+                <div className='md:col-span-1'>
+                    <label className="label">Filter by Role: </label>
+                    <select
+                        name='user_role_filter'
+                        className='select'
+                        value={filters.user_role_filter}
+                        onChange={(e) => {
+                            handleFilterChange(e);
+                            localStorage.setItem("user_role_filter", e.target.value);
+                        }}
+                    >
+                        <option value="">All</option>
+                        <option value="super_admin">🧑‍💻 Super Admin</option>
+                        <option value="admin">🧑‍💼 Admin</option>
+                        <option value="student">🧑‍🎓 Student</option>
+                        <option value="teacher">🧑‍🏫 Teacher</option>
+                    </select>
+                </div>
+
+                {/* Order by */}
+                <div className="md:col-span-1">
+                    <label className="label block">Order By: </label>
+                    <select
+                        name='user_order_by_filter'
+                        className='select w-full'
+                        value={filters.user_order_by_filter}
+                        onChange={(e) => {
+                            handleFilterChange(e);
+                            localStorage.setItem("user_order_by_filter", e.target.value);
+                        }}
+                    >
+                        <option value="asc">ASC ⬇️</option>
+                        <option value="desc">DESC ⬆️</option>
+                    </select>
+                </div>
+
+                {/* Search Title/Code */}
+                <div className="form-control md:col-span-4">
+                    <label className="label">Search by Department</label>
+                    <input
+                        type="text"
+                        name="department_search"
+                        placeholder="CSE, EEE, etc..."
+                        className="input input-bordered w-full"
+                        value={filters.department_search}
+                        onChange={handleFilterChange}
+                    />
+                </div>
+
+                {/* Reset Button */}
+                <div className="md:col-span-1  md:mt-6">
+                    <button
+                        className="btn btn-error w-full text-sm text-white"
+                        onClick={() => {
+                            setFilters({ user_role_filter: "", department_search: "", user_order_by_filter: "" })
+                            localStorage.removeItem("user_role_filter");
+                            localStorage.removeItem("order_by_filter");
+                        }}
+                    >
+                        Clear Filters
+                    </button>
+                </div>
+            </div>
+
+
+
+            {/* All User Table */}
+            {
+                isAllUserPending ?
+                    <AllUserTableSkeleton />
+                    :
+                    <div className="overflow-x-auto overflow-y-clip">
+                        <table className="table table-xs md:table-md">
+                            {/* head */}
+                            <thead className='bg-base-200'>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Username/Email</th>
+                                    <th>Mobile</th>
+                                    <th>Department</th>
+                                    <th>Details</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    allUser?.length > 0 && allUser.map((user) =>
+                                        <tr className="hover:bg-base-300" key={user.id}>
+                                            <td>{user.id}</td>
+
+                                            {/* Name */}
+                                            <td>
+                                                {user.role === "student" && user?.student?.name}
+                                                {user.role === "teacher" && user?.teacher?.name}
+                                            </td>
+
+                                            <td><span className={`badge badge-sm badge-soft ${(user?.role === "admin" || user?.role === "super_admin") && "badge-warning"} ${user?.role === "student" && "badge-info"} ${user?.role === "teacher" && "badge-secondary"}`}>{user.role}</span></td>
+
+
+                                            {/* username/email */}
+                                            <td className='overflow-x-auto max-w-48'>{user.username}</td>
+
+                                            {/* Mobile */}
+                                            <td>{user.mobile_number || <span className='text-error'>N/A</span>}</td>
+
+                                            {/* Department */}
+                                            <td className='uppercase max-w-44 xl:max-w-full'>
+                                                {user.role === "student" && ((user?.student?.department) ? user?.student?.department?.department_name : <p className='text-error'>N/A</p>)}
+
+                                                {user.role === "teacher" && ((user?.teacher?.department) ? user?.teacher?.department?.department_name : <p className='text-error'>N/A</p>)}
+                                            </td>
+
+                                            {/* Account Status */}
+                                            <td>{user.is_active ?
+                                                <button className="badge badge-sm badge-soft badge-success font-medium">Active</button>
+                                                : <button className="badge badge-sm badge-soft badge-error font-medium">Inactive</button>}
+                                            </td>
+
+                                            {/* details */}
+                                            <td>
+                                                {
+                                                    (user?.role !== "admin" && user?.role !== "super_admin") &&
+                                                    <Link
+                                                        to={`/admin/user/${user.id}`}
+                                                        state={{ userData: user }} // pass the user data to the user details page
+                                                        className="link link-primary link-hover"
+                                                    >Details
+                                                    </Link>}
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+            }
             {/* TODO: Pagination if possible */}
         </div>
     );

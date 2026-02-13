@@ -1,5 +1,4 @@
 import { Outlet } from 'react-router-dom';
-import { GoSidebarCollapse, GoSidebarExpand } from 'react-icons/go';
 
 const DrawerSidebar = ({ navLinks }) => {
     return (
@@ -12,10 +11,7 @@ const DrawerSidebar = ({ navLinks }) => {
                 </label>
 
                 {/* Page content here */}
-                {/* <div className="p-1 sm:p-4">
-                    <Outlet />
-                </div> */}
-                <div>
+                <div className='p-1 sm:p-4'>
                     <Outlet />
                 </div>
             </div>

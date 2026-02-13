@@ -22,7 +22,7 @@ const CreateUserForm = ({
             onSubmit={handleSubmit(submitAction || ((data) => console.log(data)))}
         >
             {/* User Table Fieldset */}
-            <fieldset className="fieldset text-left bg-base-200 border-base-300 rounded-box  border p-1 sm:p-4">
+            <fieldset className="fieldset text-left border-base-300 shadow-2xl rounded-box  border p-1 sm:p-4">
 
                 {/* Email (Username) */}
                 <div className={`w-full ${errors.email && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.email && errors.email.message}>
@@ -71,7 +71,7 @@ const CreateUserForm = ({
             </fieldset>
 
             {/* Student/Teacher Table Fieldset */}
-            <fieldset className={`${showNextForm ? 'max-w-xs mt-3 md:ml-3' : 'hidden'} fieldset bg-base-200 border-base-300 rounded-box border p-1 sm:p-4 text-left`}>
+            <fieldset className={`${showNextForm ? 'max-w-xs mt-3 md:ml-3' : 'hidden'} fieldset shadow-2xl border-base-300 rounded-box border p-1 sm:p-4 text-left`}>
 
                 {/* Name */}
                 <div className={`w-full ${errors.name && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.name && errors.name.message}>
@@ -147,12 +147,12 @@ const CreateUserForm = ({
                 }
 
                 <label className="label">Present Address</label>
-                <input type="text" className="input" placeholder="Present Address"
+                <input type="text" className="textarea h-10" placeholder="Present Address"
                     {...register("present_address")}
                 />
 
                 <label className="label">Permanent Address</label>
-                <input type="text" className="input" placeholder="Permanent Address"
+                <input type="text" className="textarea h-10" placeholder="Permanent Address"
                     {...register("permanent_address")}
                 />
 

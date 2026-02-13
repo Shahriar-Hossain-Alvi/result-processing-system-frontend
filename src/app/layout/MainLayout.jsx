@@ -21,8 +21,6 @@ const MainLayoutWithAxiosInterceptor = () => {
 
 
 const MainLayout = () => {
-
-
     return (
         <AuthProvider>
             <MainLayoutWithAxiosInterceptor />

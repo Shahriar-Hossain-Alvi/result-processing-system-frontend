@@ -127,7 +127,7 @@ const SingleUserDetails = () => {
 
     return (
         <div>
-            <div className="w-11/12 my-5 bg-white p-4 mx-auto rounded-xl">
+            <div className="bg-white p-4 rounded-xl">
                 <div className="border-b border-base-300 flex items-center justify-between">
                     <SectionHeader section_title='User Profile' />
 
@@ -240,7 +240,7 @@ const SingleUserDetails = () => {
 
 
             {/* Role Specific details */}
-            <div className="mt-10 w-11/12 bg-white p-4 mx-auto rounded-xl">
+            <div className="mt-10 bg-white p-4 rounded-xl">
                 <div className="border-b border-base-300 flex items-center mb-5 justify-between">
                     <SectionHeader section_title={`${role} Details`} />
 
@@ -353,12 +353,6 @@ const SingleUserDetails = () => {
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
 
             {/* User data Update Modal (Email, Account Status) */}
             <dialog id="update_user_details_modal" className="modal">
