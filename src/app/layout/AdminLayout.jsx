@@ -7,9 +7,11 @@ import { FaBook, FaBuilding, FaUsers } from 'react-icons/fa6';
 import { LuFileSpreadsheet, LuNotebookPen } from 'react-icons/lu';
 import { RiUserAddFill } from 'react-icons/ri';
 import { GrTableAdd } from 'react-icons/gr';
+import useTheme from '../../hooks/useTheme.jsx';
 
 
 const AdminLayout = () => {
+    const [theme] = useTheme();
     const { logout } = useAuth();
     const navigate = useNavigate();
 
@@ -96,8 +98,8 @@ const AdminLayout = () => {
             <li className='mt-5'>
                 <button onClick={handleLogout} className="is-drawer-close:tooltip is-drawer-close:tooltip-right btn btn-error is-drawer-close:btn-sm is-drawer-open:rounded-none" data-tip="Logout">
 
-                    <MdLogout className='w-4 h-4' />
-                    <p className="is-drawer-close:hidden text-black">Logout</p>
+                    <MdLogout className={`w-4 h-4 ${theme === "light" ? "text-white" : "text-black"}`} />
+                    <p className={`is-drawer-close:hidden ${theme === "light" ? "text-white" : "text-black"}`}>Logout</p>
                 </button>
             </li>
         </ul>

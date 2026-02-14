@@ -17,7 +17,7 @@ const AdminDashboard = () => {
     console.log(dashboardCounts);
 
     return (
-        <div>
+        <div className='min-h-screen'>
             <SectionHeader section_title="Admin Dashboard" />
 
             <div className='grid grid-cols-2 md:grid-cols-5 gap-2'>

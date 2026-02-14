@@ -7,8 +7,10 @@ import { AllUserTableSkeleton } from '../../components/ui/Skeletons.jsx';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
 import { Link } from 'react-router-dom';
 import { useDebounce } from '../../hooks/useDebounce.jsx';
+import useTheme from '../../hooks/useTheme.jsx';
 
 const AllUser = () => {
+    const [theme] = useTheme();
     const axiosSecure = useAxiosSecure();
     const [filters, setFilters] = useState({
         user_role_filter: localStorage.getItem("user_role_filter") || "",
@@ -52,7 +54,7 @@ const AllUser = () => {
     };
 
     return (
-        <div className='bg-white p-4 rounded-xl'>
+        <div className='bg-base-100 p-4 rounded-xl'>
             <div className='flex items-center gap-1'>
                 <SectionHeader section_title='All User' />
                 <span className='font-bold text-xl'>({allUser?.length})</span>
@@ -115,7 +117,7 @@ const AllUser = () => {
                 {/* Reset Button */}
                 <div className="md:col-span-1  md:mt-6">
                     <button
-                        className="btn btn-error w-full text-sm text-white"
+                        className={`btn btn-error w-full text-sm ${theme === "dark" ? "text-black" : "text-white"}`}
                         onClick={() => {
                             setFilters({ user_role_filter: "", department_search: "", user_order_by_filter: "" })
                             localStorage.removeItem("user_role_filter");

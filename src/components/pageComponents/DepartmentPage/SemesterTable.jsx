@@ -7,8 +7,10 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import toast from 'react-hot-toast';
 import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
 import useAuth from '../../../hooks/useAuth.jsx';
+import useTheme from '../../../hooks/useTheme.jsx';
 
 const SemesterTable = ({ allSemesters, totalSemestersRefetch }) => {
+    const [theme] = useTheme();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -91,9 +93,9 @@ const SemesterTable = ({ allSemesters, totalSemestersRefetch }) => {
                         <tr>
                             <th>#</th>
                             <th>Semester Name</th>
-                            <th>Semester Number</th>
-                            <th>Semester ID</th>
-                            <th>Action</th>
+                            <th className='text-center'>Semester Number</th>
+                            <th className='text-center'>Semester ID</th>
+                            <th className='text-center'>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,23 +105,22 @@ const SemesterTable = ({ allSemesters, totalSemestersRefetch }) => {
                                 <tr key={semester?.id}>
                                     <th>{index + 1}</th>
                                     <td className='capitalize'>{semester?.semester_name}</td>
-                                    <td>{semester?.semester_number}</td>
-                                    <td>{semester?.id}</td>
-                                    <td className='flex gap-2'>
+                                    <td className='text-center'>{semester?.semester_number}</td>
+                                    <td className='text-center'>{semester?.id}</td>
+                                    <td className='flex gap-2 justify-center'>
 
                                         {/* update semester Modal trigger */}
                                         <button
                                             onClick={() => openUpdateSemesterModal(semester)}
-                                            className="btn btn-ghost hover:bg-transparent border-0 group/edit-semester">
-                                            <FaEdit className='group-hover/edit-semester:text-success'
-                                            />
+                                            className="btn btn-ghost text-primary hover:btn-primary border-0 hover:text-white">
+                                            <FaEdit />
                                         </button>
 
 
                                         {/* Delete semester confirmation Modal */}
                                         {
                                             user?.role === "super_admin" && <div>
-                                                <button className="btn btn-ghost hover:bg-transparent border-0 group/delete-semester"
+                                                <button className="btn btn-ghost text-error hover:btn-error hover:text-white border-0"
                                                     onClick={() => {
                                                         setSelectedSemester(semester);
                                                         document.getElementById('delete_semester_modal').
@@ -127,7 +128,7 @@ const SemesterTable = ({ allSemesters, totalSemestersRefetch }) => {
                                                             showModal()
                                                     }}
                                                 >
-                                                    <MdDelete className='group-hover/delete-semester:text-red-700 text-lg' />
+                                                    <MdDelete className='text-lg' />
                                                 </button>
                                             </div>}
                                     </td>

@@ -127,7 +127,7 @@ const SingleUserDetails = () => {
 
     return (
         <div>
-            <div className="bg-white p-4 rounded-xl">
+            <div className="bg-base-100 p-4 rounded-xl">
                 <div className="border-b border-base-300 flex items-center justify-between">
                     <SectionHeader section_title='User Profile' />
 
@@ -189,7 +189,7 @@ const SingleUserDetails = () => {
                             <h2 className="text-xl sm:text-3xl font-bold">
                                 {student && student.name || teacher && teacher.name}
                             </h2>
-                            <button className={`badge rounded-full ${is_active ? "bg-success" : "bg-error"}`}>{is_active ? "Active" : "Disabled"}</button>
+                            <button className={`badge text-black rounded-full ${is_active ? "bg-success" : "bg-error"}`}>{is_active ? "Active" : "Disabled"}</button>
                         </div>
 
 
@@ -240,7 +240,7 @@ const SingleUserDetails = () => {
 
 
             {/* Role Specific details */}
-            <div className="mt-10 bg-white p-4 rounded-xl">
+            <div className="mt-10 bg-base-100 p-4 rounded-xl">
                 <div className="border-b border-base-300 flex items-center mb-5 justify-between">
                     <SectionHeader section_title={`${role} Details`} />
 

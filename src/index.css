@@ -10,7 +10,7 @@
   themes: light --default, dim --prefersdark;
 }
 
-/* 1. CUSTOMIZE CORPORATE THEME */
+/* 1. CUSTOMIZE light THEME */
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
@@ -20,17 +20,17 @@
   
   /* Primary Blue Overrides */
   --color-primary: oklch(0.5876 0.1389 241.97);        /* main blue */
-  --color-primary-dark: oklch(0.5 0.1193 242.75); /* hover/active blue */
-  --color-primary-tint: oklch(0.9702 0.0159 239.1); /* hover/active blue */
+  --color-primary-dark: oklch(0.5 0.1193 242.75); /* darker blue */
+  --color-primary-tint: oklch(0.9702 0.0159 239.1); /* whitish blue */
   --color-primary-content: #ffffff; /* Ensure text on blue buttons is white */
 }
 
 @plugin "daisyui/theme" {
   name: "dim";
   prefersdark: true;
-  --color-primary: oklch(0.5876 0.1389 241.97);
-  --color-primary-dark: oklch(0.5 0.1193 242.75);
-  --color-primary-tint: oklch(0.9702 0.0159 239.1);
+  --color-primary: oklch(0.65 0.12 245); /* lighter blue */
+  --color-primary-dark: oklch(0.55 0.11 245); /* Blue */
+  --color-primary-tint: oklch(0.2795 0.0368 260.03); /* dark blue */
   --color-primary-content: #ffffff;
 }
   
@@ -48,6 +48,6 @@
 }
 
 #sidebar a.active{
-  background-color: oklch(0.9702 0.0159 239.1);
-  color: oklch(0.5 0.1193 242.75)
+  background-color: var(--color-primary-dark);
+  color: white
 }

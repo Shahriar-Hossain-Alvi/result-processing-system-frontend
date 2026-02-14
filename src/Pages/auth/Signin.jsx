@@ -2,20 +2,20 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaEyeSlash } from 'react-icons/fa';
 import { FaEye, FaLock } from 'react-icons/fa6';
-import useAxiosPublic from '../../hooks/useAxiosPublic.jsx';
 import useAuth from '../../hooks/useAuth.jsx';
 import { useNavigate } from 'react-router-dom';
-// @ts-ignore
-import axiosSecure from '../../utils/axios/axiosSecure.js';
 import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
-import toast, { Toaster } from 'react-hot-toast';
-import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
+import toast from 'react-hot-toast';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
 // @ts-ignore
-import logo from "../../assets/edutrack_logo.png"
+import logoLightMode from "../../assets/edutrack_logo.png";
+// @ts-ignore
+import logoDarkMode from "../../assets/edutrack_logo_white.png";
 import { MdEmail } from 'react-icons/md';
+import useTheme from '../../hooks/useTheme.jsx';
 
 const Signin = () => {
+    const [theme] = useTheme();
     const [showPassword, setShowPassword] = useState(false);
     const [formLoading, setFormLoading] = useState(false);
     const axiosSecure = useAxiosSecure();
@@ -76,14 +76,20 @@ const Signin = () => {
         <div className="hero min-h-screen bg-primary-tint">
             <div className="flex-col xs:w-3xs w-2xs md:w-lg">
                 <div className="text-center">
-                    <img src={logo} alt="Logo" className='w-44 md:w-60 lg:w-72 mx-auto' />
-                    <p className="py-6 text-black text-lg lg:text-xl">
+                    {
+                        theme === "dark" ?
+                            <img src={logoDarkMode} alt="Logo" className='w-44 md:w-60 lg:w-72 mx-auto' /> :
+                            <img src={logoLightMode} alt="Logo" className='w-44 md:w-60 lg:w-72 mx-auto' />
+                    }
+                    {/* <img src={logoLightMode} alt="Logo" className='w-44 md:w-60 lg:w-72 mx-auto' /> */}
+                    <p className="py-6 text-lg lg:text-xl">
                         Sign in to your account
                     </p>
                 </div>
                 <div className="card bg-base-100 shadow-lg hover:shadow-2xl transition ease-in-out duration-500 w-full shrink-0">
                     <form onSubmit={handleSubmit(signInUser)} className="card-body">
                         <fieldset className="fieldset">
+                            {/* Email */}
                             <div className={`w-full ${errors.email && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.email && errors.email.message}>
                                 <p className='font-medium mb-2'>Email Address</p>
                                 <label className='input w-full has-focus:input-info transition-colors h-12'>

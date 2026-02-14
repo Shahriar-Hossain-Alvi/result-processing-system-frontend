@@ -7,8 +7,10 @@ import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
 import useAuth from '../../../hooks/useAuth.jsx';
+import useTheme from '../../../hooks/useTheme.jsx';
 
 const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
+    const [theme] = useTheme();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -83,7 +85,7 @@ const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
                             <th>#</th>
                             <th>Department Name</th>
                             <th>Department ID</th>
-                            <th>Action</th>
+                            <th className='text-center'>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,14 +95,13 @@ const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
                                 <tr key={department?.id}>
                                     <th>{index + 1}</th>
                                     <td>{department?.department_name.toUpperCase()}</td>
-                                    <td>{department?.id}</td>
+                                    <td className='text-center'>{department?.id}</td>
                                     <td className='flex gap-2'>
                                         {/* update department Modal trigger */}
                                         <button
                                             onClick={() => openUpdateDepartmentModal(department)}
-                                            className="btn btn-ghost hover:bg-transparent border-0 group/edit-dept">
-                                            <FaEdit className='group-hover/edit-dept:text-success'
-                                            />
+                                            className="btn btn-ghost hover:btn-primary hover:text-white text-primary border-0">
+                                            <FaEdit />
                                         </button>
 
 
@@ -108,7 +109,7 @@ const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
                                         {
                                             user?.role === "super_admin" &&
                                             <div>
-                                                <button className="btn btn-ghost hover:bg-transparent border-0 group/delete-dept"
+                                                <button className="btn btn-ghost hover:btn-error hover:text-white text-error border-0 "
                                                     onClick={() => {
                                                         setSelectedDept(department);
                                                         document.getElementById('delete_dept_modal').
@@ -116,7 +117,7 @@ const DepartmentTable = ({ allDepartments, allDepartmentsRefetch }) => {
                                                             showModal()
                                                     }}
                                                 >
-                                                    <MdDelete className='group-hover/delete-dept:text-red-700 text-lg' />
+                                                    <MdDelete className='text-lg' />
                                                 </button>
                                             </div>}
                                     </td>

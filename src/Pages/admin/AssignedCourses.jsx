@@ -12,9 +12,11 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import UpdateCourseAssignment from "../../components/pageComponents/AssignedCourses/UpdateCourseAssignment.jsx";
 import { AssignedCoursesSkeleton } from "../../components/ui/Skeletons.jsx";
 import { useDebounce } from "../../hooks/useDebounce.jsx";
+import useTheme from "../../hooks/useTheme.jsx";
 
 
 const AssignedCourses = () => {
+    const [theme] = useTheme();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [selectedSubjectOffering, setSelectedSubjectOffering] = useState(null); // state for editing
@@ -100,7 +102,7 @@ const AssignedCourses = () => {
     }
 
     return (
-        <div className="bg-white rounded-lg p-4">
+        <div className="bg-base-100 rounded-lg p-4">
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-1">
                     <SectionHeader section_title='Course Assignments' />
@@ -169,7 +171,7 @@ const AssignedCourses = () => {
                     {/* Reset Button */}
                     <div className="md:col-span-1 md:place-self-center md:mt-5">
                         <button
-                            className="btn btn-error text-sm text-white"
+                            className={`btn btn-error text-sm ${theme == "light" ? "text-white" : "text-black"}`}
                             onClick={() => {
                                 setFilters({
                                     search: "",

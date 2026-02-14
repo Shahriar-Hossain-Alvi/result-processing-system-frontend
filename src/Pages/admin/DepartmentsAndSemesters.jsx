@@ -34,7 +34,7 @@ const DepartmentsAndSemesters = () => {
     return (
         <div>
             {/* DEPARTMENTS */}
-            <div>
+            <div className='bg-base-100 p-4 rounded-xl'>
                 <div className='flex justify-between'>
                     <SectionHeader section_title='Departments' />
 
@@ -57,8 +57,7 @@ const DepartmentsAndSemesters = () => {
 
 
             {/* SEMESTERS */}
-            <div className='mt-10'>
-
+            <div className='mt-10 bg-base-100 p-4 rounded-xl'>
                 <div className='flex justify-between'>
                     <SectionHeader section_title='Semesters' />
 

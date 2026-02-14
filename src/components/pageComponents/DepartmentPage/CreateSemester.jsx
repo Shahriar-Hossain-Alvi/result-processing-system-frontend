@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure.jsx';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaPlus } from 'react-icons/fa6';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
+import useTheme from '../../../hooks/useTheme.jsx';
 
 const CreateSemester = ({ totalSemestersRefetch }) => {
     const axiosSecure = useAxiosSecure();
@@ -13,18 +14,14 @@ const CreateSemester = ({ totalSemestersRefetch }) => {
 
     // ADD NEW SEMESTER Function
     const addNewSemester = async (data) => {
-        console.log(data);
         const semester_name = data.semesterName;
         const semester_number = parseInt(data.semesterNumber);
-
-        console.log(semester_name, semester_number);
 
         try {
             setIsLoading(true);
             const res = await axiosSecure.post('/semesters/', {
                 semester_name, semester_number
             });
-            console.log(res);
             totalSemestersRefetch();
 
             // @ts-ignore
@@ -32,7 +29,6 @@ const CreateSemester = ({ totalSemestersRefetch }) => {
             // @ts-ignore
             toast.success(res?.data?.message);
         } catch (error) {
-            console.log(error);
             // @ts-ignore
             document.getElementById('create_semester_modal').close();
             const message = errorMessageParser(error);

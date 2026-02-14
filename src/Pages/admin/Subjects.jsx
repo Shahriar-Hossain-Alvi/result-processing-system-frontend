@@ -11,9 +11,11 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import useAuth from "../../hooks/useAuth.jsx";
 import { useForm } from "react-hook-form";
 import { useDebounce } from "../../hooks/useDebounce.jsx";
+import useTheme from "../../hooks/useTheme.jsx";
 
 
 const Subjects = () => {
+    const [theme] = useTheme();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -162,7 +164,7 @@ const Subjects = () => {
     }
 
     return (
-        <div>
+        <div className="bg-base-100 p-4 rounded-xl">
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-1">
                     <SectionHeader section_title='Subjects' />
@@ -173,7 +175,7 @@ const Subjects = () => {
             </div>
 
             {/* 3. Filter UI Section */}
-            <div className="grid grid-cols-1 md:grid-cols-10 gap-4 mb-6 bg-base-200 p-4 rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-10 gap-4 mb-6">
 
                 {/* Semester Select */}
                 <div className="form-control md:col-span-1">
@@ -239,7 +241,7 @@ const Subjects = () => {
                 {/* Reset Button */}
                 <div className="md:col-span-1 md:place-self-center md:mt-5">
                     <button
-                        className="btn btn-error text-sm"
+                        className={`btn btn-error text-sm ${theme === "light" ? "text-white" : "text-black"}`}
                         onClick={() => {
                             setFilters({ semester_id: "", subject_credits: "", search: "", sub_order_by_filter: "" })
                             localStorage.removeItem("sub_order_by_filter");
@@ -281,13 +283,12 @@ const Subjects = () => {
                                     <td>C: {subject.created_at?.split('T')[0]} <br />
                                         U: {subject.updated_at?.split('T')[0]}
                                     </td>
-                                    <td className="flex gap-2">
+                                    <td>
                                         {/* update subject Modal trigger */}
                                         <button
                                             onClick={() => openUpdateSubjectModal(subject)}
-                                            className="btn btn-ghost hover:bg-transparent border-0 group/edit-dept">
-                                            <FaEdit className='group-hover/edit-dept:text-success'
-                                            />
+                                            className="btn btn-ghost bg-transparent border-0 shadow-none btn-primary hover:bg-primary hover:text-white">
+                                            <FaEdit />
                                         </button>
 
 
@@ -295,7 +296,7 @@ const Subjects = () => {
                                         {
                                             user?.role === "super_admin" &&
                                             <div>
-                                                <button className="btn btn-ghost hover:bg-transparent border-0 group/delete-dept"
+                                                <button className="btn btn-ghost bg-transparent border-0 shadow-none btn-error hover:bg-error hover:text-white"
                                                     onClick={() => {
                                                         setSelectedSubject(subject);
                                                         document.getElementById('delete_subject_modal').
@@ -303,7 +304,7 @@ const Subjects = () => {
                                                             showModal()
                                                     }}
                                                 >
-                                                    <MdDelete className='group-hover/delete-dept:text-red-700 text-lg' />
+                                                    <MdDelete className='text-lg' />
                                                 </button>
                                             </div>}
                                     </td>

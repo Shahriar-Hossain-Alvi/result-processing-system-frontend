@@ -8,7 +8,7 @@ export const ThemeContext = createContext();
 const ThemeProvider = ({ children }) => {
     // get stored theme by default from local storage
     const [theme, setTheme] = useState(() => {
-        return localStorage.getItem("theme") || "corporate";
+        return localStorage.getItem("theme") || "light";
     })
 
     // save theme to local storage

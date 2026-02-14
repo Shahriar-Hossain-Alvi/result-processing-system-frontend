@@ -55,7 +55,7 @@ const AddUser = () => {
 
 
     return (
-        <div className='bg-white p-4 rounded-2xl'>
+        <div className='bg-base-100 p-4 rounded-2xl'>
             <SectionHeader section_title='User Registration' />
 
             {/* name of each tab group should be unique */}
