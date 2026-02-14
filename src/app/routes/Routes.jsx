@@ -1,7 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
 import MainLayout from "../layout/MainLayout.jsx";
 import ErrorPage from "../../pages/public/ErrorPage.jsx";
-import Signin from "../../pages/auth/Signin.jsx";
 import Notice from "../../pages/public/Notice.jsx";
 import Contact from "../../pages/public/Contact.jsx";
 import Faculties from "../../pages/public/Faculties.jsx";
@@ -10,6 +9,7 @@ import TeacherRoutes from "./TeacherRoutes.jsx";
 import StudentRoutes from "./StudentRoutes.jsx";
 import Unauthorize from "../../pages/public/Unauthorize.jsx";
 import RoleBasedRedirects from "../../components/RouteHandlers/RoleBasedRedirects.jsx";
+import Signin from "../../pages/auth/Signin.jsx";
 
 
 const router = createBrowserRouter(
