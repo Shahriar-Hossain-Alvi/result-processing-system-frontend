@@ -28,6 +28,23 @@ const InsertMarks = () => {
     const selectedStudentId = watch("studentId");
     const selectedSubjectId = watch("subjectId");
 
+    // Fetch All Marks
+    const { data: allMarks, isPending: isAllMarksPending, error: allMarksError, isError: isAllMarksError } = useQuery({
+        queryKey: ['allMarks'],
+        queryFn: async () => {
+            const res = await axiosSecure('/get_all_marks_with_filters/');
+            return res.data;
+        }
+    })
+
+    useEffect(() => {
+        if (isAllMarksError) {
+            console.log(allMarksError);
+            const message = errorMessageParser(allMarksError);
+            toast.error(message || "Failed to fetch all marks data");
+        }
+    }, [isAllMarksError])
+
     // Fetch students 
     const {
         data: allStudentsForMarks,
@@ -102,13 +119,6 @@ const InsertMarks = () => {
             student_id: parseInt(data.studentId),
             semester_id: parseInt(data.semesterId),
             subject_id: parseInt(data.subjectId),
-
-            // Marks
-            // assignment_mark: parseFloat(data.assignmentMarks) || null,
-            // class_test_mark: parseFloat(data.classTestMarks) || null,
-            // midterm_mark: parseFloat(data.midtermMarks) || null,
-            // final_exam_mark: parseFloat(data.finalExamMarks) || null,
-
         };
         if (data.assignmentMarks) payload.assignment_mark = parseFloat(data.assignmentMarks);
         if (data.classTestMarks) payload.class_test_mark = parseFloat(data.classTestMarks);
@@ -120,8 +130,6 @@ const InsertMarks = () => {
             document.getElementById('insert_marks_modal').close();
             return toast.error('Minimum one mark is required to insert marks.');
         }
-
-        console.log(payload);
 
         try {
             setIsLoading(true);
@@ -157,6 +165,11 @@ const InsertMarks = () => {
                 <FaPlus className='text-lg group-hover/insertMarks:text-success' />
             </button>
 
+            {/* Show all marks */}
+
+
+
+            {/* Insert Marks Modal */}
             <dialog id="insert_marks_modal" className="modal">
                 <div className="modal-box max-w-3xl">
                     <h3 className="font-bold text-2xl mb-6 border-b pb-2">Insert Marks</h3>

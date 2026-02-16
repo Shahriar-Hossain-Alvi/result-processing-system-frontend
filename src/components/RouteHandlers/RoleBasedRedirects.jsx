@@ -8,23 +8,24 @@ const RoleBasedRedirects = () => {
    const navigate = useNavigate();
 
    useEffect(() => {
-      if (!user && loading) {
-         <LoadingSpinner />
-         return
-      }
-
-      if (user) {
-         switch (user.role) {
-            case 'admin': navigate('/admin', { replace: true }); break;
-            case 'super_admin': navigate('/admin', { replace: true }); break;
-            case 'teacher': navigate('/teacher', { replace: true }); break;
-            case 'student': navigate('/student', { replace: true }); break;
-            default: navigate('/unauthorized', { replace: true });
+      if (!loading) {
+         if (user) {
+            switch (user.role) {
+               case 'admin': navigate('/admin', { replace: true }); break;
+               case 'super_admin': navigate('/admin', { replace: true }); break;
+               case 'teacher': navigate('/teacher', { replace: true }); break;
+               case 'student': navigate('/student', { replace: true }); break;
+               default: navigate('/unauthorized', { replace: true });
+            }
+         } else {
+            navigate('/signin', { replace: true });
          }
-      } else {
-         navigate('/signin', { replace: true });
       }
-   })
+   }, [user, loading, navigate]);
+
+   if (loading) {
+      return <LoadingSpinner />
+   }
 
    return null;
 };
