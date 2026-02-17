@@ -2,6 +2,7 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import axiosSecure from "../utils/axios/axiosSecure.js";
 import axiosPublic from "../utils/axios/axiosPublic.js";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 
 export const AuthContext = createContext(
@@ -9,18 +10,50 @@ export const AuthContext = createContext(
         user: null,
         loading: true,
         setLoading: (newState) => { {/* Its to avoid error/warning */ } },
-        // fetchUser: () => Promise.resolve({ role: null }), // role:null to avoid 'void' warning
         fetchUser: () => Promise.resolve({ role: null }), // role:null to avoid 'void' warning
         logout: (bypass) => { },
         axiosSecure: axiosSecure,
-        axiosPublic: axiosPublic
+        axiosPublic: axiosPublic,
+        isServerWaking: false
     }
 );
+
 
 // Main Auth Provider
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isServerWaking, setIsServerWaking] = useState(false);
+
+    // Check if the server is starting
+    useEffect(() => {
+        let interval;
+        const checkServer = async () => {
+            try {
+                // If this succeeds immediately, server is already awake
+                await axios.get(`${import.meta.env.VITE_API_BASE_URL}/server/health-check`, { timeout: 3000 });
+                setIsServerWaking(false);
+            } catch (err) {
+                // If it fails or times out, the server is likely spinning up
+                setIsServerWaking(true);
+
+                // Keep polling until it's up
+                interval = setInterval(async () => {
+                    try {
+                        await axios.get(`${import.meta.env.VITE_API_BASE_URL}/server/health-check`);
+                        setIsServerWaking(false);
+                        clearInterval(interval);
+                    } catch (e) { /* still waking up */ }
+                }, 5000);
+            }
+        };
+        checkServer();
+
+        // CLEANUP: This stops the polling if the component unmounts
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, []);
 
     console.log(user);
 
@@ -77,7 +110,8 @@ const AuthProvider = ({ children }) => {
         logout,
         fetchUser,
         axiosPublic,
-        axiosSecure
+        axiosSecure,
+        isServerWaking
     }
 
 

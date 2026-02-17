@@ -23,7 +23,6 @@ const Signin = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { user, fetchUser, setLoading } = useAuth();
 
-
     const signInUser = async (data) => {
 
         if (user) {
