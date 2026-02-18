@@ -9,7 +9,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useDebounce } from '../../../hooks/useDebounce.jsx';
 import { FaSearch } from 'react-icons/fa';
 
-const InsertMarks = () => {
+const InsertMarks = ({ allMarksWithFiltersRefetch }) => {
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm();
     const [isLoading, setIsLoading] = useState(false);
@@ -27,23 +27,6 @@ const InsertMarks = () => {
     // Watching selected values to show labels
     const selectedStudentId = watch("studentId");
     const selectedSubjectId = watch("subjectId");
-
-    // Fetch All Marks
-    const { data: allMarks, isPending: isAllMarksPending, error: allMarksError, isError: isAllMarksError } = useQuery({
-        queryKey: ['allMarks'],
-        queryFn: async () => {
-            const res = await axiosSecure('/get_all_marks_with_filters/');
-            return res.data;
-        }
-    })
-
-    useEffect(() => {
-        if (isAllMarksError) {
-            console.log(allMarksError);
-            const message = errorMessageParser(allMarksError);
-            toast.error(message || "Failed to fetch all marks data");
-        }
-    }, [isAllMarksError])
 
     // Fetch students 
     const {
@@ -113,17 +96,18 @@ const InsertMarks = () => {
         }
     }, [selectedSubjectId, subjectsForMarking]);
 
-    // ADD NEW Course Assignment Function
-    const addNewSubjectOffering = async (data) => {
+    // INSERT Marks Function
+    const insertNewMark = async (data) => {
         const payload = {
             student_id: parseInt(data.studentId),
             semester_id: parseInt(data.semesterId),
             subject_id: parseInt(data.subjectId),
         };
-        if (data.assignmentMarks) payload.assignment_mark = parseFloat(data.assignmentMarks);
-        if (data.classTestMarks) payload.class_test_mark = parseFloat(data.classTestMarks);
-        if (data.midtermMarks) payload.midterm_mark = parseFloat(data.midtermMarks);
-        if (data.finalExamMarks) payload.final_exam_mark = parseFloat(data.finalExamMarks);
+        if (data.assignmentMarks !== undefined && data.assignmentMarks !== "") payload.assignment_mark = parseFloat(data.assignmentMarks);
+        if (data.classTestMarks !== undefined && data.classTestMarks !== "") payload.class_test_mark = parseFloat(data.classTestMarks);
+        if (data.midtermMarks !== undefined && data.midtermMarks !== "") payload.midterm_mark = parseFloat(data.midtermMarks);
+        if (data.finalExamMarks !== undefined && data.finalExamMarks !== "") payload.final_exam_mark = parseFloat(data.finalExamMarks);
+        console.log(payload);
 
         if (Object.keys(payload).length < 4) {
             // @ts-ignore
@@ -149,7 +133,7 @@ const InsertMarks = () => {
             setStudentSearch("");
             setSelectedSubjectForMarking(null);
             setIsLoading(false);
-            // TODO: all marks refetch
+            allMarksWithFiltersRefetch();
         }
     };
 
@@ -165,16 +149,12 @@ const InsertMarks = () => {
                 <FaPlus className='text-lg group-hover/insertMarks:text-success' />
             </button>
 
-            {/* Show all marks */}
-
-
-
             {/* Insert Marks Modal */}
             <dialog id="insert_marks_modal" className="modal">
                 <div className="modal-box max-w-3xl">
                     <h3 className="font-bold text-2xl mb-6 border-b pb-2">Insert Marks</h3>
 
-                    <form onSubmit={handleSubmit(addNewSubjectOffering)} className="grid xs:grid-cols-1 md:grid-cols-2 gap-3">
+                    <form onSubmit={handleSubmit(insertNewMark)} className="grid xs:grid-cols-1 md:grid-cols-2 gap-3">
 
                         {/* Student Search & Select */}
                         <div className="relative w-full">
