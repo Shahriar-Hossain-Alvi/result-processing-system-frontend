@@ -192,7 +192,8 @@ const InsertMarks = ({ allMarksWithFiltersRefetch }) => {
                                             }}>
                                                 <div>
                                                     <div className="font-bold">{st.name}</div>
-                                                    <div className="text-xs opacity-60">{st.department?.department_name}</div>
+                                                    <div className='text-xs opacity-70'>Reg: {st.registration}</div>
+                                                    <div className="text-xs opacity-60">{st.department?.department_name?.split(" ")[0]?.toUpperCase()} ({st.session})</div>
                                                 </div>
                                             </a>
                                         </li>
