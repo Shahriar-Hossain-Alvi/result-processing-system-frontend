@@ -74,7 +74,6 @@ const InsertMarks = ({ allMarksWithFiltersRefetch }) => {
                 // TODO: add teachers id if teacher inserts the marks
 
                 const res = await axiosSecure(`/subject_offering/offered_subject_lists_for_marking/?${params.toString()}`);
-                console.log(res?.data);
                 return res?.data;
             },
             enabled: !!selectedStudentId && isOpen && allStudentsForMarks?.length === 1
@@ -107,7 +106,6 @@ const InsertMarks = ({ allMarksWithFiltersRefetch }) => {
         if (data.classTestMarks !== undefined && data.classTestMarks !== "") payload.class_test_mark = parseFloat(data.classTestMarks);
         if (data.midtermMarks !== undefined && data.midtermMarks !== "") payload.midterm_mark = parseFloat(data.midtermMarks);
         if (data.finalExamMarks !== undefined && data.finalExamMarks !== "") payload.final_exam_mark = parseFloat(data.finalExamMarks);
-        console.log(payload);
 
         if (Object.keys(payload).length < 4) {
             // @ts-ignore
