@@ -5,12 +5,13 @@ import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
 import { useEffect, useState } from 'react';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
 import toast from 'react-hot-toast';
-import { FaEye } from 'react-icons/fa6';
-import { FaEdit } from 'react-icons/fa';
 import useAuth from '../../hooks/useAuth.jsx';
 import { MdDelete } from 'react-icons/md';
 import useTheme from '../../hooks/useTheme.jsx';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import UpdateAStudentsSingleMark from '../../components/pageComponents/MarksPage/UpdateAStudentsSingleMark.jsx';
+import { FaCheckCircle } from 'react-icons/fa';
+import { IoMdArrowDropdown } from 'react-icons/io';
 
 const Marks = () => {
     const [theme] = useTheme();
@@ -23,9 +24,22 @@ const Marks = () => {
 
     const result_status_with_color = {
         'published': `badge badge-sm ${theme === 'dark' && 'badge-soft'} badge-success`,
-        'challedged': `badge badge-sm ${theme === 'dark' && 'badge-soft'} badge-error`, // TODO: Fix this spelling after fixing from backend
         'unpublished': `badge badge-sm ${theme === 'dark' && 'badge-soft'} badge-warning`,
-        'resolved': `badge badge-sm ${theme === 'dark' && 'badge-soft'} badge-success`
+    }
+
+    const result_challenge_status_with_color = {
+        'challenged': `badge badge-sm ${theme === 'dark' && 'badge-soft'} badge-error`,
+        'resolved': `badge badge-sm ${theme === 'dark' && 'badge-soft'} badge-success`,
+        'none': `badge badge-sm badge-neutral`,
+    }
+
+    const result_challenge_timeline_with_color = {
+        'challenged': `success`,
+        'resolved': `success`,
+        'none': ``,
+        true: `success`,
+        false: `warning`,
+        null: ``,
     }
 
     const gpa_with_color = {
@@ -47,7 +61,8 @@ const Marks = () => {
         queryFn: async () => {
             const res = await axiosSecure('/marks/get_all_marks_with_filters');
             return res.data;
-        }
+        },
+        enabled: !!user
     })
 
     console.log(allMarksWithFilters);
@@ -65,7 +80,6 @@ const Marks = () => {
         try {
             setIsFormLoading(true);
             const res = await axiosSecure.delete(`/marks/${id}`);
-            console.log(res);
             // @ts-ignore
             document.getElementById('delete_a_mark_modal').close();
             allMarksWithFiltersRefetch();
@@ -113,7 +127,7 @@ const Marks = () => {
                                             <tr>
                                                 <th>#</th>
                                                 <th>Name</th>
-                                                <th>Registration</th>
+                                                <th>Reg</th>
                                                 <th>Subject</th>
                                                 <th>CT</th>
                                                 <th>Assignment</th>
@@ -123,6 +137,7 @@ const Marks = () => {
                                                 <th>GPA</th>
                                                 <th>Entered</th>
                                                 <th className='text-center'>Status</th>
+                                                <th>Challenged</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -158,27 +173,124 @@ const Marks = () => {
                                                         {/* created at */}
                                                         <td>{mark?.created_at?.split("T")[0]}</td>
 
-                                                        {/* result status with challenged */}
+                                                        {/* result status */}
                                                         <td className='text-center'>
                                                             <button className={`border capitalize ${result_status_with_color[mark?.result_status]}`}>
                                                                 {mark?.result_status}
                                                             </button>
-                                                            {mark?.challenged_at && mark?.challenged_at.split("T")[0]}
                                                         </td>
 
-                                                        {mark?.challenged_at &&
-                                                            <td className={`${mark?.result_challenge_payment_status === true ? "text-success" : "text-error"}`}>
-                                                                {mark?.result_challenge_payment_status ? "Paid" : "Not Paid"}
-                                                            </td>}
+                                                        {/* challenged status */}
+                                                        <td className='text-center'>
+                                                            <div className='flex items-center justify-center'>
+                                                                <button className={`border capitalize ${result_challenge_status_with_color[mark?.result_challenge_status]}`}>
+                                                                    {mark?.result_challenge_status}
+                                                                </button>
 
+                                                                {/* add a dropdown to show challenged details */}
+                                                                <button className={`${mark?.result_challenge_status === 'none' ? 'hidden' : ''} btn btn-xs btn-circle btn-ghost hover:bg-transparent border-none`} popoverTarget={`popover-${mark?.id}`} style={{ anchorName: `--anchor-${mark?.id}` } /* as React.CSSProperties */}>
+                                                                    <IoMdArrowDropdown />
+                                                                </button>
+                                                            </div>
+
+                                                            {/* TIMELINE */}
+                                                            <div className='dropdown dropdown-end shadow-2xl bg-base-100 rounded-2xl p-1'
+                                                                popover='auto'
+                                                                id={`popover-${mark?.id}`}
+                                                                style={{ positionAnchor: `--anchor-${mark?.id}` }}
+                                                            >
+                                                                <ul className="timeline timeline-vertical">
+                                                                    {/* Show status */}
+                                                                    <li>
+                                                                        <div className="timeline-start">Challenge Status</div>
+                                                                        <div className="timeline-middle">
+                                                                            {/* Color for the check mark based on the status */}
+                                                                            <FaCheckCircle className={`text-${result_challenge_timeline_with_color[mark?.result_challenge_status]}`} />
+                                                                        </div>
+                                                                        <div className="timeline-end timeline-box">{mark?.result_challenge_status}</div>
+
+                                                                        {/* the line Color after the status check mark based on the status */}
+                                                                        <hr className={`bg-${result_challenge_timeline_with_color[mark?.result_challenge_status]}`} />
+                                                                    </li>
+
+                                                                    {/* Show challenged date */}
+                                                                    <li>
+                                                                        {/* upper line Color for the status check mark based on the status */}
+                                                                        <hr className={`bg-${result_challenge_timeline_with_color[mark?.result_challenge_status]}`} />
+                                                                        <div className="timeline-start">Challenged At</div>
+                                                                        <div className="timeline-middle">
+                                                                            {/* Color for the check mark based on the status */}
+                                                                            <FaCheckCircle className={`text-${result_challenge_timeline_with_color[mark?.result_challenge_status]}`} />
+                                                                        </div>
+                                                                        <div className="timeline-end timeline-box">{mark?.challenged_at && mark?.challenged_at.split("T")[0] || "N/A"}</div>
+
+                                                                        {/* the lower line Color of the challenged at check mark based on the payment status */}
+                                                                        <hr className={`bg-${result_challenge_timeline_with_color[(mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) ? false : mark?.result_challenge_payment_status]}`} />
+                                                                    </li>
+
+                                                                    {/* show payment status */}
+                                                                    <li>
+                                                                        {/* the upper line Color of the payment status check mark based on the payment status */}
+                                                                        <hr className={`bg-${result_challenge_timeline_with_color[(mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) ? false : mark?.result_challenge_payment_status]}`} />
+                                                                        <div className="timeline-start">Payment Status</div>
+                                                                        <div className="timeline-middle">
+                                                                            {
+                                                                                mark?.result_challenge_payment_status === true && <FaCheckCircle className={`text-${result_challenge_timeline_with_color[mark?.result_challenge_payment_status]}`} />
+                                                                            }
+
+                                                                            {
+                                                                                mark?.result_challenge_payment_status === false && <FaCheckCircle className={`text-${result_challenge_timeline_with_color[mark?.result_challenge_payment_status]}`} />
+                                                                            }
+
+                                                                            {
+                                                                                (mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) && <FaCheckCircle className={`text-${result_challenge_timeline_with_color[(mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) ? false : mark?.result_challenge_payment_status]}`} />
+                                                                            }
+                                                                        </div>
+                                                                        <div className="timeline-end timeline-box">
+                                                                            {mark?.result_challenge_payment_status === true && "Paid"}
+                                                                            {mark?.result_challenge_payment_status === false && "Not Paid"}
+                                                                            {mark?.result_challenge_payment_status === null && "N/A"}
+                                                                        </div>
+
+                                                                        {/* the lower line Color of the payment status check mark based on the payment status */}
+                                                                        <hr className={`bg-${result_challenge_timeline_with_color[(mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) ? false : mark?.result_challenge_payment_status]}`} />
+                                                                    </li>
+
+                                                                    {/* show payment time */}
+                                                                    <li>
+                                                                        {/* the upper line Color of the payment time check mark based on the payment status */}
+                                                                        <hr className={`bg-${result_challenge_timeline_with_color[(mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) ? false : mark?.result_challenge_payment_status]}`} />
+
+                                                                        <div className="timeline-start">Payment Time</div>
+                                                                        <div className="timeline-middle">
+                                                                            <FaCheckCircle className={`text-${result_challenge_timeline_with_color[(mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) ? false : mark?.result_challenge_payment_status]}`} />
+                                                                        </div>
+                                                                        <div className="timeline-end timeline-box">{mark?.challenge_payment_time !== null && mark?.challenge_payment_time.split("T")[0] || "Not Paid"}</div>
+
+                                                                        {/* the lower line Color of the payment time check mark based on the payment status */}
+                                                                        <hr className={`bg-${result_challenge_timeline_with_color[mark?.challenge_resolved_at && true || false]}`} />
+                                                                    </li>
+
+                                                                    {/* Challenged Resolved date */}
+                                                                    <li>
+                                                                        {/* the upper line Color of the resolved time check mark based on the payment status */}
+                                                                        <hr className={`bg-${result_challenge_timeline_with_color[mark?.challenge_resolved_at && true || false]}`} />
+                                                                        <div className="timeline-start">Resolved At</div>
+                                                                        <div className="timeline-middle">
+                                                                            <FaCheckCircle className={`text-${result_challenge_timeline_with_color[mark?.challenge_resolved_at && true || null]}`} />
+                                                                        </div>
+                                                                        <div className="timeline-end timeline-box">{mark?.challenge_resolved_at && mark?.challenge_resolved_at.split("T")[0] || "Not Paid"}</div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
                                                         {/* action */}
                                                         <td>
                                                             {/* update marks button */}
-                                                            <button className='btn btn-ghost bg-transparent border-0 shadow-none btn-primary hover:bg-primary hover:text-white' onClick={() => {
-
-                                                            }}>
-                                                                <FaEdit className='text-sm' />
-                                                            </button>
+                                                            <UpdateAStudentsSingleMark
+                                                                mark={mark}
+                                                                allMarksWithFiltersRefetch={allMarksWithFiltersRefetch}
+                                                            />
 
                                                             {/* Delete mark confirmation Modal */}
                                                             {
@@ -203,7 +315,7 @@ const Marks = () => {
                                             <tr>
                                                 <th>#</th>
                                                 <th>Name</th>
-                                                <th>Registration</th>
+                                                <th>Reg</th>
                                                 <th>Subject</th>
                                                 <th>CT</th>
                                                 <th>Assignment</th>
@@ -213,6 +325,7 @@ const Marks = () => {
                                                 <th>GPA</th>
                                                 <th>Entered</th>
                                                 <th className='text-center'>Status</th>
+                                                <th>Challenged</th>
                                                 <th>Action</th>
                                             </tr>
                                         </tfoot>

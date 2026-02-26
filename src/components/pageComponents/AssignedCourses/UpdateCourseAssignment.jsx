@@ -100,7 +100,7 @@ const UpdateCourseAssignment = ({ assignedCourse, allDepartments, isAllDepartmen
     // Get Department Name for Summary
     const currentDeptName = allDepartments?.find(dept => dept.id == selectedDepartmentId)?.department_name || "...";
 
-    // ADD NEW Course Assignment Function
+    // Update Course Assignment Function
     const updateSubjectOffering = async (data) => {
         const update_data = {
             taught_by_id: null
