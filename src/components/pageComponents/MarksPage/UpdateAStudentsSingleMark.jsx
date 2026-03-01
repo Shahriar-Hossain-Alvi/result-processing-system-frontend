@@ -12,12 +12,18 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
     const modalId = `update_mark_modal_${mark?.id}`; // unique id for each row to avoid always showing the first data
     const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm({
         defaultValues: {
+            // Autofill marks
             updatedAssignmentMark: mark?.assignment_mark,
             updatedClassTestMark: mark?.class_test_mark,
             updatedMidtermMark: mark?.midterm_mark,
             updatedFinalExamMark: mark?.final_exam_mark,
-            updatedResultChallengePaymentStatus: mark?.result_challenge_payment_status,
-            updatedResultStatus: mark?.result_status,
+
+            // Autofill result status
+            updatedResultStatus: mark?.result_status || "unpublished", // published or unpublished
+
+            // Autofill result challenge status
+            updatedResultChallengeStatus: mark?.result_challenge_status || "none", // challenged, resolved or none
+            updatedResultChallengePaymentStatus: mark?.result_challenge_payment_status !== null ? mark?.result_challenge_payment_status.toString() : "false", // paid or not (true, false or null)
         }
     });
 
@@ -25,55 +31,50 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-
-    // Watching selected values to show labels
-    // const selectedTeacherId = watch("updatedTeacherId");
-    // const selectedSubjectId = watch("updatedSubjectId");
-    // const selectedDepartmentId = watch("updatedDepartmentId");
-
-    // SYNC FORM WHEN PROP CHANGES (The "First row" fix)
-    // useEffect(() => {
-    //     if (assignedCourse) {
-    //         setValue("updatedDepartmentId", assignedCourse.department?.id);
-    //         setValue("updatedTeacherId", assignedCourse.taught_by?.id || null);
-    //         setValue("updatedSubjectId", assignedCourse.subject?.id);
-    //         setTeacherSearch(assignedCourse.taught_by?.name || "");
-    //         setSubjectSearch(`${assignedCourse.subject?.subject_code}: ${assignedCourse.subject?.subject_title}` || "");
-    //     }
-    // }, [assignedCourse, setValue]);
+    console.log(mark);
 
 
     // Update Mark Function
     const updateStudentsMark = async (data) => {
-        console.log(data);
-        //     const update_data = {
-        //         taught_by_id: null
-        //     };
+        const update_data = {};
 
-        //     if (Object.keys(update_data).length === 0) {
-        //         // @ts-ignore
-        //         document.getElementById(modalId).close();
-        //         return toast.error("No changes made. Change at least one field to update.");
-        //     }
+        if (data.updatedClassTestMark !== undefined && parseFloat(data.updatedClassTestMark) !== mark.class_test_mark) update_data.class_test_mark = parseFloat(data.updatedClassTestMark);
 
-        //     try {
-        //         setIsLoading(true);
-        //         const res = await axiosSecure.patch(`/subject_offering/${assignedCourse?.id}`, update_data);
-        //         toast.success(res?.data?.message || 'Course assignment updated successfully');
-        //         // @ts-ignore
-        //         document.getElementById(modalId).close();
-        //         reset();
-        //     } catch (error) {
-        //         console.log(error);
-        //         // @ts-ignore
-        //         document.getElementById(modalId).close();
-        //         const message = errorMessageParser(error);
-        //         toast.error(message || 'Failed to update mark');
-        //     } finally {
-        //         reset();
-        //         setIsLoading(false);
-        //         allMarksWithFiltersRefetch();
-        //     }
+        if (data.updatedAssignmentMark !== undefined && parseFloat(data.updatedAssignmentMark) !== mark.assignment_mark) update_data.assignment_mark = parseFloat(data.updatedAssignmentMark);
+
+        if (data.updatedMidtermMark !== undefined && parseFloat(data.updatedMidtermMark) !== mark.midterm_mark) update_data.midterm_mark = parseFloat(data.updatedMidtermMark);
+
+        if (data.updatedFinalExamMark !== undefined && parseFloat(data.updatedFinalExamMark) !== mark.final_exam_mark) update_data.final_exam_mark = parseFloat(data.updatedFinalExamMark);
+
+        if (data.updatedResultStatus && data.updatedResultStatus !== mark.result_status) update_data.result_status = data.updatedResultStatus;
+
+
+        // result_challenge_status, result_challenge_payment_status
+
+        if (Object.keys(update_data).length === 0) {
+            // @ts-ignore
+            document.getElementById(modalId).close();
+            return toast.error("No changes made. Change at least one field to update.");
+        }
+
+        try {
+            console.log(update_data);
+            setIsLoading(true);
+            const res = await axiosSecure.patch(`/marks/${mark?.id}`, update_data);
+            toast.success(res?.data?.message || 'Mark updated successfully');
+            console.log(res);
+            document.getElementById(modalId).close();
+            reset();
+        } catch (error) {
+            console.log(error);
+            document.getElementById(modalId).close();
+            const message = errorMessageParser(error);
+            toast.error(message || 'Failed to update mark');
+        } finally {
+            setIsOpen(false);
+            setIsLoading(false);
+            allMarksWithFiltersRefetch();
+        }
     };
 
     // console.log(mark);
@@ -84,7 +85,20 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
                 {/* Create New Course Assignment Modal */}
                 <button className='btn btn-ghost bg-transparent border-0 shadow-none btn-primary hover:bg-primary hover:text-white' onClick={() => {
                     setIsOpen(true);
-                    // @ts-ignore
+                    reset({
+                        // Autofill marks
+                        updatedAssignmentMark: mark?.assignment_mark,
+                        updatedClassTestMark: mark?.class_test_mark,
+                        updatedMidtermMark: mark?.midterm_mark,
+                        updatedFinalExamMark: mark?.final_exam_mark,
+
+                        // Autofill result status
+                        updatedResultStatus: mark?.result_status || "unpublished", // published or unpublished
+
+                        // Autofill result challenge status
+                        updatedResultChallengeStatus: mark?.result_challenge_status || "none", // challenged, resolved or none
+                        updatedResultChallengePaymentStatus: mark?.result_challenge_payment_status !== null ? mark?.result_challenge_payment_status.toString() : "false", // paid or not (true, false or null)
+                    });
                     document.getElementById(modalId).showModal()
                 }}>
                     <FaEdit className='text-sm' />
@@ -92,7 +106,17 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
 
                 <dialog id={modalId} onClose={() => setIsOpen(false)} className="modal">
                     <div className="modal-box max-w-3xl">
-                        <h3 className="font-bold text-2xl mb-6 border-b pb-2">Update Mark</h3>
+                        <div className='mb-6 border-b pb-2'>
+                            <h3 className="font-bold text-2xl mb-2">Update Mark & Result Status</h3>
+                            <h3 className='text-lg'>Name: {mark?.student?.name || ""}</h3>
+
+                            <div className='flex gap-2'>
+                                <h3 className='text-lg'>Registration: {mark?.student?.registration || ""}</h3>
+                                <div className='divider divider-horizontal'></div>
+                                <h3 className='text-lg'>Session: {mark?.student?.session || ""}</h3>
+                            </div>
+
+                        </div>
 
                         <form onSubmit={handleSubmit(updateStudentsMark)} className="space-y-6">
 
@@ -191,25 +215,66 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
                                     />
                                     {errors.updatedFinalExamMark ? <span className='text-error text-xs'>{errors?.updatedFinalExamMark?.message}</span> : <span className='text-xs text-warning'>Range: 0 - 80</span>}
                                 </fieldset>
+
+                                {/* Result Status */}
+                                <fieldset className="space-y-1 fieldset">
+                                    <label className="label font-semibold">Result Status</label>
+                                    <select
+                                        {...register("updatedResultStatus")}
+                                        className="select select-bordered w-full max-w-xs">
+                                        <option value="published">Published</option>
+                                        <option value="unpublished">Unpublished</option>
+                                    </select>
+                                </fieldset>
+
+                                {/* result challenge status is not "none" */}
+                                {
+                                    mark?.result_challenge_status !== "none" &&
+                                    (
+                                        <>
+                                            {/* Result Challenge Status */}
+                                            <fieldset className="space-y-1 fieldset">
+                                                <label className="label font-semibold">Challenge Status</label>
+                                                <select
+                                                    {...register("updatedResultChallengeStatus")}
+                                                    className={`select select-bordered w-full max-w-xs ${mark?.result_challenge_status === "resolved" && "border-success"} ${mark?.result_challenge_status === "challenged" && "border-error"}`}>
+                                                    <option disabled value="none">Not Challenged</option>
+                                                    <option value="challenged">Challenged</option>
+                                                    <option value="resolved">Resolved</option>
+                                                </select>
+                                            </fieldset>
+
+                                            {/* Challenge Payment Status */}
+                                            <fieldset className="space-y-1 fieldset">
+                                                <label className="label font-semibold">Challenge payment Status</label>
+                                                <select
+                                                    {...register("updatedResultChallengePaymentStatus")}
+                                                    className={`select select-bordered w-full max-w-xs ${mark?.result_challenge_payment_status === false && "border-error"} ${mark?.result_challenge_payment_status === true && "border-success"}`}>
+                                                    <option value="true">Paid</option>
+                                                    <option value="false">Not Paid</option>
+                                                </select>
+                                                <span className='text-xs text-warning'>Update after receiving payment receipts</span>
+                                            </fieldset>
+                                        </>
+                                    )}
                             </div>
+
 
                             {/* close modal and submit */}
                             <div className="modal-action flex items-center justify-end">
                                 <button type="button" className="btn btn-ghost" onClick={() => {
                                     setIsOpen(false);
-                                    // @ts-ignore
                                     document.getElementById(modalId).close();
                                 }}>Cancel</button>
                                 <button className="btn btn-primary min-w-[120px]" disabled={isLoading}>
                                     {isLoading ? <AiOutlineLoading3Quarters className="animate-spin" /> : "Update"}
                                 </button>
-
                             </div>
                         </form>
                     </div>
                 </dialog>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

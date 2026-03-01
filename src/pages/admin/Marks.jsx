@@ -65,7 +65,7 @@ const Marks = () => {
         enabled: !!user
     })
 
-    console.log(allMarksWithFilters);
+    // console.log(allMarksWithFilters);
 
     useEffect(() => {
         if (isAllMarksError) {
@@ -122,7 +122,7 @@ const Marks = () => {
 
                             <div className="collapse-content text-sm">
                                 <div className="overflow-x-auto">
-                                    <table className="table table-xs">
+                                    <table className="table table-xs table-pin-cols">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -194,11 +194,12 @@ const Marks = () => {
                                                             </div>
 
                                                             {/* TIMELINE */}
-                                                            <div className='dropdown dropdown-end shadow-2xl bg-base-100 rounded-2xl p-1'
+                                                            <div className='dropdown dropdown-end shadow-2xl bg-base-300 glass rounded-2xl p-1'
                                                                 popover='auto'
                                                                 id={`popover-${mark?.id}`}
                                                                 style={{ positionAnchor: `--anchor-${mark?.id}` }}
                                                             >
+                                                                <p className='text-base font-semibold uppercase'>Progress</p>
                                                                 <ul className="timeline timeline-vertical">
                                                                     {/* Show status */}
                                                                     <li>
@@ -207,7 +208,7 @@ const Marks = () => {
                                                                             {/* Color for the check mark based on the status */}
                                                                             <FaCheckCircle className={`text-${result_challenge_timeline_with_color[mark?.result_challenge_status]}`} />
                                                                         </div>
-                                                                        <div className="timeline-end timeline-box">{mark?.result_challenge_status}</div>
+                                                                        <div className="timeline-end timeline-box border-none">{mark?.result_challenge_status}</div>
 
                                                                         {/* the line Color after the status check mark based on the status */}
                                                                         <hr className={`bg-${result_challenge_timeline_with_color[mark?.result_challenge_status]}`} />
@@ -222,7 +223,7 @@ const Marks = () => {
                                                                             {/* Color for the check mark based on the status */}
                                                                             <FaCheckCircle className={`text-${result_challenge_timeline_with_color[mark?.result_challenge_status]}`} />
                                                                         </div>
-                                                                        <div className="timeline-end timeline-box">{mark?.challenged_at && mark?.challenged_at.split("T")[0] || "N/A"}</div>
+                                                                        <div className="timeline-end timeline-box border-none">{mark?.challenged_at && mark?.challenged_at.split("T")[0] || "N/A"}</div>
 
                                                                         {/* the lower line Color of the challenged at check mark based on the payment status */}
                                                                         <hr className={`bg-${result_challenge_timeline_with_color[(mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) ? false : mark?.result_challenge_payment_status]}`} />
@@ -246,7 +247,7 @@ const Marks = () => {
                                                                                 (mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) && <FaCheckCircle className={`text-${result_challenge_timeline_with_color[(mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) ? false : mark?.result_challenge_payment_status]}`} />
                                                                             }
                                                                         </div>
-                                                                        <div className="timeline-end timeline-box">
+                                                                        <div className="timeline-end timeline-box border-none">
                                                                             {mark?.result_challenge_payment_status === true && "Paid"}
                                                                             {mark?.result_challenge_payment_status === false && "Not Paid"}
                                                                             {mark?.result_challenge_payment_status === null && "N/A"}
@@ -265,7 +266,7 @@ const Marks = () => {
                                                                         <div className="timeline-middle">
                                                                             <FaCheckCircle className={`text-${result_challenge_timeline_with_color[(mark?.result_challenge_status === 'challenged' && mark?.result_challenge_payment_status === null) ? false : mark?.result_challenge_payment_status]}`} />
                                                                         </div>
-                                                                        <div className="timeline-end timeline-box">{mark?.challenge_payment_time !== null && mark?.challenge_payment_time.split("T")[0] || "Not Paid"}</div>
+                                                                        <div className="timeline-end timeline-box border-none">{mark?.challenge_payment_time !== null && mark?.challenge_payment_time.split("T")[0] || "Not Paid"}</div>
 
                                                                         {/* the lower line Color of the payment time check mark based on the payment status */}
                                                                         <hr className={`bg-${result_challenge_timeline_with_color[mark?.challenge_resolved_at && true || false]}`} />
@@ -279,7 +280,7 @@ const Marks = () => {
                                                                         <div className="timeline-middle">
                                                                             <FaCheckCircle className={`text-${result_challenge_timeline_with_color[mark?.challenge_resolved_at && true || null]}`} />
                                                                         </div>
-                                                                        <div className="timeline-end timeline-box">{mark?.challenge_resolved_at && mark?.challenge_resolved_at.split("T")[0] || "Not Paid"}</div>
+                                                                        <div className="timeline-end timeline-box border-none">{mark?.challenge_resolved_at && mark?.challenge_resolved_at.split("T")[0] || "Not Paid"}</div>
                                                                     </li>
                                                                 </ul>
                                                             </div>
