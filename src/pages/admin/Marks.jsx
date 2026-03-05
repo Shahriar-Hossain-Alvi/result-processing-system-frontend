@@ -12,6 +12,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import UpdateAStudentsSingleMark from '../../components/pageComponents/MarksPage/UpdateAStudentsSingleMark.jsx';
 import { FaCheckCircle } from 'react-icons/fa';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import { useDebounce } from '../../hooks/useDebounce.jsx';
 
 const Marks = () => {
     const [theme] = useTheme();
@@ -55,17 +56,43 @@ const Marks = () => {
         0.0: 'text-red-600',
     }
 
+    // Filter
+    const [filters, setFilters] = useState({
+        search: "",
+        department_id: "",
+        semester_id: "",
+        result_status: localStorage.getItem("result_status") || "",
+    });
+
+    // debounce the search string by 500ms(wait 500ms before making the request send after user stop typing)
+    const debouncedSearch = useDebounce(filters.search, 500);
+
     // Fetch All Marks
     const { data: allMarksWithFilters, isPending: isAllMarksPending, error: allMarksError, isError: isAllMarksError, refetch: allMarksWithFiltersRefetch } = useQuery({
-        queryKey: ['allMarksWithFilters'],
+        queryKey: ['allMarksWithFilters', filters.department_id, filters.semester_id, filters.result_status, debouncedSearch],
         queryFn: async () => {
-            const res = await axiosSecure('/marks/get_all_marks_with_filters');
+            const params = new URLSearchParams();
+
+            if (filters.department_id) params.append('department_id', filters.department_id);
+            if (filters.semester_id) params.append('semester_id', filters.semester_id);
+            if (filters.result_status) params.append('result_status', filters.result_status);
+
+            // Use the debounced value for the API call
+            if (debouncedSearch) params.append('session', debouncedSearch);
+
+            console.log(params.toString());
+
+            const res = await axiosSecure(`/marks/get_all_marks_with_filters?${params.toString()}`);
             return res.data;
         },
         enabled: !!user
     })
 
-    // console.log(allMarksWithFilters);
+    // Handler to update filters
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters(prev => ({ ...prev, [name]: value }));
+    };
 
     useEffect(() => {
         if (isAllMarksError) {
@@ -74,6 +101,41 @@ const Marks = () => {
             toast.error(message || "Failed to fetch all marks data");
         }
     }, [isAllMarksError])
+
+
+    // Fetch departments
+    const { data: allDepartments, isPending: isAllDepartmentsPending, error: allDepartmentsError, isError: isAllDepartmentsError, refetch: allDepartmentsRefetch } = useQuery({
+        queryKey: ['allDepartments'],
+        queryFn: async () => {
+            const res = await axiosSecure('/departments/');
+            return res.data;
+        }
+    })
+
+    useEffect(() => {
+        if (isAllDepartmentsError) {
+            console.log(allDepartmentsError);
+            const message = errorMessageParser(allDepartmentsError);
+            toast.error(message || "Failed to fetch departments");
+        }
+    }, [isAllDepartmentsError])
+
+    // Fetch SEMESTERS
+    const { data: allSemesters, isPending: isSemesterPending, error: semesterError, isError: isSemesterError, refetch: totalSemestersRefetch } = useQuery({
+        queryKey: ['totalSemesters'],
+        queryFn: async () => {
+            const res = await axiosSecure('/semesters/');
+            return res.data;
+        }
+    })
+
+    useEffect(() => {
+        if (isSemesterError) {
+            console.log(semesterError);
+            const message = errorMessageParser(semesterError);
+            toast.error(message || "Failed to fetch semesters");
+        }
+    }, [isSemesterError])
 
     // delete mark
     const deleteStudentsMarks = async (id) => {
@@ -93,6 +155,7 @@ const Marks = () => {
         } finally {
             setIsFormLoading(false);
             setSelectedMark(null);
+            allDepartmentsRefetch();
         }
     }
 
@@ -101,11 +164,100 @@ const Marks = () => {
             <div className='flex justify-between'>
                 <SectionHeader section_title="All Marks" />
 
-                <InsertMarks allMarksWithFiltersRefetch={allMarksWithFiltersRefetch} />
+                <InsertMarks
+                    allMarksWithFiltersRefetch={allMarksWithFiltersRefetch}
+                    allDepartmentsRefetch={allDepartmentsRefetch}
+                    totalSemestersRefetch={totalSemestersRefetch}
+                />
             </div>
 
             {/* Show all marks */}
             <div>
+                {/* 3. Filter UI Section */}
+                <div className="grid grid-cols-1 md:grid-cols-10 gap-4 mb-6">
+
+                    {/* Department Select */}
+                    <div className="form-control md:col-span-3">
+                        <label className="label">Department</label>
+                        <select
+                            name="department_id"
+                            className="select w-full uppercase"
+                            value={filters.department_id}
+                            onChange={handleFilterChange}
+                        >
+                            <option value="">All</option>
+                            {allDepartments?.map(department => (
+                                <option key={department.id} value={department.id}>{department.department_name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Semester Select */}
+                    <div className="form-control md:col-span-2">
+                        <label className="label">Semester</label>
+                        <select
+                            name="semester_id"
+                            className="select w-full uppercase"
+                            value={filters.semester_id}
+                            onChange={handleFilterChange}
+                        >
+                            <option value="">All</option>
+                            {allSemesters?.map(semester => (
+                                <option key={semester.id} value={semester.id}>{semester.semester_number}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Result Status */}
+                    <div className="form-control md:col-span-2">
+                        <label className="label">Status</label>
+                        <select
+                            name="result_status"
+                            className="select w-full uppercase"
+                            value={filters.result_status}
+                            onChange={(e) => {
+                                localStorage.setItem("result_status", e.target.value);
+                                handleFilterChange(e);
+                            }}
+                        >
+                            <option value="">All</option>
+                            <option value="published">Published</option>
+                            <option value="unpublished">Unpublished</option>
+                        </select>
+                    </div>
+
+                    {/* Search by session */}
+                    <div className="form-control md:col-span-2">
+                        <label className="label">Session</label>
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="session.."
+                            className="input input-bordered w-full"
+                            value={filters.search}
+                            onChange={handleFilterChange}
+                        />
+                    </div>
+
+                    {/* Reset Button */}
+                    <div className="md:col-span-1 md:place-self-center md:mt-5">
+                        <button
+                            className={`btn btn-error text-sm ${theme == "light" ? "text-white" : "text-black"}`}
+                            onClick={() => {
+                                setFilters({
+                                    search: "",
+                                    department_id: "",
+                                    semester_id: "",
+                                    result_status: "",
+                                })
+                                localStorage.removeItem("result_status")
+                            }}
+                        >
+                            Clear Filters
+                        </button>
+                    </div>
+                </div>
+
                 {isAllMarksPending && <p className='text-center text-xl font-semibold text-error'>Loading...</p>}
 
                 {allMarksWithFilters?.length === 0 && <p className='text-center text-xl font-semibold text-error'>No marks found</p>}
