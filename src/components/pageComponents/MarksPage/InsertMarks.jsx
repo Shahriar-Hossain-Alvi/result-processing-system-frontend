@@ -9,7 +9,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useDebounce } from '../../../hooks/useDebounce.jsx';
 import { FaSearch } from 'react-icons/fa';
 
-const InsertMarks = ({ allMarksWithFiltersRefetch }) => {
+const InsertMarks = ({ allMarksWithFiltersRefetch, allDepartmentsRefetch, totalSemestersRefetch }) => {
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm();
     const [isLoading, setIsLoading] = useState(false);
@@ -132,6 +132,8 @@ const InsertMarks = ({ allMarksWithFiltersRefetch }) => {
             setSelectedSubjectForMarking(null);
             setIsLoading(false);
             allMarksWithFiltersRefetch();
+            allDepartmentsRefetch();
+            totalSemestersRefetch();
         }
     };
 
