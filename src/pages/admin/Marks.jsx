@@ -494,7 +494,7 @@ const Marks = () => {
 
 
             {/* Modals */}
-            {/* delete subject offering modal */}
+            {/* delete subject mark modal */}
             <dialog id="delete_a_mark_modal" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg text-error uppercase">Be Careful!!!</h3>
