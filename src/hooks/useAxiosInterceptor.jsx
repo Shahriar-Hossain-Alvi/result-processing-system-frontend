@@ -33,7 +33,7 @@ const useAxiosInterceptor = () => {
                         console.log("Access token expired. Attempting to refresh...");
 
                         // call the /refresh route
-                        const response = await axios.post('/auth/refresh', {}, { withCredentials: true });
+                        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/refresh`, {}, { withCredentials: true });
                         console.log("Token refreshed successfully");
 
                         return axiosSecure(originalRequest); // send the original request again
