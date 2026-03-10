@@ -40,7 +40,7 @@ const CreateNewCourseAssignment = ({ allDepartments, isAllDepartmentsPending, al
             if (!debouncedTeacherSearch) return [];
 
             const res = await axiosSecure.get(`/teachers/all/?search=${debouncedTeacherSearch}`);
-            return res.data; // TODO: create api endpoint for this: [{id, name, department: {department_name}}]
+            return res.data;
         },
         enabled: debouncedTeacherSearch.length > 1
     });

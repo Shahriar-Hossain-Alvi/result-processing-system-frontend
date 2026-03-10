@@ -9,6 +9,7 @@ import SingleUserDetails from "../../pages/private/SingleUserDetails.jsx";
 import Subjects from "../../pages/admin/Subjects.jsx";
 import AssignedCourses from "../../pages/admin/AssignedCourses.jsx";
 import Marks from "../../pages/admin/Marks.jsx";
+import Results from "../../pages/private/Results.jsx";
 
 
 const AdminRoutes = (
@@ -26,7 +27,7 @@ const AdminRoutes = (
         <Route path="allUser" element={<AllUser />} />
         <Route path="user/:id" element={<SingleUserDetails />} />
         <Route path="marks" element={<Marks />} />
-        {/* <Route path="insertMarks" element={<AdminDashboard />} /> */}
+        <Route path="results" element={<Results />} />
         <Route path="subjects" element={<Subjects />} />
         <Route path="assignedCourses" element={<AssignedCourses />} />
         <Route path="departmentsAndSemesters" element={<DepartmentsAndSemesters />} />

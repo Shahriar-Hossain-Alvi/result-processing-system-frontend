@@ -23,16 +23,14 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
 
             // Autofill result challenge status
             updatedResultChallengeStatus: mark?.result_challenge_status || "none", // challenged, resolved or none
-            updatedResultChallengePaymentStatus: mark?.result_challenge_payment_status !== null ? mark?.result_challenge_payment_status.toString() : "false", // paid or not (true, false or null)
+            // updatedResultChallengePaymentStatus: mark?.result_challenge_payment_status !== null ? mark?.result_challenge_payment_status.toString() : "false", // paid or not (true, false or null)
+            updatedResultChallengePaymentStatus: mark?.result_challenge_payment_status === true ? "true" : "false",
         }
     });
 
     // Add a state to track if THIS specific modal is open
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
-    // console.log(mark);
-
 
     // Update Mark Function
     const updateStudentsMark = async (data) => {
@@ -48,9 +46,15 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
 
         if (data.updatedResultStatus && data.updatedResultStatus !== mark.result_status) update_data.result_status = data.updatedResultStatus;
 
-        if (data.updatedResultChallengePaymentStatus === "true" && mark?.result_challenge_payment_status !== true) update_data.result_challenge_payment_status = true;
+        // get the value
+        const newPaymentValue = data.updatedResultChallengePaymentStatus === "true";
 
-        if (data.updatedResultChallengePaymentStatus === "false" && mark?.result_challenge_payment_status !== false) update_data.result_challenge_payment_status = false;
+        // convert to boolean
+        const currentDBValue = !!mark?.result_challenge_payment_status;
+
+        if (newPaymentValue !== currentDBValue) {
+            update_data.result_challenge_payment_status = newPaymentValue;
+        }
 
         if (data.updatedResultChallengeStatus !== mark.result_challenge_status) update_data.result_challenge_status = data.updatedResultChallengeStatus;
 
@@ -80,8 +84,6 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
             allMarksWithFiltersRefetch();
         }
     };
-
-    // console.log(mark);
 
     return (
         <div>
