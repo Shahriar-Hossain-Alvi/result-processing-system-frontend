@@ -159,6 +159,32 @@ const Marks = () => {
         }
     }
 
+    console.log(allMarksWithFilters);
+
+    // publish result in bulk
+    const publish_result_bulk = async (department_id, semester_id, session) => {
+        const update_data = {
+            semester_id: semester_id,
+            department_id: department_id,
+            session: session
+        }
+        try {
+            setIsFormLoading(true);
+            const res = await axiosSecure.patch("/marks/batch_publish", update_data);
+            allMarksWithFiltersRefetch();
+            toast.success(res?.data?.message);
+        } catch (error) {
+            console.log(error);
+            const message = errorMessageParser(error);
+            toast.error(message || 'Failed to publish results');
+        } finally {
+            setIsFormLoading(false);
+            allDepartmentsRefetch();
+            totalSemestersRefetch();
+            allMarksWithFiltersRefetch();
+        }
+    }
+
     return (
         <div className='bg-base-100 p-4 rounded-xl min-h-dvh'>
             <div className='flex justify-between'>
@@ -182,6 +208,7 @@ const Marks = () => {
                         <select
                             name="department_id"
                             className="select w-full uppercase"
+                            disabled={isAllDepartmentsPending}
                             value={filters.department_id}
                             onChange={handleFilterChange}
                         >
@@ -198,6 +225,7 @@ const Marks = () => {
                         <select
                             name="semester_id"
                             className="select w-full uppercase"
+                            disabled={isSemesterPending}
                             value={filters.semester_id}
                             onChange={handleFilterChange}
                         >
@@ -272,9 +300,15 @@ const Marks = () => {
                                 onChange={() => setActiveIndexForAccordion(idx)}
                             />
 
-                            <div className="collapse-title font-semibold capitalize">{category.department_name.split(" - ")[0].toUpperCase()} - {category.semester_name} Semester ({category.session})</div>
+                            <div className="collapse-title font-semibold capitalize">
+                                {category.department_name.split(" - ")[0].toUpperCase()} - {category.semester_name} Semester ({category.session})
+                            </div>
 
                             <div className="collapse-content text-sm">
+                                <div className='text-end'>
+                                    <button onClick={() => publish_result_bulk(category.department_id, category.semester_id, category.session)} className="btn btn-sm btn-success" disabled={isFormLoading}>Publish Result</button>
+                                </div>
+
                                 <div className="overflow-x-auto">
                                     <table className="table table-xs table-pin-cols">
                                         <thead>
