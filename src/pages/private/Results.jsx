@@ -112,8 +112,6 @@ const Results = () => {
         downloadLink.click();
     };
 
-    console.log(singleSearchedResult);
-
     return (
         <div className='bg-base-100 p-4 rounded-xl min-h-dvh'>
             <SectionHeader section_title="Results" />

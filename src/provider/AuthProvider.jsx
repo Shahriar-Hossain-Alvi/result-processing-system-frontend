@@ -66,7 +66,7 @@ const AuthProvider = ({ children }) => {
         if (!bypassBackendCall) {
             try {
                 const res = await axiosSecure.post('/auth/logout');
-                console.log("Logout message", res?.data?.message);
+                console.log(res?.data?.message);
                 toast.success(res?.data?.message);
             } catch (error) {
                 console.error("Backend logout failed", error);
