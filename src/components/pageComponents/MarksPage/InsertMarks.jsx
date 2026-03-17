@@ -3,7 +3,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure.jsx';
 import { set, useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { FaPlus } from 'react-icons/fa6';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useDebounce } from '../../../hooks/useDebounce.jsx';
@@ -346,7 +346,7 @@ const InsertMarks = ({ allMarksWithFiltersRefetch, allDepartmentsRefetch, totalS
                                     // @ts-ignore
                                     document.getElementById('insert_marks_modal').close();
                                 }}>Cancel</button>
-                                <button type="submit" className="btn btn-primary min-w-[120px]" disabled={isLoading}>
+                                <button type="submit" className="btn btn-primary min-w-30" disabled={isLoading}>
                                     {isLoading ? <AiOutlineLoading3Quarters className="animate-spin" /> : "Insert Marks"}
                                 </button>
                             </div>

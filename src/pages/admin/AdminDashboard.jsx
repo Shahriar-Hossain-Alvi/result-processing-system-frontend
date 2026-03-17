@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
 import AdminDashboardCards from '../../components/ui/AdminDashboardCards.jsx';
 import SectionHeader from '../../utils/SectionHeader/SectionHeader.jsx';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import useTheme from '../../hooks/useTheme.jsx';
 import { FaEye, FaEyeSlash } from 'react-icons/fa6';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth.jsx';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
 
 const AdminDashboard = () => {

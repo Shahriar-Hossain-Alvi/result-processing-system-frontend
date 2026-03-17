@@ -3,9 +3,8 @@ import SectionHeader from '../../utils/SectionHeader/SectionHeader.jsx';
 import { useDebounce } from '../../hooks/useDebounce.jsx';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
-import useAuth from '../../hooks/useAuth.jsx';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import useTheme from '../../hooks/useTheme.jsx';
 import { BsFiletypePdf } from 'react-icons/bs';
 
@@ -187,21 +186,14 @@ const Results = () => {
 
                 {/* show the result */}
                 <div>
-                    {/* State 1: User hasn't filled filters yet */}
+                    {/* If all the filters are not selected */}
                     {(!filters.department_id || !filters.semester_id || debouncedSearch.length <= 2) && (
                         <div className="text-center py-10 text-warning opacity-70">
                             Please select Department, Semester, and enter Registration to view results.
                         </div>
                     )}
 
-                    {/* State 2: Loading */}
-                    {isSingleSearchedResultPending && filters.department_id && filters.semester_id && (
-                        <div className="flex justify-center py-10">
-                            <span className="loading loading-spinner loading-lg"></span>
-                        </div>
-                    )}
-
-                    {/* State 3: Data display */}
+                    {/* Data display */}
                     {singleSearchedResult && (
                         <div className="results-container">
                             <h2 className='text-center text-lg text-error'>{singleSearchedResult?.message}</h2>
