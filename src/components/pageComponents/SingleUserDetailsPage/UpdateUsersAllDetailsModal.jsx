@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useQuery } from '@tanstack/react-query';
 import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 const UpdateUsersAllDetailsModal = ({ singleUserDetails, singleUserDetailsRefetch, user_specific_table_id }) => {
     const axiosSecure = useAxiosSecure();
