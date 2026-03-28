@@ -2,6 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure.jsx";
 import useAuth from "../../hooks/useAuth.jsx";
 import SectionHeader from "../../utils/SectionHeader/SectionHeader.jsx";
+import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
+import { useEffect } from "react";
+import errorMessageParser from "../../utils/errorMessageParser/errorMessageParser.js";
+import { toast } from "react-hot-toast";
 
 const OfferedCourses = () => {
     const { user } = useAuth();
@@ -15,15 +19,24 @@ const OfferedCourses = () => {
         enabled: !!user
     })
 
-    console.log(offeredCourses);
+    useEffect(() => {
+        if (isError) {
+            console.log(error);
+            const message = errorMessageParser(error);
+            toast.error(message || "Failed to fetch offered courses");
+        }
+    }, [isError])
+
 
     return (
         <div>
             <SectionHeader section_title='My Offered Courses' />
 
             <div>
+                {isPending && <LoadingSpinner />}
+                {offeredCourses.length === 0 && <h2 className="text-xl font-semibold">No Offered Courses found</h2>}
                 {
-                    offeredCourses?.map((offeredCourse, idx) => (
+                    !isPending && offeredCourses.length > 0 && offeredCourses?.map((offeredCourse, idx) => (
                         <div key={idx} className="mb-5">
                             <h2 className="uppercase text-center text-xl font-semibold">{offeredCourse?.semester_name} Semester</h2>
                             {offeredCourse.subject_name}
