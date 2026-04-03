@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import SectionHeader from '../../utils/SectionHeader/SectionHeader.jsx';
 import { useQuery } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
 import { AllUserTableSkeleton } from '../../components/ui/Skeletons.jsx';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
@@ -147,8 +147,8 @@ const AllUser = () => {
                                     <th>Username/Email</th>
                                     <th>Mobile</th>
                                     <th>Department</th>
-                                    <th>Details</th>
                                     <th>Status</th>
+                                    {/* <th>Details</th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -159,8 +159,20 @@ const AllUser = () => {
 
                                             {/* Name */}
                                             <td>
-                                                {user.role === "student" && user?.student?.name}
-                                                {user.role === "teacher" && user?.teacher?.name}
+                                                <Link
+                                                    className='link link-hover link-info'
+                                                    to={`/admin/user/${user?.id}`}
+                                                    target='_blank'
+                                                >
+                                                    {user.role === "student" && user?.student?.name}
+                                                </Link>
+                                                <Link
+                                                    className='link link-hover link-info'
+                                                    to={`/admin/user/${user?.id}`}
+                                                    target='_blank'
+                                                >
+                                                    {user.role === "teacher" && user?.teacher?.name}
+                                                </Link>
                                             </td>
 
                                             <td><span className={`badge badge-sm badge-soft ${(user?.role === "admin" || user?.role === "super_admin") && "badge-warning"} ${user?.role === "student" && "badge-info"} ${user?.role === "teacher" && "badge-secondary"}`}>{user.role}</span></td>
@@ -186,7 +198,7 @@ const AllUser = () => {
                                             </td>
 
                                             {/* details */}
-                                            <td>
+                                            {/* <td>
                                                 {
                                                     (user?.role !== "admin" && user?.role !== "super_admin") &&
                                                     <Link
@@ -195,7 +207,7 @@ const AllUser = () => {
                                                         className="link link-primary link-hover"
                                                     >Details
                                                     </Link>}
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     )
                                 }

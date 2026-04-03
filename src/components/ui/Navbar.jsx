@@ -15,8 +15,8 @@ const Navbar = () => {
     }
 
     return (
-        <div id='navbar' className="navbar bg-base-100 shadow-sm ">
-            <div className="flex-1">
+        <div id='navbar' className="navbar bg-base-100 shadow-sm justify-between">
+            <div className="">
                 <NavLink to="/" className="text-xl">
                     {/* <img src={eduTrack_logo} className='max-h-20 w-28' alt="edutrack logo" /> */}
                     {

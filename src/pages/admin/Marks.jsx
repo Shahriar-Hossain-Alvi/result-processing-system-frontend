@@ -13,6 +13,7 @@ import UpdateAStudentsSingleMark from '../../components/pageComponents/MarksPage
 import { FaCheckCircle } from 'react-icons/fa';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useDebounce } from '../../hooks/useDebounce.jsx';
+import { Link } from 'react-router-dom';
 
 const Marks = () => {
     const [theme] = useTheme();
@@ -79,8 +80,6 @@ const Marks = () => {
 
             // Use the debounced value for the API call
             if (debouncedSearch) params.append('session', debouncedSearch);
-
-            console.log(params.toString());
 
             const res = await axiosSecure(`/marks/get_all_marks_with_filters?${params.toString()}`);
             return res.data;
@@ -158,8 +157,6 @@ const Marks = () => {
             allDepartmentsRefetch();
         }
     }
-
-    console.log(allMarksWithFilters);
 
     // publish result in bulk
     const publish_result_bulk = async (department_id, semester_id, session) => {
@@ -331,7 +328,14 @@ const Marks = () => {
                                                 category?.marks?.map((mark, index) =>
                                                     <tr key={mark?.id}>
                                                         <th>{index + 1}</th>
-                                                        <td>{mark?.student?.name}</td>
+                                                        <td>
+                                                            <Link
+                                                                className='link link-hover link-info'
+                                                                target='_blank'
+                                                                to={`/admin/user/${mark?.student?.user_id}`}>
+                                                                {mark?.student?.name}
+                                                            </Link>
+                                                        </td>
 
                                                         <td className='text-center'>{mark?.student?.registration}</td>
 

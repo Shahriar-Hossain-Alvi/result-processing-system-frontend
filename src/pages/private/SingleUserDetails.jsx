@@ -217,7 +217,7 @@ const SingleUserDetails = () => {
 
 
                             {/* username, email, mobile */}
-                            <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 space-y-2 sm:space-y-0">
+                            <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3 space-y-2 sm:space-y-0">
                                 <div>
                                     <h4 className="text-gray-500">Username</h4>
                                     <h4 className="font-semibold">{username}</h4>
