@@ -4,7 +4,7 @@ import SectionHeader from "../../utils/SectionHeader/SectionHeader.jsx";
 import CreateNewCourseAssignment from "../../components/pageComponents/AssignedCourses/CreateNewCourseAssignment.jsx";
 import { useEffect, useState } from "react";
 import errorMessageParser from "../../utils/errorMessageParser/errorMessageParser.js";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import useAuth from "../../hooks/useAuth.jsx";

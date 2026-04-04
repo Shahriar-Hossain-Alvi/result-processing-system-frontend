@@ -5,7 +5,7 @@ import { FaEye, FaLock } from 'react-icons/fa6';
 import useAuth from '../../hooks/useAuth.jsx';
 import { useNavigate } from 'react-router-dom';
 import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
 // @ts-ignore
 import logoLightMode from "../../assets/edutrack_logo.png";
@@ -43,7 +43,7 @@ const Signin = () => {
             setFormLoading(true);
             // 1: get token in httponly cookie from backend
             const res = await axiosSecure.post('/auth/login', formData);
-            console.log(res);
+
             if (res?.data?.message === "Login successful") {
                 toast.success(res?.data?.message);
                 // 2: Fetch user info using the new cookie

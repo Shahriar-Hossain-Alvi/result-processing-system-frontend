@@ -1,7 +1,5 @@
-import React from 'react';
 import { Route } from 'react-router-dom';
 import StudentLayout from '../layout/StudentLayout.jsx';
-import StudentDashboard from '../../pages/student/StudentDashboard.jsx';
 import PrivateRoutes from '../../components/RouteHandlers/PrivateRoutes.jsx';
 import StudentProfile from '../../pages/student/StudentProfile.jsx';
 import SingleStudentMarks from '../../pages/student/SingleStudentMarks.jsx';
@@ -17,7 +15,6 @@ const StudentRoutes = (
             </PrivateRoutes>
         }
     >
-        {/* <Route  element={<StudentDashboard />} /> */}
         <Route index element={<StudentProfile />} />
         <Route path="my-courses" element={<OfferedCourses />} />
         <Route path="marks" element={<SingleStudentMarks />} />

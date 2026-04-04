@@ -1,23 +1,22 @@
-import { useQuery } from "@tanstack/react-query";
-import SectionHeader from "../../utils/SectionHeader/SectionHeader.jsx";
-import useAxiosSecure from "../../hooks/useAxiosSecure.jsx";
-import useAuth from "../../hooks/useAuth.jsx";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { SingleUserDetailsSkeleton } from "../../components/ui/Skeletons.jsx";
-import errorMessageParser from "../../utils/errorMessageParser/errorMessageParser.js";
+import React, { useState } from 'react';
+import useAuth from '../../hooks/useAuth.jsx';
+import useTheme from '../../hooks/useTheme.jsx';
+import useAxiosSecure from '../../hooks/useAxiosSecure.jsx';
+import { useForm } from 'react-hook-form';
+import { useQuery } from '@tanstack/react-query';
+import { SingleUserDetailsSkeleton } from '../../components/ui/Skeletons.jsx';
+import errorMessageParser from '../../utils/errorMessageParser/errorMessageParser.js';
 // @ts-ignore
-import defaultImage from "../../assets/blank-profile-picture.png";
-import { ImZoomIn } from "react-icons/im";
-import { toast } from "react-hot-toast";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import useTheme from "../../hooks/useTheme.jsx";
-import { IoIosNotifications } from "react-icons/io";
-import { RiCheckDoubleLine } from "react-icons/ri";
+import defaultImage from "../../assets/blank-profile-picture.png"
+import { toast } from 'react-hot-toast';
+import { IoIosNotifications } from 'react-icons/io';
+import { RiCheckDoubleLine } from 'react-icons/ri';
+import SectionHeader from '../../utils/SectionHeader/SectionHeader.jsx';
+import { FaEye, FaEyeSlash } from 'react-icons/fa6';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { ImZoomIn } from 'react-icons/im';
 
-
-const StudentProfile = () => {
+const TeacherProfile = () => {
     const [theme] = useTheme();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
@@ -28,7 +27,7 @@ const StudentProfile = () => {
     const { data: userProfileData, isPending, isError, error } = useQuery({
         queryKey: ['userProfileData'],
         queryFn: async () => {
-            const res = await axiosSecure(`/students/${user?.id}`);
+            const res = await axiosSecure(`/teachers/${user?.id}`);
             return res.data;
         },
         enabled: !!user
@@ -55,8 +54,10 @@ const StudentProfile = () => {
         return <h2 className="text-error text-2xl text-center">{message || 'User Details not found'}</h2>;
     }
 
+    console.log(userProfileData);
+
     // user image
-    const userImage = userProfileData?.photo_url || defaultImage;
+    const userImage = userProfileData?.user_data?.photo_url || defaultImage;
 
     const updatePassword = async (data) => {
         const update_data = {
@@ -96,6 +97,7 @@ const StudentProfile = () => {
             setIsFormLoading(false);
         }
     }
+
     const show_indicator = notification?.some(n => n?.is_read === false);
 
     // mark notification as read
@@ -119,6 +121,7 @@ const StudentProfile = () => {
         }
 
     }
+
 
     return (
         <div>
@@ -268,19 +271,19 @@ const StudentProfile = () => {
                         {/* Name & Status */}
                         <div className="flex items-center gap-2 mt-4 md:mt-0">
                             <h2 className="text-xl sm:text-3xl font-bold">
-                                {userProfileData?.name}
+                                {userProfileData?.user_data?.name}
                             </h2>
-                            <button className={`badge text-black rounded-full ${userProfileData?.user?.is_active ? "bg-success" : "bg-error"}`}>{userProfileData?.user?.is_active ? "Active" : "Disabled"}</button>
+                            <button className={`badge text-black rounded-full ${userProfileData?.user_data?.user?.is_active ? "bg-success" : "bg-error"}`}>{userProfileData?.user_data?.user?.is_active ? "Active" : "Disabled"}</button>
                         </div>
 
 
                         {/* username, email, mobile */}
                         <div className="mt-3 space-y-2">
-                            <h4 className="text-gray-500">Username: <span className="font-semibold text-base-content">{userProfileData?.user?.username}</span></h4>
+                            <h4 className="text-gray-500">Username: <span className="font-semibold text-base-content">{userProfileData?.user_data?.user?.username}</span></h4>
 
-                            <h4 className="text-gray-500">Email: <span className="font-semibold text-base-content">{userProfileData?.user?.email}</span></h4>
+                            <h4 className="text-gray-500">Email: <span className="font-semibold text-base-content">{userProfileData?.user_data?.user?.email}</span></h4>
 
-                            <h4 className="text-gray-500">Mobile: <span className="font-semibold">{userProfileData?.user?.mobile_number}</span></h4>
+                            <h4 className="text-gray-500">Mobile: <span className="font-semibold">{userProfileData?.user_data?.user?.mobile_number}</span></h4>
                         </div>
                     </div>
                 </div>
@@ -293,48 +296,25 @@ const StudentProfile = () => {
                     <SectionHeader section_title={"More Details"} />
                 </div>
 
-
-                {/* Student Specific Data */}
-                {
-                    <div className="grid sm:grid-cols-3 justify-between items-center md:text-lg mb-4 space-y-4 sm:space-y-0 sm:gap-4">
-                        {/* Registration Number */}
-                        <div>
-                            <h4 className="text-gray-500">Registration Number</h4>
-                            <h4 className="font-semibold">{userProfileData?.registration}</h4>
-                        </div>
-
-                        {/* Current Semester */}
-                        <div className="capitalize">
-                            <h4 className="text-gray-500">Current Semester</h4>
-                            <h4 className="font-semibold">{
-                                userProfileData?.semester?.semester_number
-                                ||
-                                <span className="text-error">N/A</span>
-                            }(
-                                {userProfileData?.semester?.semester_name
-                                    ||
-                                    <span className="text-error">N/A</span>
-                                })</h4>
-                        </div>
-
-                        {/* Session */}
-                        <div>
-                            <h4 className="text-gray-500">Session</h4>
-                            <h4 className="font-medium">{userProfileData?.session || <span className="text-error">N/A</span>}</h4>
-                        </div>
-                    </div>
-                }
-
                 <div className="md:text-lg">
                     <div className="grid sm:grid-cols-3 justify-between items-center mb-4 space-y-4 sm:space-y-0 sm:gap-4">
+
+                        <div>
+                            <h4 className='text-gray-500'>Total Assigned Courses</h4>
+                            <h4 className='font-medium'>
+
+                                {userProfileData?.total_assigned_courses}
+                            </h4>
+                        </div>
+
                         {/* Date of Birth */}
                         <div>
                             <h4 className="text-gray-500">Date of Birth</h4>
 
                             <h4 className="font-medium">
-                                {userProfileData?.date_of_birth?.split("T")[0]}
+                                {userProfileData?.user_data?.date_of_birth?.split("T")[0]}
 
-                                {(userProfileData.date_of_birth === null) && <span className="text-error">N/A</span>}
+                                {(userProfileData?.user_data?.date_of_birth === null) && <span className="text-error">N/A</span>}
 
                                 <span className="text-sm italic ml-1">(YYYY-MM-DD)</span>
                             </h4>
@@ -345,10 +325,10 @@ const StudentProfile = () => {
                             <h4 className="text-gray-500">Department</h4>
                             <h4 className="font-medium">
                                 {
-                                    userProfileData?.department?.department_name.toUpperCase()
+                                    userProfileData?.user_data?.department?.department_name.toUpperCase()
                                 }
                                 {
-                                    (userProfileData.department === null) && <span className="text-error">Not Assigned</span>
+                                    (userProfileData?.user_data?.department === null) && <span className="text-error">Not Assigned</span>
                                 }
                             </h4>
                         </div>
@@ -358,8 +338,8 @@ const StudentProfile = () => {
                         {/* Present Address */}
                         <h4 className="text-gray-500">Present Address</h4>
                         <h4>
-                            {userProfileData.present_address}
-                            {userProfileData.present_address === "" && <span className="text-error">N/A</span>}
+                            {userProfileData?.user_data?.present_address}
+                            {userProfileData?.user_data?.present_address === "" && <span className="text-error">N/A</span>}
                         </h4>
                     </div>
 
@@ -368,8 +348,8 @@ const StudentProfile = () => {
                         <h4 className="text-gray-500">Permanent Address</h4>
 
                         <h4 className="font-medium">
-                            {userProfileData.permanent_address}
-                            {userProfileData.permanent_address === "" && <span className="text-error">N/A</span>}
+                            {userProfileData?.user_data?.permanent_address}
+                            {userProfileData?.user_data?.permanent_address === "" && <span className="text-error">N/A</span>}
                         </h4>
                     </div>
                 </div>
@@ -392,4 +372,4 @@ const StudentProfile = () => {
     );
 };
 
-export default StudentProfile;
+export default TeacherProfile;

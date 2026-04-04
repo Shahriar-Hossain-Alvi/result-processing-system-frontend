@@ -1,7 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import axiosSecure from "../utils/axios/axiosSecure.js";
 import axiosPublic from "../utils/axios/axiosPublic.js";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import axios from "axios";
 
 

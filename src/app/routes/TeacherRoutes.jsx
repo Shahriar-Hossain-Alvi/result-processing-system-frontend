@@ -1,7 +1,8 @@
 import { Route } from 'react-router-dom';
 import TeacherLayout from '../layout/TeacherLayout.jsx';
-import TeacherDashboard from '../../pages/teacher/TeacherDashboard.jsx';
 import PrivateRoutes from '../../components/RouteHandlers/PrivateRoutes.jsx';
+import TeacherProfile from '../../pages/teacher/TeacherProfile.jsx';
+import OfferedCourses from '../../pages/student/OfferedCourses.jsx';
 
 const TeacherRoutes = (
     <Route
@@ -12,7 +13,10 @@ const TeacherRoutes = (
             </PrivateRoutes>
         }>
 
-        <Route index element={<TeacherDashboard />} />
+        <Route index element={<TeacherProfile />} />
+        <Route path="my-courses" element={<OfferedCourses />} />
+        {/* <Route path="my-courses" element={<OfferedCourses />} /> */}
+        {/* <Route path="my-courses" element={<OfferedCourses />} /> */}
     </Route >
 )
 

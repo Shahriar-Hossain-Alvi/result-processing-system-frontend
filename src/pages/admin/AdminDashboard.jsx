@@ -27,7 +27,7 @@ const AdminDashboard = () => {
         }
     })
 
-    console.log(dashboardCounts);
+    // console.log(dashboardCounts);
 
     const updateAdminPassword = async (data) => {
         const update_data = {
