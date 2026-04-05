@@ -1,13 +1,15 @@
 // @ts-nocheck
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure.jsx';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { FaEdit } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import errorMessageParser from '../../../utils/errorMessageParser/errorMessageParser.js';
+import useAuth from '../../../hooks/useAuth.jsx';
 
 const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
+    const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const modalId = `update_mark_modal_${mark?.id}`; // unique id for each row to avoid always showing the first data
     const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm({
@@ -88,7 +90,7 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
     return (
         <div>
             <div>
-                {/* Create New Course Assignment Modal */}
+                {/* update Course Assignment Modal */}
                 <button className='btn btn-ghost bg-transparent border-0 shadow-none btn-primary hover:bg-primary hover:text-white' onClick={() => {
                     setIsOpen(true);
                     reset({
@@ -113,7 +115,17 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
                 <dialog id={modalId} onClose={() => setIsOpen(false)} className="modal">
                     <div className="modal-box max-w-3xl">
                         <div className='mb-6 border-b pb-2'>
-                            <h3 className="font-bold text-2xl mb-2">Update Mark & Result Status</h3>
+                            {
+                                user?.role === "teacher" &&
+                                <h3 className="font-bold text-2xl mb-2">Update Mark</h3>
+                            }
+                            {user?.role === "teacher" && <p className='text-error'>Note: Only update the marks that are assigned to you.</p>}
+
+                            {(user?.role === "admin" || user?.role === "super_admin") &&
+                                <h3 className="font-bold text-2xl mb-2">Update Mark & Result Status</h3>
+                            }
+
+
                             <h3 className='text-lg'>Name: {mark?.student?.name || ""}</h3>
 
                             <div className='flex gap-2'>
@@ -223,15 +235,17 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
                                 </fieldset>
 
                                 {/* Result Status */}
-                                <fieldset className="space-y-1 fieldset">
-                                    <label className="label font-semibold">Result Status</label>
-                                    <select
-                                        {...register("updatedResultStatus")}
-                                        className="select select-bordered w-full max-w-xs">
-                                        <option value="published">Published</option>
-                                        <option value="unpublished">Unpublished</option>
-                                    </select>
-                                </fieldset>
+                                {
+                                    (user?.role === "admin" || user?.role === "super_admin") &&
+                                    <fieldset className="space-y-1 fieldset">
+                                        <label className="label font-semibold">Result Status</label>
+                                        <select
+                                            {...register("updatedResultStatus")}
+                                            className="select select-bordered w-full max-w-xs">
+                                            <option value="published">Published</option>
+                                            <option value="unpublished">Unpublished</option>
+                                        </select>
+                                    </fieldset>}
 
                                 {/* result challenge status is not "none" */}
                                 {
@@ -239,28 +253,32 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
                                     (
                                         <>
                                             {/* Result Challenge Status */}
-                                            <fieldset className="space-y-1 fieldset">
-                                                <label className="label font-semibold">Challenge Status</label>
-                                                <select
-                                                    {...register("updatedResultChallengeStatus")}
-                                                    className={`select select-bordered w-full max-w-xs ${mark?.result_challenge_status === "resolved" && "border-success"} ${mark?.result_challenge_status === "challenged" && "border-error"}`}>
-                                                    <option disabled value="none">Not Challenged</option>
-                                                    <option value="challenged">Challenged</option>
-                                                    <option value="resolved">Resolved</option>
-                                                </select>
-                                            </fieldset>
+                                            {
+                                                (user?.role === "admin" || user?.role === "super_admin") &&
+                                                <fieldset className="space-y-1 fieldset">
+                                                    <label className="label font-semibold">Challenge Status</label>
+                                                    <select
+                                                        {...register("updatedResultChallengeStatus")}
+                                                        className={`select select-bordered w-full max-w-xs ${mark?.result_challenge_status === "resolved" && "border-success"} ${mark?.result_challenge_status === "challenged" && "border-error"}`}>
+                                                        <option disabled value="none">Not Challenged</option>
+                                                        <option value="challenged">Challenged</option>
+                                                        <option value="resolved">Resolved</option>
+                                                    </select>
+                                                </fieldset>}
 
                                             {/* Challenge Payment Status */}
-                                            <fieldset className="space-y-1 fieldset">
-                                                <label className="label font-semibold">Challenge payment Status</label>
-                                                <select
-                                                    {...register("updatedResultChallengePaymentStatus")}
-                                                    className={`select select-bordered w-full max-w-xs ${mark?.result_challenge_payment_status === false && "border-error"} ${mark?.result_challenge_payment_status === true && "border-success"}`}>
-                                                    <option value="true">Paid</option>
-                                                    <option value="false">Not Paid</option>
-                                                </select>
-                                                <span className='text-xs text-warning'>Update after receiving payment receipts</span>
-                                            </fieldset>
+                                            {
+                                                (user?.role === "admin" || user?.role === "super_admin") &&
+                                                <fieldset className="space-y-1 fieldset">
+                                                    <label className="label font-semibold">Challenge payment Status</label>
+                                                    <select
+                                                        {...register("updatedResultChallengePaymentStatus")}
+                                                        className={`select select-bordered w-full max-w-xs ${mark?.result_challenge_payment_status === false && "border-error"} ${mark?.result_challenge_payment_status === true && "border-success"}`}>
+                                                        <option value="true">Paid</option>
+                                                        <option value="false">Not Paid</option>
+                                                    </select>
+                                                    <span className='text-xs text-warning'>Update after receiving payment receipts</span>
+                                                </fieldset>}
                                         </>
                                     )}
                             </div>
@@ -272,7 +290,7 @@ const UpdateAStudentsSingleMark = ({ mark, allMarksWithFiltersRefetch }) => {
                                     setIsOpen(false);
                                     document.getElementById(modalId).close();
                                 }}>Cancel</button>
-                                <button className="btn btn-primary min-w-[120px]" disabled={isLoading}>
+                                <button className="btn btn-primary min-w-30" disabled={isLoading}>
                                     {isLoading ? <AiOutlineLoading3Quarters className="animate-spin" /> : "Update"}
                                 </button>
                             </div>

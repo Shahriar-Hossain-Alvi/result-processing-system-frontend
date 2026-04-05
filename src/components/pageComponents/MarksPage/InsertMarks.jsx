@@ -8,8 +8,10 @@ import { FaPlus } from 'react-icons/fa6';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useDebounce } from '../../../hooks/useDebounce.jsx';
 import { FaSearch } from 'react-icons/fa';
+import useAuth from '../../../hooks/useAuth.jsx';
 
 const InsertMarks = ({ allMarksWithFiltersRefetch, allDepartmentsRefetch, totalSemestersRefetch }) => {
+    const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm();
     const [isLoading, setIsLoading] = useState(false);
@@ -62,16 +64,11 @@ const InsertMarks = ({ allMarksWithFiltersRefetch, allDepartmentsRefetch, totalS
             queryKey: ['subjectsForMarking'],
             queryFn: async () => {
                 const student = allStudentsForMarks[0];
-                // const students_current_semester_id = allStudentsForMarks[0]?.semester_id
-                // const students_department_id = allStudentsForMarks[0]?.department_id
 
                 const params = new URLSearchParams({
                     students_current_semester_id: student.semester_id,
                     students_department_id: student.department_id
                 });
-                // if (students_current_semester_id) params.append('students_current_semester_id', students_current_semester_id);
-                // if (students_department_id) params.append('students_department_id', students_department_id);
-                // TODO: add teachers id if teacher inserts the marks
 
                 const res = await axiosSecure(`/subject_offering/offered_subject_lists_for_marking/?${params.toString()}`);
                 return res?.data;

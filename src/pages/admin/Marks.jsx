@@ -302,9 +302,13 @@ const Marks = () => {
                             </div>
 
                             <div className="collapse-content text-sm">
-                                <div className='text-end'>
-                                    <button onClick={() => publish_result_bulk(category.department_id, category.semester_id, category.session)} className="btn btn-sm btn-success" disabled={isFormLoading}>Publish Result</button>
-                                </div>
+                                {
+                                    (user?.role == "admin" || user?.role == "super_admin") &&
+                                    <div className='text-end'>
+                                        <button
+                                            onClick={() => publish_result_bulk(category.department_id, category.semester_id, category.session)} className="btn btn-sm btn-success" disabled={isFormLoading}>Publish Result</button>
+                                    </div>
+                                }
 
                                 <div className="overflow-x-auto">
                                     <table className="table table-xs table-pin-cols">

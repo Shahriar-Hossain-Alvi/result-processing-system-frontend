@@ -48,19 +48,13 @@ const TeacherLayout = () => {
                 </NavLink>
             </li>
 
-            {/* <li>
-                <NavLink to="/student/marks" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Insert & edit marks">
+            <li>
+                <NavLink to="/teacher/marks" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Insert & edit marks">
                     <GrTableAdd className='w-4 h-4' />
-                    <p className="is-drawer-close:hidden">All Marks</p>
+                    <p className="is-drawer-close:hidden">Insert Marks</p>
                 </NavLink>
-            </li> */}
+            </li>
 
-            {/* <li>
-                <NavLink to="/student/results" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Results">
-                    <LuFileSpreadsheet className='w-4 h-4' />
-                    <p className="is-drawer-close:hidden">Check Result</p>
-                </NavLink>
-            </li> */}
 
 
             {/* logout button */}

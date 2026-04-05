@@ -3,6 +3,7 @@ import TeacherLayout from '../layout/TeacherLayout.jsx';
 import PrivateRoutes from '../../components/RouteHandlers/PrivateRoutes.jsx';
 import TeacherProfile from '../../pages/teacher/TeacherProfile.jsx';
 import MyAssignedCourses from '../../pages/teacher/MyAssignedCourses.jsx';
+import Marks from '../../pages/admin/Marks.jsx';
 
 const TeacherRoutes = (
     <Route
@@ -15,8 +16,7 @@ const TeacherRoutes = (
 
         <Route index element={<TeacherProfile />} />
         <Route path="my-courses" element={<MyAssignedCourses />} />
-        {/* <Route path="my-courses" element={<OfferedCourses />} /> */}
-        {/* <Route path="my-courses" element={<OfferedCourses />} /> */}
+        <Route path="marks" element={<Marks />} />
     </Route >
 )
 
