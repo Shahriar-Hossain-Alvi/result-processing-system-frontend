@@ -34,12 +34,11 @@ const OfferedCourses = () => {
 
             <div>
                 {isPending && <LoadingSpinner />}
-                {offeredCourses?.length === 0 && <h2 className="text-xl font-semibold">No Offered Courses found</h2>}
+                {offeredCourses?.length === 0 && <h2 className="text-xl text-center text-error font-semibold">No Offered Courses found</h2>}
                 {
                     !isPending && offeredCourses.length > 0 && offeredCourses?.map((offeredCourse, idx) => (
                         <div key={idx} className="mb-5">
                             <h2 className="uppercase text-center text-xl font-semibold">{offeredCourse?.semester_name} Semester</h2>
-                            {offeredCourse.subject_name}
 
                             <div className="overflow-x-auto">
                                 <table className="table">
