@@ -99,7 +99,6 @@ const Marks = () => {
     const allMarksData = allMarksWithFilters?.items || [];
     const totalPages = allMarksWithFilters?.pages || 0;
 
-
     // Handler to update filters
     const handleFilterChange = (e) => {
         const { name, value } = e.target;

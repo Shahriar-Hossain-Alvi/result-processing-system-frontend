@@ -21,8 +21,6 @@ const SingleStudentMarks = () => {
         enabled: !!user
     })
 
-    console.log(allResults);
-
     useEffect(() => {
         if (isError) {
             console.log(error);
@@ -72,14 +70,12 @@ const SingleStudentMarks = () => {
 
     return (
         <div>
-            Challenge Initiation: give options to initiate challenge under 7 days <br />
-
-            GPA/CGPA Calculation: Show GPA/CGPA after each semesters marks <br />
+            {/* TODO: Challenge Initiation: give options to initiate challenge under 7 days <br /> */}
             <SectionHeader section_title="Your Marks" />
 
             <div>
                 {isPending && <LoadingSpinner />}
-                {allResults?.length === 0 && <h2 className="text-xl font-semibold">No Published Results found</h2>}
+                {allResults?.length === 0 && <h2 className="text-xl font-semibold text-center text-error">No Published Results found</h2>}
                 {
                     !isPending && allResults?.length > 0 && allResults?.map((result, idx) => (
                         <div key={idx} className="mb-5">
@@ -153,6 +149,11 @@ const SingleStudentMarks = () => {
                                         ))}
                                     </tbody>
                                 </table>
+                            </div>
+
+                            <div className='flex py-5 bg-base-300 justify-between px-5'>
+                                <h2 className='capitalize text-center text-success text-lg'>{result?.semester_name} Semester GPA: {result?.semester_gpa}</h2>
+                                <h2 className='capitalize text-center text-success text-lg '>CGPA upto this semester: {result?.cgpa_up_to_this_semester}</h2>
                             </div>
                         </div>
                     ))

@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { SingleUserDetailsSkeleton } from "../../components/ui/Skeletons.jsx";
 import errorMessageParser from "../../utils/errorMessageParser/errorMessageParser.js";
-// @ts-ignore
-import defaultImage from "../../assets/blank-profile-picture.png";
 import { ImZoomIn } from "react-icons/im";
 import { toast } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
@@ -15,6 +13,8 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import useTheme from "../../hooks/useTheme.jsx";
 import { IoIosNotifications } from "react-icons/io";
 import { RiCheckDoubleLine } from "react-icons/ri";
+// @ts-ignore
+import defaultImage from "../../assets/blank-profile-picture.png";
 
 
 const StudentProfile = () => {
@@ -64,7 +64,7 @@ const StudentProfile = () => {
     }
 
     // user image
-    const userImage = userProfileData?.photo_url || defaultImage;
+    const userImage = userProfileData?.student?.photo_url || defaultImage;
 
     const updatePassword = async (data) => {
         const update_data = {
@@ -276,19 +276,19 @@ const StudentProfile = () => {
                         {/* Name & Status */}
                         <div className="flex items-center gap-2 mt-4 md:mt-0">
                             <h2 className="text-xl sm:text-3xl font-bold">
-                                {userProfileData?.name}
+                                {userProfileData?.student?.name}
                             </h2>
-                            <button className={`badge text-black rounded-full ${userProfileData?.user?.is_active ? "bg-success" : "bg-error"}`}>{userProfileData?.user?.is_active ? "Active" : "Disabled"}</button>
+                            <button className={`badge text-black rounded-full ${userProfileData?.student?.user?.is_active ? "bg-success" : "bg-error"}`}>{userProfileData?.student?.user?.is_active ? "Active" : "Disabled"}</button>
                         </div>
 
 
                         {/* username, email, mobile */}
                         <div className="mt-3 space-y-2">
-                            <h4 className="text-gray-500">Username: <span className="font-semibold text-base-content">{userProfileData?.user?.username}</span></h4>
+                            <h4 className="text-gray-500">Username: <span className="font-semibold text-base-content">{userProfileData?.student?.user?.username}</span></h4>
 
-                            <h4 className="text-gray-500">Email: <span className="font-semibold text-base-content">{userProfileData?.user?.email}</span></h4>
+                            <h4 className="text-gray-500">Email: <span className="font-semibold text-base-content">{userProfileData?.student?.user?.email}</span></h4>
 
-                            <h4 className="text-gray-500">Mobile: <span className="font-semibold">{userProfileData?.user?.mobile_number}</span></h4>
+                            <h4 className="text-gray-500">Mobile: <span className="font-semibold">{userProfileData?.student?.user?.mobile_number}</span></h4>
                         </div>
                     </div>
                 </div>
@@ -308,27 +308,29 @@ const StudentProfile = () => {
                         {/* Registration Number */}
                         <div>
                             <h4 className="text-gray-500">Registration Number</h4>
-                            <h4 className="font-semibold">{userProfileData?.registration}</h4>
+                            <h4 className="font-semibold">{userProfileData?.student?.registration}</h4>
                         </div>
 
                         {/* Current Semester */}
                         <div className="capitalize">
                             <h4 className="text-gray-500">Current Semester</h4>
                             <h4 className="font-semibold">{
-                                userProfileData?.semester?.semester_number
+                                userProfileData?.student?.semester?.semester_number
                                 ||
                                 <span className="text-error">N/A</span>
-                            }(
-                                {userProfileData?.semester?.semester_name
-                                    ||
-                                    <span className="text-error">N/A</span>
-                                })</h4>
+                            }</h4>
                         </div>
 
                         {/* Session */}
                         <div>
                             <h4 className="text-gray-500">Session</h4>
-                            <h4 className="font-medium">{userProfileData?.session || <span className="text-error">N/A</span>}</h4>
+                            <h4 className="font-medium">{userProfileData?.student?.session || <span className="text-error">N/A</span>}</h4>
+                        </div>
+
+                        {/* Current CGPA */}
+                        <div>
+                            <h4 className="text-gray-500">Current CGPA</h4>
+                            <h4 className="font-medium">{userProfileData?.CGPA || <span className="text-error">N/A</span>}</h4>
                         </div>
                     </div>
                 }
@@ -340,9 +342,9 @@ const StudentProfile = () => {
                             <h4 className="text-gray-500">Date of Birth</h4>
 
                             <h4 className="font-medium">
-                                {userProfileData?.date_of_birth?.split("T")[0]}
+                                {userProfileData?.student?.date_of_birth?.split("T")[0]}
 
-                                {(userProfileData.date_of_birth === null) && <span className="text-error">N/A</span>}
+                                {(userProfileData?.student.date_of_birth === null) && <span className="text-error">N/A</span>}
 
                                 <span className="text-sm italic ml-1">(YYYY-MM-DD)</span>
                             </h4>
@@ -353,10 +355,10 @@ const StudentProfile = () => {
                             <h4 className="text-gray-500">Department</h4>
                             <h4 className="font-medium">
                                 {
-                                    userProfileData?.department?.department_name.toUpperCase()
+                                    userProfileData?.student?.department?.department_name.toUpperCase()
                                 }
                                 {
-                                    (userProfileData.department === null) && <span className="text-error">Not Assigned</span>
+                                    (userProfileData?.student.department === null) && <span className="text-error">Not Assigned</span>
                                 }
                             </h4>
                         </div>
@@ -366,8 +368,8 @@ const StudentProfile = () => {
                         {/* Present Address */}
                         <h4 className="text-gray-500">Present Address</h4>
                         <h4>
-                            {userProfileData.present_address}
-                            {userProfileData.present_address === "" && <span className="text-error">N/A</span>}
+                            {userProfileData?.student.present_address}
+                            {userProfileData?.student.present_address === "" && <span className="text-error">N/A</span>}
                         </h4>
                     </div>
 
@@ -376,8 +378,8 @@ const StudentProfile = () => {
                         <h4 className="text-gray-500">Permanent Address</h4>
 
                         <h4 className="font-medium">
-                            {userProfileData.permanent_address}
-                            {userProfileData.permanent_address === "" && <span className="text-error">N/A</span>}
+                            {userProfileData?.student.permanent_address}
+                            {userProfileData?.student.permanent_address === "" && <span className="text-error">N/A</span>}
                         </h4>
                     </div>
                 </div>
@@ -389,7 +391,7 @@ const StudentProfile = () => {
                     <div className="rounded">
                         <img src={userImage || defaultImage} />
                     </div>
-                    <h3 className="font-bold text-lg text-center mt-3">{userProfileData.name}</h3>
+                    <h3 className="font-bold text-lg text-center mt-3">{userProfileData?.student.name}</h3>
                 </div>
                 <form method="dialog" className="modal-backdrop">
                     <button>close</button>

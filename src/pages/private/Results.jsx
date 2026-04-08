@@ -89,6 +89,8 @@ const Results = () => {
         enabled: !!filters.department_id && !!filters.semester_id && debouncedSearch.length > 2
     })
 
+    console.log(singleSearchedResult);
+
     // Handler to update filters
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -268,6 +270,9 @@ const Results = () => {
                                         ))}
                                     </tbody>
                                 </table>
+                                <div className='flex gap-2 justify-end mr-5 items-center'>
+                                    GPA <span className='border p-2'>{singleSearchedResult.semester_gpa}</span>
+                                </div>
                             </div>
                             <div className='text-center mt-4'>
                                 <button
