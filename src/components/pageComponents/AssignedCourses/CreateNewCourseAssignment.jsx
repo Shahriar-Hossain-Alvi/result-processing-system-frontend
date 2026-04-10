@@ -69,6 +69,8 @@ const CreateNewCourseAssignment = ({ allDepartments, isAllDepartmentsPending, al
         enabled: debouncedSubjectSearch?.length > 1
     });
 
+    const subjects = allSubjects?.items || [];
+
 
     useEffect(() => {
         if (isAllSubjectsError) {
@@ -215,9 +217,9 @@ const CreateNewCourseAssignment = ({ allDepartments, isAllDepartmentsPending, al
                                 </div>
 
                                 {/* Results Dropdown */}
-                                {allSubjects?.length > 0 && !selectedSubjectId && (
+                                {subjects?.length > 0 && !selectedSubjectId && (
                                     <ul className={`absolute z-10 top-20 menu p-2 shadow bg-base-100 rounded-box w-full border border-base-300 max-h-60 overflow-y-auto`} >
-                                        {allSubjects.map(subject => (
+                                        {subjects.map(subject => (
                                             <li key={subject.id}>
                                                 <a onClick={() => {
                                                     setValue("subjectId", subject.id);
@@ -253,7 +255,7 @@ const CreateNewCourseAssignment = ({ allDepartments, isAllDepartmentsPending, al
                                     // @ts-ignore
                                     document.getElementById('create_subject_offering_modal').close();
                                 }}>Cancel</button>
-                                <button className="btn btn-primary min-w-[120px]" disabled={isLoading}>
+                                <button className="btn btn-primary min-w-30" disabled={isLoading}>
                                     {isLoading ? <AiOutlineLoading3Quarters className="animate-spin" /> : "Confirm Assignment"}
                                 </button>
                             </div>
