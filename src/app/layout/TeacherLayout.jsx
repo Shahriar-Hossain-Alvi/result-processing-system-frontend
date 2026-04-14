@@ -8,6 +8,7 @@ import { LuFileSpreadsheet } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
 import useTheme from '../../hooks/useTheme.jsx';
 import useAuth from '../../hooks/useAuth.jsx';
+import { CgProfile } from 'react-icons/cg';
 
 const TeacherLayout = () => {
     const [theme] = useTheme();
@@ -35,14 +36,14 @@ const TeacherLayout = () => {
 
             {/* Links */}
             <li>
-                <NavLink end to="/teacher" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Add User">
-                    <RiUserAddFill className='w-4 h-4' />
+                <NavLink end to="/teacher" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Profile">
+                    <CgProfile className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">Profile</p>
                 </NavLink>
             </li>
 
             <li>
-                <NavLink to="/teacher/my-courses" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Insert & edit marks">
+                <NavLink to="/teacher/my-courses" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Offered Subjects">
                     <FaBook className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">Offered Subjects</p>
                 </NavLink>
@@ -52,6 +53,13 @@ const TeacherLayout = () => {
                 <NavLink to="/teacher/marks" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Insert & edit marks">
                     <GrTableAdd className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">Insert Marks</p>
+                </NavLink>
+            </li>
+
+            <li>
+                <NavLink to="/teacher/results" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Results">
+                    <LuFileSpreadsheet className='w-4 h-4' />
+                    <p className="is-drawer-close:hidden">Check Result</p>
                 </NavLink>
             </li>
 

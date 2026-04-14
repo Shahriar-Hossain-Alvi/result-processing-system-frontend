@@ -8,6 +8,7 @@ import { GrTableAdd } from 'react-icons/gr';
 import { LuFileSpreadsheet } from 'react-icons/lu';
 import useTheme from '../../hooks/useTheme.jsx';
 import useAuth from '../../hooks/useAuth.jsx';
+import { CgProfile } from 'react-icons/cg';
 
 const StudentLayout = () => {
     const [theme] = useTheme();
@@ -35,21 +36,21 @@ const StudentLayout = () => {
 
             {/* Links */}
             <li>
-                <NavLink end to="/student" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Add User">
-                    <RiUserAddFill className='w-4 h-4' />
+                <NavLink end to="/student" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Profile">
+                    <CgProfile className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">Profile</p>
                 </NavLink>
             </li>
 
             <li>
-                <NavLink to="/student/my-courses" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Insert & edit marks">
+                <NavLink to="/student/my-courses" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Offered Subjects">
                     <FaBook className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">Offered Subjects</p>
                 </NavLink>
             </li>
 
             <li>
-                <NavLink to="/student/marks" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Insert & edit marks">
+                <NavLink to="/student/marks" className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All Marks">
                     <GrTableAdd className='w-4 h-4' />
                     <p className="is-drawer-close:hidden">All Marks</p>
                 </NavLink>
