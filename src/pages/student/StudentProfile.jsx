@@ -131,7 +131,7 @@ const StudentProfile = () => {
     return (
         <div>
             {/* notification */}
-            <div className=" flex justify-end my-2">
+            <div className=" flex justify-end sm:my-2">
                 <div className="dropdown dropdown-left">
                     <div tabIndex={0} role="button" className="btn border-0 hover:bg-transparent m-1">
                         <div className="indicator">

@@ -82,7 +82,7 @@ const AllUser = () => {
                     <label className="label">Filter by Role: </label>
                     <select
                         name='user_role_filter'
-                        className='select'
+                        className='select w-full select-sm sm:select-md'
                         value={filters.user_role_filter}
                         onChange={(e) => {
                             handleFilterChange(e);
@@ -102,7 +102,7 @@ const AllUser = () => {
                     <label className="label block">Order By: </label>
                     <select
                         name='user_order_by_filter'
-                        className='select w-full'
+                        className='select w-full select-sm sm:select-md'
                         value={filters.user_order_by_filter}
                         onChange={(e) => {
                             handleFilterChange(e);
@@ -121,7 +121,7 @@ const AllUser = () => {
                         type="text"
                         name="department_search"
                         placeholder="CSE, EEE, etc..."
-                        className="input input-bordered w-full"
+                        className="input input-bordered w-full input-sm sm:input-md"
                         value={filters.department_search}
                         onChange={handleFilterChange}
                     />
@@ -130,7 +130,7 @@ const AllUser = () => {
                 {/* Reset Button */}
                 <div className="md:col-span-1  md:mt-6">
                     <button
-                        className={`btn btn-error w-full text-sm ${theme === "dark" ? "text-black" : "text-white"}`}
+                        className={`btn btn-error btn-sm sm:btn-md w-full text-sm ${theme === "dark" ? "text-black" : "text-white"}`}
                         onClick={() => {
                             setFilters({ user_role_filter: "", department_search: "", user_order_by_filter: "" })
                             localStorage.removeItem("user_role_filter");

@@ -72,7 +72,7 @@ const SingleStudentMarks = () => {
         <div>
             <SectionHeader section_title="Your Marks" />
 
-            <div>
+            <div className='bg-base-100 sm:p-4 rounded-xl py-5'>
                 {isPending && <LoadingSpinner />}
                 {allResults?.length === 0 && <h2 className="text-xl font-semibold text-center text-error">No Published Results found</h2>}
                 {
@@ -82,9 +82,9 @@ const SingleStudentMarks = () => {
                             {result.subject_name}
 
                             <div className="overflow-x-auto">
-                                <table className="table table-sm">
+                                <table className="table table-xs sm:table-sm">
                                     {/* head */}
-                                    <thead>
+                                    <thead className='text-xs sm:text-sm'>
                                         <tr>
                                             <th>#</th>
                                             <th>Subject</th>
@@ -92,27 +92,31 @@ const SingleStudentMarks = () => {
                                             <th className='text-center'>Total</th>
                                             <th className='text-center'>GPA</th>
                                             <th className='text-center'>Challenge Status</th>
-                                            <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className='text-xs sm:text-base'>
                                         {result?.marks?.map((mark, number) => (
                                             <tr className="hover:bg-base-300" key={mark?.id}>
                                                 <th>{number + 1}</th>
-                                                <td>
+
+                                                <td className='space-y-1'>
                                                     <span className='block font-medium'>{mark?.subject?.subject_title}</span>
                                                     <span className='text-xs opacity-70 block'>Code: {mark?.subject?.subject_code}</span>
                                                     <span className='text-xs opacity-70'>Credits: {mark?.subject?.credits}</span>
                                                 </td>
 
-                                                <td>
-                                                    <span>Assignment - {mark?.assignment_mark}</span> <br />
-                                                    <span>Class Test - {mark?.class_test_mark}</span> <br />
-                                                    <span>Midterm - {mark?.midterm_mark}</span> <br />
-                                                    <span>Final Exam - {mark?.final_exam_mark}</span>
+                                                <td className='space-y-1'>
+                                                    <span className='block'>Assignment - {mark?.assignment_mark}</span>
+
+                                                    <span className='block'>Class Test - {mark?.class_test_mark}</span>
+
+                                                    <span className='block'>Midterm - {mark?.midterm_mark}</span>
+
+                                                    <span className='block'>Final Exam - {mark?.final_exam_mark}</span>
                                                 </td>
 
                                                 <td className='text-center'>{mark?.total_mark}</td>
+
                                                 <td className='text-center'>{mark?.GPA}</td>
 
                                                 {
@@ -133,7 +137,7 @@ const SingleStudentMarks = () => {
                                                 }
                                                 {
                                                     mark?.result_challenge_status !== "none" &&
-                                                    <td>
+                                                    <td className='space-y-1'>
                                                         <span className='block capitalize'>Status: {mark?.result_challenge_status}</span>
 
                                                         <span className='block my-1'>Challenged At: {mark?.challenged_at?.split("T")[0]}</span>

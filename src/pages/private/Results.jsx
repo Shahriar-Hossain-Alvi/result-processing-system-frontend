@@ -127,7 +127,7 @@ const Results = () => {
                         <label className="label">Department</label>
                         <select
                             name="department_id"
-                            className="select w-full uppercase"
+                            className="select select-sm sm:select-md w-full uppercase"
                             value={filters.department_id}
                             onChange={handleFilterChange}
                         >
@@ -143,7 +143,7 @@ const Results = () => {
                         <label className="label">Semester</label>
                         <select
                             name="semester_id"
-                            className="select w-full uppercase"
+                            className="select select-sm sm:select-md w-full uppercase"
                             value={filters.semester_id}
                             onChange={handleFilterChange}
                         >
@@ -162,7 +162,7 @@ const Results = () => {
                             type="text"
                             name="search"
                             placeholder="registration.."
-                            className="input input-bordered w-full"
+                            className="input input-sm sm:input-md input-bordered w-full"
                             value={filters.search}
                             onChange={handleFilterChange}
                         />
@@ -202,12 +202,12 @@ const Results = () => {
 
                             {/* student info */}
                             <div className='text-center'>
-                                <h2 className='uppercase text-lg font-semibold'>{singleSearchedResult?.department_info?.department_name}</h2>
-                                <h2 className='capitalize text-lg font-medium'>{singleSearchedResult?.semester_info?.semester_name} semester (Session: {singleSearchedResult?.student_info?.session})</h2>
+                                <h2 className='uppercase text-sm md:text-lg font-semibold'>{singleSearchedResult?.department_info?.department_name}</h2>
+                                <h2 className='capitalize text-sm md:text-lg font-medium'>{singleSearchedResult?.semester_info?.semester_name} semester (Session: {singleSearchedResult?.student_info?.session})</h2>
 
-                                <h2 className='mt-10 mb-5 font-medium text-xl underline'>Result Sheet</h2>
+                                <h2 className='mt-10 mb-5 font-medium text-base sm:text-xl underline'>Result Sheet</h2>
 
-                                <div className='border w-5/6 max-w-3xl text-left mx-auto rounded-lg p-1 space-y-1'>
+                                <div className='border md:w-5/6 max-w-3xl text-left mx-auto rounded-lg p-1 space-y-1 text-sm md:text-base'>
                                     <h2 className='grid grid-cols-3'>
                                         <span className='border-r'>Student Name</span>
                                         <span className='col-span-2 pl-2'>{singleSearchedResult?.student_info?.name}</span>
@@ -230,7 +230,7 @@ const Results = () => {
 
                                     <h2 className='grid grid-cols-3'>
                                         <span className='border-r'>Department</span>
-                                        <span className='col-span-2 pl-2'>{singleSearchedResult?.department_info?.department_name}</span>
+                                        <span className='col-span-2 pl-2 uppercase'>{singleSearchedResult?.department_info?.department_name}</span>
                                     </h2>
 
                                 </div>
@@ -239,9 +239,9 @@ const Results = () => {
 
                             {/* Result */}
                             <div className="overflow-x-auto mt-5 max-w-6xl mx-auto">
-                                <table className="table">
+                                <table className="table table-xs sm:table-md">
                                     {/* head */}
-                                    <thead className='text-center'>
+                                    <thead className='text-center text-xs sm:text-base'>
                                         <tr>
                                             <th>#</th>
                                             <th className='text-left'>Subject</th>
@@ -270,7 +270,7 @@ const Results = () => {
                                         ))}
                                     </tbody>
                                 </table>
-                                <div className='flex gap-2 justify-end mr-5 items-center'>
+                                <div className='flex gap-2 justify-end mr-5 items-center text-xs sm:text-base'>
                                     GPA <span className='border p-2'>{singleSearchedResult.semester_gpa}</span>
                                 </div>
                             </div>

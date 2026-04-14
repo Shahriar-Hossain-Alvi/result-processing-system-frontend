@@ -217,7 +217,7 @@ const Marks = () => {
                         <label className="label">Department</label>
                         <select
                             name="department_id"
-                            className="select w-full uppercase"
+                            className="select w-full uppercase select-sm sm:select-md"
                             disabled={isAllDepartmentsPending}
                             value={filters.department_id}
                             onChange={handleFilterChange}
@@ -234,7 +234,7 @@ const Marks = () => {
                         <label className="label">Semester</label>
                         <select
                             name="semester_id"
-                            className="select w-full uppercase"
+                            className="select w-full uppercase select-sm sm:select-md"
                             disabled={isSemesterPending}
                             value={filters.semester_id}
                             onChange={handleFilterChange}
@@ -251,7 +251,7 @@ const Marks = () => {
                         <label className="label">Status</label>
                         <select
                             name="result_status"
-                            className="select w-full uppercase"
+                            className="select w-full uppercase select-sm sm:select-md"
                             value={filters.result_status}
                             onChange={(e) => {
                                 localStorage.setItem("result_status", e.target.value);
@@ -271,7 +271,7 @@ const Marks = () => {
                             type="text"
                             name="search"
                             placeholder="session.."
-                            className="input input-bordered w-full"
+                            className="input input-bordered w-full input-sm sm:input-md"
                             value={filters.search}
                             onChange={handleFilterChange}
                         />
@@ -280,7 +280,7 @@ const Marks = () => {
                     {/* Reset Button */}
                     <div className="md:col-span-1 md:place-self-center md:mt-5">
                         <button
-                            className={`btn btn-error text-sm ${theme == "light" ? "text-white" : "text-black"}`}
+                            className={`btn btn-error btn-sm sm:btn-md text-sm ${theme == "light" ? "text-white" : "text-black"}`}
                             onClick={() => {
                                 setFilters({
                                     search: "",
@@ -319,13 +319,14 @@ const Marks = () => {
                                     (user?.role == "admin" || user?.role == "super_admin") &&
                                     <div className='text-end'>
                                         <button
-                                            onClick={() => publish_result_bulk(category.department_id, category.semester_id, category.session)} className="btn btn-sm btn-success" disabled={isFormLoading}>Publish Result</button>
+                                            onClick={() => publish_result_bulk(category.department_id, category.semester_id, category.session)}
+                                            className="btn btn-sm btn-success" disabled={isFormLoading}>Publish Result</button>
                                     </div>
                                 }
 
                                 <div className="overflow-x-auto">
                                     <table className="table table-xs table-pin-cols">
-                                        <thead>
+                                        <thead className='text-xs sm:text-base'>
                                             <tr>
                                                 <th>#</th>
                                                 <th>Name</th>
@@ -359,7 +360,7 @@ const Marks = () => {
                                                         <td>{mark?.subject?.subject_title}</td>
 
                                                         {/* marks categorized */}
-                                                        <td>
+                                                        <td className='grow min-w-24'>
                                                             <span className='block'>CT: {mark?.class_test_mark === null ? <button className='text-error  opacity-50'>N/A</button> : mark?.class_test_mark}</span>
 
                                                             <span className='block my-1'>Assignment: {mark?.assignment_mark === null ? <button className='text-error opacity-50'>N/A</button> : mark?.assignment_mark}</span>
@@ -519,7 +520,7 @@ const Marks = () => {
                                                     </tr>
                                                 )}
                                         </tbody>
-                                        <tfoot>
+                                        <tfoot className='text-xs sm:text-base'>
                                             <tr>
                                                 <th>#</th>
                                                 <th>Name</th>

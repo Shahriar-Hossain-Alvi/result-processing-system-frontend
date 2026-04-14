@@ -32,7 +32,7 @@ const OfferedCourses = () => {
         <div>
             <SectionHeader section_title='My Offered Courses' />
 
-            <div>
+            <div className="bg-base-100 sm:p-4 rounded-xl py-5">
                 {isPending && <LoadingSpinner />}
                 {offeredCourses?.length === 0 && <h2 className="text-xl text-center text-error font-semibold">No Offered Courses found</h2>}
                 {
@@ -41,7 +41,7 @@ const OfferedCourses = () => {
                             <h2 className="uppercase text-center text-xl font-semibold">{offeredCourse?.semester_name} Semester</h2>
 
                             <div className="overflow-x-auto">
-                                <table className="table">
+                                <table className="table table-sm sm:table-md">
                                     {/* head */}
                                     <thead>
                                         <tr>
@@ -51,7 +51,7 @@ const OfferedCourses = () => {
                                             <th>Teacher</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className="text-xs sm:text-base">
                                         {offeredCourse?.subjects?.map((subject, number) => (
                                             <tr className="hover:bg-base-300" key={subject?.id}>
                                                 <th>{number + 1}</th>

@@ -70,7 +70,6 @@ const Signin = () => {
         }
     }
 
-
     // signin using dummy account
     const handleDummySignIn = async (role) => {
         if (user) {
@@ -136,7 +135,7 @@ const Signin = () => {
                     </p>
                 </div>
                 <div className="card bg-base-100 shadow-lg hover:shadow-2xl transition ease-in-out duration-500 w-full shrink-0">
-                    <form onSubmit={handleSubmit(signInUser)} className="card-body">
+                    <form onSubmit={handleSubmit(signInUser)} className="card-body p-4 sm:p-6">
                         <fieldset className="fieldset">
                             {/* Email */}
                             <div className={`w-full ${errors.email && "tooltip tooltip-open tooltip-top tooltip-error"}`} data-tip={errors.email && errors.email.message}>
@@ -185,7 +184,7 @@ const Signin = () => {
                             </div>
 
                             {/* <a className="link link-hover link-info text-right text-sm">Forgot password?</a> */}
-                            <button className={`btn mt-4 ${formLoading ? "btn-disabled" : "bg-primary hover:bg-primary-dark text-white"}`} type='submit'>Login</button>
+                            <button className={`btn ${formLoading ? "btn-disabled" : "bg-primary hover:bg-primary-dark text-white"}`} type='submit'>Login</button>
                         </fieldset>
 
                         <div className='flex justify-center gap-2'>
