@@ -344,7 +344,7 @@ const StudentProfile = () => {
                             <h4 className="font-medium">
                                 {userProfileData?.student?.date_of_birth?.split("T")[0]}
 
-                                {(userProfileData?.student.date_of_birth === null) && <span className="text-error">N/A</span>}
+                                {(userProfileData?.student?.date_of_birth === null) && <span className="text-error">N/A</span>}
 
                                 <span className="text-sm italic ml-1">(YYYY-MM-DD)</span>
                             </h4>
@@ -358,7 +358,7 @@ const StudentProfile = () => {
                                     userProfileData?.student?.department?.department_name.toUpperCase()
                                 }
                                 {
-                                    (userProfileData?.student.department === null) && <span className="text-error">Not Assigned</span>
+                                    (userProfileData?.student?.department === null) && <span className="text-error">Not Assigned</span>
                                 }
                             </h4>
                         </div>
